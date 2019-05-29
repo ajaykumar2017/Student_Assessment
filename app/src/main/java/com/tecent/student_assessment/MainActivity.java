@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     ImageView nav_header_imageView;
     Toolbar toolbar;
     TextView nav_header_textView_name, nav_header_textView_email;
-    SharedPreferences sharedPreferences;
+    SharedPreferences sharedPreferences, sharedPreferencesLike;
     RequestQueue requestQueue;
     FloatingActionButton fab;
 
@@ -38,13 +38,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar_main);
+        toolbar = findViewById(R.id.toolbar_main);
         requestQueue = Volley.newRequestQueue(this);
         fab=findViewById(R.id.fab_post);
         sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE);
+        sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "");
         String email = sharedPreferences.getString("email", "");
         String userdp = sharedPreferences.getString("userdp", "");
+        String userid=sharedPreferences.getString("userid","");
 
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open,
@@ -83,10 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            drawerLayout.openDrawer(GravityCompat.START);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -138,10 +139,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_profile:
                 Intent intProfile=new Intent(this,Profile.class);
+                intProfile.putExtra("profile","MyProfile");
                 startActivity(intProfile);
                 break;
             case R.id.nav_practice:
-                Toast.makeText(this, "Practice", Toast.LENGTH_SHORT).show();
+                Intent intSp=new Intent(this,SinglePostsActivity.class);
+                intSp.putExtra("postid","36");
+                startActivity(intSp);
                 break;
             case R.id.nav_performance:
                 Toast.makeText(this, "Performance", Toast.LENGTH_SHORT).show();

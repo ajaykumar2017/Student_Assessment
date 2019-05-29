@@ -45,6 +45,22 @@ public class ExtraFunctions {
 
     }
 
+    public static String getFullUniversity(String university){
+        switch (university){
+            case "KU":
+                university="Kolhan University";
+                break;
+            case "JUT":
+                university="Jharkhand University of Technology";
+                break;
+            default:
+                university="Others";
+                break;
+        }
+        return university;
+
+    }
+
     public static String getFullSemester(String semester){
         switch (semester){
             case "1":
@@ -190,6 +206,9 @@ public class ExtraFunctions {
                     public void onErrorResponse(VolleyError error) {
                     }
                 });
+    }
+    static boolean isValidPostId(String postId){
+        return postId.matches("[0-9]+");
     }
 
 }

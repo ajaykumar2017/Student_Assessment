@@ -62,6 +62,9 @@ public class SetUpActivity extends AppCompatActivity {
                     spe.putString("ban", emp.getString("ban"));
                     spe.putString("joindate", emp.getString("joindate"));
                     spe.putString("userdp", emp.getString("userdp"));
+                    spe.putString("posts", emp.getString("posts"));
+                    spe.putString("doubts", emp.getString("doubts"));
+                    spe.putString("answers", emp.getString("answers"));
                     spe.apply();
                     Intent intentNew = new Intent(SetUpActivity.this, MainActivity.class);
                     startActivity(intentNew);

@@ -46,7 +46,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     lateinit var dialog: ACProgressFlower
     lateinit var userid: String
     lateinit var commentText: String
-    var path: String=""
+    var path: String = ""
     lateinit var postDoubtid: String
     lateinit var recyclerView: RecyclerView
     lateinit var swipeRefreshLayout: SwipeRefreshLayout
@@ -65,8 +65,8 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
         sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
         userid = sharedPreferences.getString("userid", "")
-        swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout)
-        recyclerView=findViewById(R.id.recyclerView)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
+        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.setHasFixedSize(true)
         recyclerView.setLayoutManager(LinearLayoutManager(this))
         val userdp = sharedPreferences.getString("userdp", "")
@@ -89,6 +89,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                     tv_btn_post_comment.setTextColor(ContextCompat.getColor(this@AnswersDoubtsPostsDoubts, R.color.lightenblue))
                 }
             }
+
             override fun afterTextChanged(editable: Editable) {}
         })
 
@@ -102,7 +103,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
             } else if (file.exists()) {
                 volleyImageRequest()
                 dialog.show()
-            } else{
+            } else {
                 volleyTestWithoutImage()
                 dialog.show()
             }
@@ -249,8 +250,9 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
         }
 
     }
+
     //Comments data request
-    fun volleyAnswerDataRequest(){
+    fun volleyAnswerDataRequest() {
         try {
             val url = ExtraFunctions.serverurl + "answersDoubtsPostsDataAdapter.php"
             val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
@@ -263,17 +265,17 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                         val json = emp.getString("answerList")
                         val builder = GsonBuilder()
                         val gson = builder.create()
-                        val answerObjectArrayList:ArrayList<AnswerObject> = gson.fromJson(
+                        val answerObjectArrayList: ArrayList<AnswerObject> = gson.fromJson(
                                 json,
                                 object : TypeToken<List<AnswerObject>>() {
                                 }.type
                         )
                         val adapter = MyRecyclerDoubtsPostsAnswersAdapter(
-                                dialog, requestQueue,  userid, this
-                                ,answerObjectArrayList
+                                dialog, requestQueue, userid, this
+                                , answerObjectArrayList
                         )
                         recyclerView.adapter = adapter
-                        swipeRefreshLayout.isRefreshing=false
+                        swipeRefreshLayout.isRefreshing = false
                     }
                 } catch (exception: Exception) {
                     Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
@@ -294,6 +296,11 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
+    }
+
+    public override fun onResume() {
+        volleyAnswerDataRequest()
+        super.onResume()
     }
 
 }

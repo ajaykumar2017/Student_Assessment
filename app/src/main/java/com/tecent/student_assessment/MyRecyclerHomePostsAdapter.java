@@ -95,7 +95,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         final String mUserdp = muserdplist.get(position);
         final String mUserName = musernamelist.get(position);
         String mPostDateTime = mposttimelist.get(position);
-        String mBranch = muserbranchlist.get(position);
+        final String mBranch = muserbranchlist.get(position);
         final String mPostId = mpostidlist.get(position);
         final String mPostText = mposttextlist.get(position);
         final String mPostFile = mpostfilelist.get(position);
@@ -130,6 +130,62 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         } else {
             homePostsHolder.iv_post_image.setVisibility(View.GONE);
         }
+        //Onclick show profile start
+        homePostsHolder.iv_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
+            }
+        });
+        homePostsHolder.iv_profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
+            }
+        });
+        homePostsHolder.ivdate_and_branch_subject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
+            }
+        });
+        //Onclick show profile end
         //onClick post image start
         final String finalViewLink = viewLink;
         final String finalType = type;

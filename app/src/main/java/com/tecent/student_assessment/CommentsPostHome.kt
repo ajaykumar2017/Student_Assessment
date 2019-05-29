@@ -168,6 +168,7 @@ class CommentsPostHome : AppCompatActivity() {
                 val status = result.getString("result")
                 if (status == "successful") {
                     dialog.dismiss()
+                    editText.setText("")
                     Toast.makeText(this@CommentsPostHome, "Comment uploaded successfully", Toast.LENGTH_SHORT).show()
                     volleyCommentDataRequest()
                 }
@@ -230,6 +231,7 @@ class CommentsPostHome : AppCompatActivity() {
             val emp = JSONObject(jsontext)
             val result = emp.getString("result")
             if (result == "successful") {
+                editText.setText("")
                 dialog.dismiss()
                 Toast.makeText(this@CommentsPostHome, "Comment uploaded successfully", Toast.LENGTH_SHORT).show()
                 volleyCommentDataRequest()
@@ -289,6 +291,10 @@ class CommentsPostHome : AppCompatActivity() {
             Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
+    }
+    public override fun onResume() {
+        volleyCommentDataRequest()
+        super.onResume()
     }
 
 }

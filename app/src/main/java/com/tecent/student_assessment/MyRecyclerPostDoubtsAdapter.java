@@ -83,7 +83,7 @@ public class MyRecyclerPostDoubtsAdapter extends RecyclerView.Adapter<MyRecycler
         final String mUserdp = muserdplist.get(position);
         final String mUserName = musernamelist.get(position);
         String mPostDateTime = mposttimelist.get(position);
-        String mBranch = muserbranchlist.get(position);
+        final String mBranch = muserbranchlist.get(position);
         final String mPostDoubtId = mpostdoubtidlist.get(position);
         final String mPostText = mposttextlist.get(position);
         final String mPostImage = mpostimagelist.get(position);
@@ -100,8 +100,9 @@ public class MyRecyclerPostDoubtsAdapter extends RecyclerView.Adapter<MyRecycler
         postDoubtsHolder.iv_post_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(viewLink));
-                mContext.startActivity(browserIntent);
+                Intent intent = new Intent(mContext, ImagePdfWebView.class);
+                intent.putExtra("viewLink", viewLink);
+                mContext.startActivity(intent);
             }
         });
 
@@ -323,6 +324,61 @@ public class MyRecyclerPostDoubtsAdapter extends RecyclerView.Adapter<MyRecycler
                 Intent doubtIntent=new Intent(mContext,AnswersDoubtsPostsDoubts.class);
                 doubtIntent.putExtra("postdoubtid",mPostDoubtId);
                 mContext.startActivity(doubtIntent);
+            }
+        });
+        //profile
+        postDoubtsHolder.iv_profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
+            }
+        });
+        postDoubtsHolder.iv_username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
+            }
+        });
+        postDoubtsHolder.ivdate_and_branch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mMyuserid.equals(mUserId)){
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("profile","MyProfile");
+                    mContext.startActivity(intProfile);
+                }else{
+                    Intent intProfile=new Intent(mContext,Profile.class);
+                    intProfile.putExtra("userid",mUserId);
+                    intProfile.putExtra("username",mUserName);
+                    intProfile.putExtra("userdp",mUserdp);
+                    intProfile.putExtra("userbranch",mBranch);
+                    intProfile.putExtra("profile","OtherProfile");
+                    mContext.startActivity(intProfile);
+                }
             }
         });
 
