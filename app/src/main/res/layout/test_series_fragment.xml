@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/algo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:paddingBottom="10dp"
+            android:drawableStart="@drawable/ic_sub1"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:text="    Algorithms"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/datastr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub2"
+            android:text="    Data Structure"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/compiler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub7"
+            android:text="    Compiler Design"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/toc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub4"
+            android:text="    Theory of Computation"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/dbms"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub12"
+            android:text="    DataBase Management System"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/operating"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub13"
+            android:text="    Operating System"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/digital"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub3"
+            android:text="    Digital Logic"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/coa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub5"
+            android:text="    Computer Organization &amp; Arch.."
+            android:textColor="@color/verydarkgrey"
+            android:background="?attr/selectableItemBackground"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/cn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub14"
+            android:text="    Computer Network"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/dm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub10"
+            android:text="    Discrete Math"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/clang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub11"
+            android:text="    C Language"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/cpplang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub6"
+            android:text="    C++"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/javalang"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub9"
+            android:text="    Java"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/python"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub16"
+            android:text="    Python"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/androids"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub8"
+            android:text="    Android"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/others"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="20dp"
+            android:paddingRight="15dp"
+            android:drawableEnd="@drawable/ic_right_arrow"
+            android:drawableStart="@drawable/ic_sub15"
+            android:text="    Others"
+            android:background="?attr/selectableItemBackground"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="19sp" />
+    </LinearLayout>
+</ScrollView>

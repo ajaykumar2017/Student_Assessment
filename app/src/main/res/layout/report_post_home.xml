@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/report_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:text="Report Post"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/report_post"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/spamnpromotion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Spam/Promotion"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/violencenharassment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Violence/Harassment"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/wrong"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Wrong Information"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/copyrightviolation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Copyright Violation"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/shouldnotbe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:buttonTint="@color/colorPrimary"
+            android:text="Should not be in Student Assessment App"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/et_explain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radiogroup"
+        android:layout_marginLeft="15dp"
+        android:hint="Explain Further"
+        android:maxLines="2"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/et_explain"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3" />
+
+        <TextView
+            android:id="@+id/tv_btn_cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:text="CANCEL"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_btn_report"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.35"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_horizontal"
+            android:text="REPORT"
+            android:textColor="@color/green"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</RelativeLayout>

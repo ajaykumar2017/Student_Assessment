@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
+
+    <TextView
+        android:id="@+id/tv_delete_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="    Delete Post"
+        android:layout_marginBottom="20dp"
+        android:textSize="17sp"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_002_delete"
+        android:textColor="@color/verydarkgrey"/>
+
+    <TextView
+        android:id="@+id/tv_share_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:drawableLeft="@drawable/ic_001_share"
+        android:text="    Share Post"
+        android:background="?attr/selectableItemBackground"
+        android:layout_below="@+id/tv_delete_post"
+        android:textSize="17sp"
+        android:textColor="@color/verydarkgrey"/>
+    <TextView
+        android:id="@+id/save_to_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="    Save to my notes"
+        android:drawableLeft="@drawable/ic_003_save_button"
+        android:layout_below="@+id/tv_share_post"
+        android:textSize="17sp"
+        android:textColor="@color/verydarkgrey"/>
+    <TextView
+        android:id="@+id/tv_turn_on_post_notif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="    Turn on Post notifications"
+        android:drawableLeft="@drawable/ic_004_notification"
+        android:layout_below="@+id/save_to_notes"
+        android:textSize="17sp"
+        android:textColor="@color/verydarkgrey"/>
+    <TextView
+        android:id="@+id/tv_report_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="    Report post"
+        android:background="?attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_005_ban"
+        android:layout_below="@+id/tv_turn_on_post_notif"
+        android:textSize="17sp"
+        android:textColor="@color/verydarkgrey"/>
+
+</RelativeLayout>
