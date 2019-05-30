@@ -49,28 +49,35 @@
                             app:civ_border_color="@color/smalldarkgrey"
                             app:civ_border_width="0.5dp" />
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:layout_gravity="center_horizontal"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_gravity="center_horizontal|center_vertical"
+                            android:gravity="center"
                             android:orientation="horizontal">
                         <TextView
                             android:id="@+id/tv_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="0dp"
+                            android:layout_weight="0.9"
+                            android:layout_height="match_parent"
                             android:text="Ajay Kumar"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:maxLines="1"
                             android:textColor="#fff"
                             android:textSize="21sp"
                             android:layout_marginRight="20dp"
                             android:textStyle="bold" />
                             <ImageView
                                 android:id="@+id/edit_name"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:paddingStart="10dp"
-                                android:paddingEnd="10dp"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.1"
+                                android:layout_height="30dp"
                                 android:paddingTop="5dp"
-                                android:paddingBottom="10dp"
+                                android:paddingStart="5dp"
+                                android:paddingEnd="5dp"
                                 android:src="@drawable/ic_pencil_edit_button_color_white"/>
                         </LinearLayout>
                     </LinearLayout>

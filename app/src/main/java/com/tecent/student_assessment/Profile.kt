@@ -11,10 +11,7 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.RadioButton
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
@@ -158,6 +155,7 @@ class Profile : AppCompatActivity() {
             //edit name
             val sharedPreferencesEdit = sharedPreferences.edit()
             edit_name.setOnClickListener {
+                editProfileDialog.select_subject.text="Enter New Name"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.VISIBLE
                 editProfileDialog.radioGroup_gender.visibility = View.GONE
@@ -185,9 +183,11 @@ class Profile : AppCompatActivity() {
                                         dialog.dismiss()
                                     } else {
                                         Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
                                     Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
@@ -201,6 +201,7 @@ class Profile : AppCompatActivity() {
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
                             Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
@@ -208,6 +209,7 @@ class Profile : AppCompatActivity() {
 
 
             edit_gender.setOnClickListener {
+                editProfileDialog.select_subject.text="Enter New Gender"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.GONE
                 editProfileDialog.radioGroup_gender.visibility = View.VISIBLE
@@ -222,8 +224,14 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val selectedIdRadio = editProfileDialog.radioGroup_gender.getCheckedRadioButtonId()
-                            val radioButton = findViewById<View>(selectedIdRadio) as RadioButton
+                            var genderValue:String
+                            if (editProfileDialog.rad_male.isChecked){
+                                genderValue="Male"
+                            }else if(editProfileDialog.rad_female.isChecked){
+                                genderValue="Female"
+                            }else{
+                                genderValue="Others"
+                            }
                             val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
@@ -231,33 +239,37 @@ class Profile : AppCompatActivity() {
                                     val result = emp.getString("result")
                                     if (result == "successful") {
                                         Toast.makeText(this, "Gender Changed", Toast.LENGTH_SHORT).show()
-                                        sharedPreferencesEdit.putString("gender", radioButton.text.toString())
-                                        tv_gender.text = radioButton.text.toString()
+                                        sharedPreferencesEdit.putString("gender", genderValue)
+                                        tv_gender.text = genderValue
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
                                     } else {
-                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(this, "volley error", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
-                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
                                 override fun getParams(): Map<String, String> {
                                     val MyData = HashMap<String, String>()
                                     MyData["userid"] = userid
-                                    MyData["gender"] = radioButton.text.toString()
+                                    MyData["gender"] = genderValue
                                     return MyData
                                 }
                             }
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
-                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
             }
             edit_branch.setOnClickListener {
+                editProfileDialog.select_subject.text="Select New Branch"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.GONE
                 editProfileDialog.radioGroup_gender.visibility = View.GONE
@@ -267,7 +279,7 @@ class Profile : AppCompatActivity() {
                 editProfileDialog.sp_university.visibility = View.GONE
                 editProfileDialog.btn_submit.setOnClickListener {
                     if (spinnerBranch.selectedItem.toString().trim { it <= ' ' } == "Select Branch") {
-                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select Branch", Toast.LENGTH_SHORT).show()
                     } else {
                         dialog.show()
                         try {
@@ -285,9 +297,11 @@ class Profile : AppCompatActivity() {
                                         dialog.dismiss()
                                     } else {
                                         Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
                                     Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
@@ -301,11 +315,13 @@ class Profile : AppCompatActivity() {
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
                             Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
             }
             edit_semester.setOnClickListener {
+                editProfileDialog.select_subject.text="Select New Semester"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.GONE
                 editProfileDialog.radioGroup_gender.visibility = View.GONE
@@ -315,7 +331,7 @@ class Profile : AppCompatActivity() {
                 editProfileDialog.sp_university.visibility = View.GONE
                 editProfileDialog.btn_submit.setOnClickListener {
                     if (spinnerSemester.selectedItem.toString().trim { it <= ' ' } == "Select Semester") {
-                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select semester", Toast.LENGTH_SHORT).show()
                     } else {
                         dialog.show()
                         try {
@@ -333,9 +349,11 @@ class Profile : AppCompatActivity() {
                                         dialog.dismiss()
                                     } else {
                                         Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
                                     Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
@@ -349,11 +367,13 @@ class Profile : AppCompatActivity() {
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
                             Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
             }
             edit_college.setOnClickListener {
+                editProfileDialog.select_subject.text="Select New College"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.GONE
                 editProfileDialog.radioGroup_gender.visibility = View.GONE
@@ -363,7 +383,7 @@ class Profile : AppCompatActivity() {
                 editProfileDialog.sp_university.visibility = View.GONE
                 editProfileDialog.btn_submit.setOnClickListener {
                     if (spinnerCollege.selectedItem.toString().trim { it <= ' ' } == "Select College") {
-                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select college", Toast.LENGTH_SHORT).show()
                     } else {
                         dialog.show()
                         try {
@@ -381,9 +401,11 @@ class Profile : AppCompatActivity() {
                                         dialog.dismiss()
                                     } else {
                                         Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
                                     Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
@@ -397,11 +419,13 @@ class Profile : AppCompatActivity() {
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
                             Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
             }
             edit_university.setOnClickListener {
+                editProfileDialog.select_subject.text="Select New University"
                 editProfileDialog.show()
                 editProfileDialog.et_name.visibility = View.GONE
                 editProfileDialog.radioGroup_gender.visibility = View.GONE
@@ -411,7 +435,7 @@ class Profile : AppCompatActivity() {
                 editProfileDialog.sp_university.visibility = View.VISIBLE
                 editProfileDialog.btn_submit.setOnClickListener {
                     if (spinnerUniversity.selectedItem.toString().trim { it <= ' ' } == "Select University") {
-                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Please select University", Toast.LENGTH_SHORT).show()
                     } else {
                         dialog.show()
                         try {
@@ -429,9 +453,11 @@ class Profile : AppCompatActivity() {
                                         dialog.dismiss()
                                     } else {
                                         Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                        dialog.dismiss()
                                     }
                                 } catch (exception: Exception) {
                                     Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    dialog.dismiss()
                                 }
                             }, Response.ErrorListener {
                             }) {
@@ -445,6 +471,7 @@ class Profile : AppCompatActivity() {
                             requestQueue.add(stringRequest)
                         } catch (e: java.lang.Exception) {
                             Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                            dialog.dismiss()
                         }
                     }
                 }
