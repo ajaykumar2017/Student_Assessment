@@ -169,7 +169,7 @@ public class DoubtsFragment extends Fragment {
                                 postimagelist.add(postimagearray.get(i).toString());
                             }
                         }
-                        MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
+                        MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
                                 userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist);
                         mRecyclerViewPost.setAdapter(postDoubtsAdapter);
                     }

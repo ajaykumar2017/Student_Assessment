@@ -3,6 +3,7 @@ package com.tecent.student_assessment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -54,8 +55,10 @@ public class MyRecyclerPostDoubtsAdapter extends RecyclerView.Adapter<MyRecycler
     String mMyuserid;
     RequestQueue mRequestQueue;
     ACProgressFlower mDialog;
+    SharedPreferences mSharedPreferences;
 
-    public MyRecyclerPostDoubtsAdapter(ACProgressFlower dialog, RequestQueue requestQueue, Context context, String myuserid, ArrayList<String> useridlist, ArrayList<String> userdplist, ArrayList<String> usernamelist, ArrayList<String> userbranchlist, ArrayList<String> posttimelist, ArrayList<String> postimagelist, ArrayList<String> postdoubtidlist, ArrayList<String> posttextlist) {
+    public MyRecyclerPostDoubtsAdapter(SharedPreferences sharedPreferences, ACProgressFlower dialog, RequestQueue requestQueue, Context context, String myuserid, ArrayList<String> useridlist, ArrayList<String> userdplist, ArrayList<String> usernamelist, ArrayList<String> userbranchlist, ArrayList<String> posttimelist, ArrayList<String> postimagelist, ArrayList<String> postdoubtidlist, ArrayList<String> posttextlist) {
+        mSharedPreferences=sharedPreferences;
         mDialog = dialog;
         mRequestQueue = requestQueue;
         mContext = context;
@@ -137,6 +140,9 @@ public class MyRecyclerPostDoubtsAdapter extends RecyclerView.Adapter<MyRecycler
                                                 String result = emp.getString("result");
                                                 if (result.equals("successful")) {
                                                     Toast.makeText(mContext, "Post Deleted successfully", Toast.LENGTH_SHORT).show();
+                                                    SharedPreferences.Editor sharedPreferencesEditPostDoubts = mSharedPreferences.edit();
+                                                    sharedPreferencesEditPostDoubts.putString("doubts",String.valueOf(Integer.parseInt(mSharedPreferences.getString("doubts",""))-1));
+                                                    sharedPreferencesEditPostDoubts.apply();
                                                 }
                                                 if (result.equals("error")) {
                                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show();

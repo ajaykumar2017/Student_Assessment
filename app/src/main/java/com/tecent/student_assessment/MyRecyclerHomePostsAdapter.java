@@ -59,13 +59,14 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
     String mMyuserid;
     RequestQueue mRequestQueue;
     ACProgressFlower mDialog;
-    SharedPreferences mSharedPreferencesLike;
+    SharedPreferences mSharedPreferencesLike, mSharedPreferences;
 
-    public MyRecyclerHomePostsAdapter(SharedPreferences sharedPreferencesLike, ACProgressFlower dialog, RequestQueue requestQueue, Context context, String myuserid, ArrayList<String> useridlist,
+    public MyRecyclerHomePostsAdapter(SharedPreferences sharedPreferences, SharedPreferences sharedPreferencesLike, ACProgressFlower dialog, RequestQueue requestQueue, Context context, String myuserid, ArrayList<String> useridlist,
                                       ArrayList<String> userdplist, ArrayList<String> usernamelist,
                                       ArrayList<String> userbranchlist, ArrayList<String> posttimelist,
                                       ArrayList<String> postfilelist, ArrayList<String> postidlist,
                                       ArrayList<String> posttextlist, ArrayList<String> subjectlist) {
+        mSharedPreferences=sharedPreferences;
         mSharedPreferencesLike = sharedPreferencesLike;
         mDialog = dialog;
         mRequestQueue = requestQueue;
@@ -246,6 +247,9 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                         String result = emp.getString("result");
                                         if (result.equals("successful")) {
                                             Toast.makeText(mContext, "Post Deleted successfully", Toast.LENGTH_SHORT).show();
+                                            SharedPreferences.Editor sharedPreferencesEditPosts = mSharedPreferences.edit();
+                                            sharedPreferencesEditPosts.putString("doubts",String.valueOf(Integer.parseInt(mSharedPreferences.getString("posts",""))-1));
+                                            sharedPreferencesEditPosts.apply();
                                         }
                                         if (result.equals("error")) {
                                             Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show();
@@ -262,7 +266,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                 }
                             }) {
                                 protected Map<String, String> getParams() {
-                                    Map<String, String> MyData = new HashMap<String, String>();
+                                    Map<String, String> MyData = new HashMap<>();
                                     MyData.put("postid", mPostId);
                                     return MyData;
                                 }
@@ -310,18 +314,18 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                         dialogReport.setContentView(R.layout.report_post_home);
                         // Set dialog title
                         dialogReport.setTitle("Custom Dialog");
-                        final RadioGroup radioGroup = (RadioGroup) dialogReport.findViewById(R.id.radiogroup);
-                        final RadioButton spamnpromotion = (RadioButton) dialogReport.findViewById(R.id.spamnpromotion);
-                        final RadioButton violencenharassment = (RadioButton) dialogReport.findViewById(R.id.violencenharassment);
-                        final RadioButton wrong = (RadioButton) dialogReport.findViewById(R.id.wrong);
-                        final RadioButton copyrightviolation = (RadioButton) dialogReport.findViewById(R.id.copyrightviolation);
-                        final RadioButton shouldnotbe = (RadioButton) dialogReport.findViewById(R.id.shouldnotbe);
-                        final EditText et_explain = (EditText) dialogReport.findViewById(R.id.et_explain);
-                        TextView tv_btn_cancel = (TextView) dialogReport.findViewById(R.id.tv_btn_cancel);
-                        final TextView tv_btn_report = (TextView) dialogReport.findViewById(R.id.tv_btn_report);
+                        final RadioGroup radioGroup = dialogReport.findViewById(R.id.radiogroup);
+                        final RadioButton spamnpromotion = dialogReport.findViewById(R.id.spamnpromotion);
+                        final RadioButton violencenharassment = dialogReport.findViewById(R.id.violencenharassment);
+                        final RadioButton wrong = dialogReport.findViewById(R.id.wrong);
+                        final RadioButton copyrightviolation = dialogReport.findViewById(R.id.copyrightviolation);
+                        final RadioButton shouldnotbe = dialogReport.findViewById(R.id.shouldnotbe);
+                        final EditText et_explain = dialogReport.findViewById(R.id.et_explain);
+                        TextView tv_btn_cancel = dialogReport.findViewById(R.id.tv_btn_cancel);
+                        final TextView tv_btn_report = dialogReport.findViewById(R.id.tv_btn_report);
                         int selectedIdRadio = radioGroup.getCheckedRadioButtonId();
                         // find the radiobutton by returned id
-                        final RadioButton radioButton = (RadioButton) dialogReport.findViewById(selectedIdRadio);
+                        final RadioButton radioButton = dialogReport.findViewById(selectedIdRadio);
                         tv_btn_cancel.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -371,7 +375,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                         }
                                     }) {
                                         protected Map<String, String> getParams() {
-                                            Map<String, String> MyData = new HashMap<String, String>();
+                                            Map<String, String> MyData = new HashMap<>();
                                             MyData.put("postid", mPostId);
                                             MyData.put("userid", mMyuserid);
                                             MyData.put("reason", finalReportValue);
@@ -432,7 +436,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                             }
                         }) {
                             protected Map<String, String> getParams() {
-                                Map<String, String> MyData = new HashMap<String, String>();
+                                Map<String, String> MyData = new HashMap<>();
                                 MyData.put("postid", mPostId);
                                 MyData.put("userid", mMyuserid);
                                 return MyData;
@@ -473,7 +477,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                             }
                         }) {
                             protected Map<String, String> getParams() {
-                                Map<String, String> MyData = new HashMap<String, String>();
+                                Map<String, String> MyData = new HashMap<>();
                                 MyData.put("postid", mPostId);
                                 MyData.put("userid", mMyuserid);
                                 return MyData;
@@ -586,11 +590,11 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         return museridlist.size();
     }
 
-    public class HomePostsHolder extends RecyclerView.ViewHolder {
-        public ImageView iv_profile_image, iv_post_image, iv_menu_btn, ivlike, ivreply, ivshare;
-        public TextView iv_username, ivdate_and_branch_subject, iv_post_text;
+    class HomePostsHolder extends RecyclerView.ViewHolder {
+        ImageView iv_profile_image, iv_post_image, iv_menu_btn, ivlike, ivreply, ivshare;
+        TextView iv_username, ivdate_and_branch_subject, iv_post_text;
 
-        public HomePostsHolder(@NonNull View itemView) {
+        HomePostsHolder(@NonNull View itemView) {
             super(itemView);
             iv_profile_image = itemView.findViewById(R.id.iv_profile_image);
             iv_post_image = itemView.findViewById(R.id.iv_post_image);

@@ -1,5 +1,6 @@
 package com.tecent.student_assessment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -61,6 +62,7 @@ class Profile : AppCompatActivity() {
     lateinit var postByUserName: String
     lateinit var postByUserDp: String
     lateinit var postByUserBranch: String
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layout.activity_profile)
@@ -75,10 +77,10 @@ class Profile : AppCompatActivity() {
         postByUserDp = ""
         userid = ""
         val profile: String = intent.getStringExtra("profile")
-        recyclerViewProfile = findViewById<RecyclerView>(R.id.recyclerView_profile)
+        recyclerViewProfile = findViewById<RecyclerView>(id.recyclerView_profile)
         recyclerViewProfile.setHasFixedSize(true)
         recyclerViewProfile.setLayoutManager(LinearLayoutManager(this))
-        recyclerViewProfilePostsDoubts = findViewById<RecyclerView>(R.id.recyclerView_profile_doubts)
+        recyclerViewProfilePostsDoubts = findViewById<RecyclerView>(id.recyclerView_profile_doubts)
         recyclerViewProfilePostsDoubts.setHasFixedSize(true)
         recyclerViewProfilePostsDoubts.setLayoutManager(LinearLayoutManager(this))
         sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
@@ -125,23 +127,23 @@ class Profile : AppCompatActivity() {
             val editProfileDialog = Dialog(this)
             editProfileDialog.setContentView(R.layout.custom_dialog_edit_profile)
 
-            val spinnerBranch = editProfileDialog.findViewById<Spinner>(R.id.sp_branch)
-            val valuesBranch = resources.getStringArray(R.array.branches)
+            val spinnerBranch = editProfileDialog.findViewById<Spinner>(id.sp_branch)
+            val valuesBranch = resources.getStringArray(array.branches)
             val adapterBranch = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesBranch)
             spinnerBranch.setAdapter(adapterBranch)
 
-            val spinnerSemester = editProfileDialog.findViewById<Spinner>(R.id.sp_semester)
-            val valuesSemester = resources.getStringArray(R.array.semester)
+            val spinnerSemester = editProfileDialog.findViewById<Spinner>(id.sp_semester)
+            val valuesSemester = resources.getStringArray(array.semester)
             val adapterSemester = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesSemester)
             spinnerSemester.setAdapter(adapterSemester)
 
-            val spinnerCollege = editProfileDialog.findViewById<Spinner>(R.id.sp_college)
-            val valuesCollege = resources.getStringArray(R.array.collegelist)
+            val spinnerCollege = editProfileDialog.findViewById<Spinner>(id.sp_college)
+            val valuesCollege = resources.getStringArray(array.collegelist)
             val adapterCollege = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesCollege)
             spinnerCollege.setAdapter(adapterCollege)
 
-            val spinnerUniversity = editProfileDialog.findViewById<Spinner>(R.id.sp_university)
-            val valuesUniversity = resources.getStringArray(R.array.university)
+            val spinnerUniversity = editProfileDialog.findViewById<Spinner>(id.sp_university)
+            val valuesUniversity = resources.getStringArray(array.university)
             val adapterUniversity = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesUniversity)
             spinnerUniversity.setAdapter(adapterUniversity)
 
@@ -170,7 +172,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -178,6 +180,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "Name Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("name", editProfileDialog.et_name.text.toString().trim())
+                                        sharedPreferencesEdit.apply()
                                         tv_name.text = editProfileDialog.et_name.text.toString().trim()
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -224,7 +227,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            var genderValue:String
+                            val genderValue:String
                             if (editProfileDialog.rad_male.isChecked){
                                 genderValue="Male"
                             }else if(editProfileDialog.rad_female.isChecked){
@@ -232,7 +235,7 @@ class Profile : AppCompatActivity() {
                             }else{
                                 genderValue="Others"
                             }
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -240,6 +243,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "Gender Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("gender", genderValue)
+                                        sharedPreferencesEdit.apply()
                                         tv_gender.text = genderValue
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -284,7 +288,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -292,6 +296,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "Branch Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("branch", ExtraFunctions.getSmallBranch(spinnerBranch.selectedItem.toString()))
+                                        sharedPreferencesEdit.apply()
                                         tv_branch.text = spinnerBranch.selectedItem.toString()
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -336,7 +341,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -344,6 +349,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "Semester Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("semester", ExtraFunctions.getSmallSemester(spinnerSemester.selectedItem.toString()))
+                                        sharedPreferencesEdit.apply()
                                         tv_semester.text = spinnerSemester.selectedItem.toString()
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -388,7 +394,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -396,6 +402,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "College Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("college", spinnerCollege.selectedItem.toString())
+                                        sharedPreferencesEdit.apply()
                                         tv_college.text = spinnerCollege.selectedItem.toString()
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -440,7 +447,7 @@ class Profile : AppCompatActivity() {
                         dialog.show()
                         try {
                             val url = ExtraFunctions.serverurl + "EditProfile.php"
-                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                                 //                progressBar.setVisibility(View.GONE)
                                 try {
                                     val emp = JSONObject(response)
@@ -448,6 +455,8 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "University Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("university", ExtraFunctions.getSmallUniversity(spinnerUniversity.selectedItem.toString()))
+
+                                        sharedPreferencesEdit.apply()
                                         tv_university.text = spinnerUniversity.selectedItem.toString()
                                         editProfileDialog.dismiss()
                                         dialog.dismiss()
@@ -496,7 +505,7 @@ class Profile : AppCompatActivity() {
                 volleyPostDataRequest(postByUserId)
                 volleyDoubtsPostsDataRequest(postByUserId)
                 val url = ExtraFunctions.serverurl + "otherUsersProfileData.php"
-                val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                     try {
                         val emp = JSONObject(response)
                         val userEmail: String = emp.getString("email")
@@ -518,11 +527,11 @@ class Profile : AppCompatActivity() {
                         tv_doubts.setText(userDoubts)
                         tv_answers.setText(userAnswers)
                         if (userGender == "Male") {
-                            tv_my_posts.setText("His Posts")
-                            tv_my_posts_doubts.setText("His Doubts")
+                            tv_my_posts.text = "His Posts"
+                            tv_my_posts_doubts.text = "His Doubts"
                         } else {
-                            tv_my_posts.setText("Her Posts")
-                            tv_my_posts_doubts.setText("Her Doubts")
+                            tv_my_posts.text = "Her Posts"
+                            tv_my_posts_doubts.text = "Her Doubts"
                         }
                     } catch (exception: Exception) {
 
@@ -542,9 +551,9 @@ class Profile : AppCompatActivity() {
                 Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show()
             }
         }
-        toolbar_main.setNavigationOnClickListener(View.OnClickListener {
+        toolbar_main.setNavigationOnClickListener{
             finish()
-        })
+        }
         //posts
         useridlist = ArrayList()
         userdplist = ArrayList()
@@ -569,7 +578,7 @@ class Profile : AppCompatActivity() {
     fun volleyPostDataRequest(userid: String) {
         try {
             val url = ExtraFunctions.serverurl + "postsProfileDataAdapter.php"
-            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                 progress_bar_profile.setVisibility(View.GONE)
                 try {
                     val emp = JSONObject(response)
@@ -609,7 +618,7 @@ class Profile : AppCompatActivity() {
                                 subjectlist.add(postsubjectarray.get(i).toString())
                             }
                         }
-                        val profilePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
+                        val profilePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
                                 userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist)
                         recyclerViewProfile.adapter = profilePostsAdapter
                     }
@@ -635,7 +644,7 @@ class Profile : AppCompatActivity() {
 
     fun volleyDoubtsPostsDataRequest(userid: String) {
         val url = ExtraFunctions.serverurl + "doubtPostsProfileDataAdapter.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
             try {
                 val emp = JSONObject(response)
                 val result = emp.getString("result")
@@ -671,7 +680,7 @@ class Profile : AppCompatActivity() {
                             postimagepostlist.add(postimagepostarray.get(i).toString())
                         }
                     }
-                    val postDoubtsProfileAdapter = MyRecyclerPostDoubtsAdapter(dialog, requestQueue, this, userid, useridpostlist, userdppostlist, usernamepostlist,
+                    val postDoubtsProfileAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, requestQueue, this, userid, useridpostlist, userdppostlist, usernamepostlist,
                             userbranchpostlist, posttimepostlist, postimagepostlist, postdoubtidpostlist, posttextpostlist)
                     recyclerViewProfilePostsDoubts.adapter = postDoubtsProfileAdapter
                 }

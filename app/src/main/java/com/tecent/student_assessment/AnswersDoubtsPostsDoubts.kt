@@ -40,6 +40,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.HashMap
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     lateinit var requestQueue: RequestQueue
     lateinit var sharedPreferences: SharedPreferences
@@ -59,12 +60,12 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
         supportActionBar!!.setTitle("Answers")
-        toolbar_main.setNavigationOnClickListener(View.OnClickListener {
+        toolbar_main.setNavigationOnClickListener {
             finish()
-        })
+        }
         requestQueue = Volley.newRequestQueue(this)
         sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
-        userid = sharedPreferences.getString("userid", "")
+        userid = this.sharedPreferences.getString("userid", "")
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.setHasFixedSize(true)
@@ -95,8 +96,9 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
 
         tv_btn_post_comment.setOnClickListener {
             commentText = editText.text.toString().replace("'", "\\'")
-            if (path!!.startsWith("/storage/primary/"))
-                path = path!!.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+            if (path.startsWith("/storage/primary/")) {
+                path = path.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+            }
             val file = File(path)
             if (commentText.trim().length < 1) {
                 Toast.makeText(this, "please write something....", Toast.LENGTH_SHORT).show()
@@ -136,7 +138,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                 path = resultUri.path
                 //now we have path of file we should compress image
                 imageView3.setImageBitmap(compressImage(path))
-                val paths = path!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                path.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 //               textView3.setText(paths[paths.size - 1])
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 //on error
@@ -147,7 +149,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     }
 
     fun compressImage(path: String?): Bitmap? {
-        var imageData: ByteArray? = null
+        var imageData: ByteArray?
         try {
             val THUMBNAIL_SIZE = 256
             val fis = FileInputStream(File(path!!))
@@ -166,7 +168,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
 
     fun volleyImageRequest() {
         val url = ExtraFunctions.serverurl + "doubtsPostsAnswerData.php"
-        val multipartRequest = object : VolleyMultipartRequest(Request.Method.POST, url, Response.Listener { response ->
+        val multipartRequest = object : VolleyMultipartRequest(Method.POST, url, Response.Listener { response ->
             val resultResponse = String(response.data)
             try {
                 val result = JSONObject(resultResponse)
@@ -174,6 +176,9 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                 if (status == "successful") {
                     dialog.dismiss()
                     Toast.makeText(this@AnswersDoubtsPostsDoubts, "Answer uploaded successfully", Toast.LENGTH_SHORT).show()
+                    val sharedPreferencesEditDoubtsAnswers = sharedPreferences.edit()
+                    sharedPreferencesEditDoubtsAnswers.putString("doubts", (Integer.parseInt(sharedPreferences.getString("doubts", "")!!) + 1).toString())
+                    sharedPreferencesEditDoubtsAnswers.apply()
                     editText.setText("")
                     volleyAnswerDataRequest()
                 }
@@ -213,7 +218,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     //Google volley
     fun volleyTestWithoutImage() {
         val url = ExtraFunctions.serverurl + "doubtsPostsAnswerData.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener { error ->
+        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener { error ->
             dialog.dismiss()
             Toast.makeText(this@AnswersDoubtsPostsDoubts, error.toString(), Toast.LENGTH_SHORT).show()
             //                Toast.makeText(CreatePostQueryDoubts.this, "Error! Please try again later...", Toast.LENGTH_SHORT).show();
@@ -255,7 +260,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     fun volleyAnswerDataRequest() {
         try {
             val url = ExtraFunctions.serverurl + "answersDoubtsPostsDataAdapter.php"
-            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
                 swipeRefreshLayout.isRefreshing = false
 //                progressBar.setVisibility(View.GONE)
                 try {

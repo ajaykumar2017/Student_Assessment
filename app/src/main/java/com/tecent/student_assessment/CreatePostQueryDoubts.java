@@ -174,7 +174,10 @@ public class CreatePostQueryDoubts extends AppCompatActivity {
                     if (status.equals("successful"))
                     {
                         dialog.dismiss();
-                        Toast.makeText(CreatePostQueryDoubts.this, "Post uploaded successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CreatePostQueryDoubts.this, "Doubt uploaded successfully", Toast.LENGTH_SHORT).show();
+                        SharedPreferences.Editor sharedPreferencesEditPostDoubts = sharedPreferences.edit();
+                        sharedPreferencesEditPostDoubts.putString("doubts",String.valueOf(Integer.parseInt(sharedPreferences.getString("doubts",""))+1));
+                        sharedPreferencesEditPostDoubts.apply();
                         finish();
                     }
                     if (status.equals("error")){
@@ -234,7 +237,7 @@ public class CreatePostQueryDoubts extends AppCompatActivity {
             }
         }) {
             protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<String, String>();
+                Map<String, String> MyData = new HashMap<>();
                 MyData.put("userid", sharedPreferences.getString("userid",""));
                 MyData.put("posttext", et_post_text.getText().toString().replace("'","\\'"));
                 MyData.put("email", sharedPreferences.getString("email",""));

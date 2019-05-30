@@ -36,6 +36,7 @@ import org.json.JSONObject
 import java.io.File
 import java.util.HashMap
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class CreatePostHome : AppCompatActivity() {
 
     lateinit var selectedSubject:String
@@ -58,9 +59,9 @@ class CreatePostHome : AppCompatActivity() {
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
         supportActionBar!!.setTitle(Html.fromHtml("<font color='#000'>Create Post</font>"))
-        toolbar_main.setNavigationOnClickListener(View.OnClickListener {
+        toolbar_main.setNavigationOnClickListener {
             finish()
-        })
+        }
         postText=""
         selectedSubject=""
         fileName=""
@@ -133,7 +134,7 @@ class CreatePostHome : AppCompatActivity() {
                 // Instead, a URI to that document will be contained in the return intent
                 // provided to this method as a parameter.
                 // Pull that URI using resultData.getData().
-                var uri: Uri? = null
+                var uri: Uri?
                 if (resultData != null) {
                     uri = resultData.data
                     val path = getPath(this, uri)
@@ -343,7 +344,7 @@ class CreatePostHome : AppCompatActivity() {
     }
     fun sendDataHomeToServer(userid:String, postText:String, selectedSubject:String, fileName:String){
         val url = ExtraFunctions.serverurl + "uploadFileHomeData.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener {
+        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener {
             dialog.dismiss()
             toast("Error! Please try again later...")
         }) {
@@ -365,6 +366,9 @@ class CreatePostHome : AppCompatActivity() {
             if (result == "successful") {
                 dialog.dismiss()
                 toast("post uploaded successfully")
+                val sharedPreferencesEditPosts = sharedPreferences.edit()
+                sharedPreferencesEditPosts.putString("posts",(Integer.parseInt(sharedPreferences.getString("posts", "")!!) + 1).toString())
+                sharedPreferencesEditPosts.apply()
                 finish()
             } else if (result == "error") {
                 dialog.dismiss()

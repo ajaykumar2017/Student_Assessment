@@ -184,7 +184,7 @@ public class HomeFragment extends Fragment {
                                     subjectlist.add(postsubjectarray.get(i).toString());
                                 }
                             }
-                            MyRecyclerHomePostsAdapter homePostsAdapter = new MyRecyclerHomePostsAdapter(sharedPreferencesLike, dialog, requestQueue, getActivity(), userid, useridlist, userdplist, usernamelist,
+                            MyRecyclerHomePostsAdapter homePostsAdapter = new MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, getActivity(), userid, useridlist, userdplist, usernamelist,
                                     userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist);
                             mRecyclerViewPostHome.setAdapter(homePostsAdapter);
                         }
