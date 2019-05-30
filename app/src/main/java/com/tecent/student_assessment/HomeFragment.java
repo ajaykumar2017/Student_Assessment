@@ -212,10 +212,10 @@ public class HomeFragment extends Fragment {
         }
 
     }
-//
-    @Override
-    public void onResume() {
-        volleyPostDataRequest();
-        super.onResume();
-    }
+
+//    @Override
+//    public void onResume() {
+//        volleyPostDataRequest();
+//        super.onResume();
+//    }
 }

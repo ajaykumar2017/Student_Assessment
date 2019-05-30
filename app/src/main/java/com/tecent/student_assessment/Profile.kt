@@ -1,5 +1,6 @@
 package com.tecent.student_assessment
 
+import android.app.Dialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -10,17 +11,21 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import android.widget.Spinner
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.*
 import kotlinx.android.synthetic.main.activity_profile.*
+import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
+import kotlinx.android.synthetic.main.custom_dialog_edit_profile.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import org.json.JSONObject
 import java.util.ArrayList
@@ -120,6 +125,330 @@ class Profile : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show()
             }
+            val editProfileDialog = Dialog(this)
+            editProfileDialog.setContentView(R.layout.custom_dialog_edit_profile)
+
+            val spinnerBranch = editProfileDialog.findViewById<Spinner>(R.id.sp_branch)
+            val valuesBranch = resources.getStringArray(R.array.branches)
+            val adapterBranch = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesBranch)
+            spinnerBranch.setAdapter(adapterBranch)
+
+            val spinnerSemester = editProfileDialog.findViewById<Spinner>(R.id.sp_semester)
+            val valuesSemester = resources.getStringArray(R.array.semester)
+            val adapterSemester = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesSemester)
+            spinnerSemester.setAdapter(adapterSemester)
+
+            val spinnerCollege = editProfileDialog.findViewById<Spinner>(R.id.sp_college)
+            val valuesCollege = resources.getStringArray(R.array.collegelist)
+            val adapterCollege = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesCollege)
+            spinnerCollege.setAdapter(adapterCollege)
+
+            val spinnerUniversity = editProfileDialog.findViewById<Spinner>(R.id.sp_university)
+            val valuesUniversity = resources.getStringArray(R.array.university)
+            val adapterUniversity = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesUniversity)
+            spinnerUniversity.setAdapter(adapterUniversity)
+
+            editProfileDialog.et_name.visibility = View.GONE
+            editProfileDialog.radioGroup_gender.visibility = View.GONE
+            editProfileDialog.sp_branch.visibility = View.GONE
+            editProfileDialog.sp_semester.visibility = View.GONE
+            editProfileDialog.sp_college.visibility = View.GONE
+            editProfileDialog.sp_university.visibility = View.GONE
+
+            //edit name
+            val sharedPreferencesEdit = sharedPreferences.edit()
+            edit_name.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.VISIBLE
+                editProfileDialog.radioGroup_gender.visibility = View.GONE
+                editProfileDialog.sp_branch.visibility = View.GONE
+                editProfileDialog.sp_semester.visibility = View.GONE
+                editProfileDialog.sp_college.visibility = View.GONE
+                editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (editProfileDialog.et_name.text.toString().trim() == "") {
+                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "Name Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("name", editProfileDialog.et_name.text.toString().trim())
+                                        tv_name.text = editProfileDialog.et_name.text.toString().trim()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["name"] = editProfileDialog.et_name.text.toString().trim()
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+
+
+            edit_gender.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.GONE
+                editProfileDialog.radioGroup_gender.visibility = View.VISIBLE
+                editProfileDialog.sp_branch.visibility = View.GONE
+                editProfileDialog.sp_semester.visibility = View.GONE
+                editProfileDialog.sp_college.visibility = View.GONE
+                editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (editProfileDialog.radioGroup_gender.getCheckedRadioButtonId() == -1) {
+                        Toast.makeText(this, "select your gender", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val selectedIdRadio = editProfileDialog.radioGroup_gender.getCheckedRadioButtonId()
+                            val radioButton = findViewById<View>(selectedIdRadio) as RadioButton
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "Gender Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("gender", radioButton.text.toString())
+                                        tv_gender.text = radioButton.text.toString()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["gender"] = radioButton.text.toString()
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            edit_branch.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.GONE
+                editProfileDialog.radioGroup_gender.visibility = View.GONE
+                editProfileDialog.sp_branch.visibility = View.VISIBLE
+                editProfileDialog.sp_semester.visibility = View.GONE
+                editProfileDialog.sp_college.visibility = View.GONE
+                editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (spinnerBranch.selectedItem.toString().trim { it <= ' ' } == "Select Branch") {
+                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "Branch Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("branch", ExtraFunctions.getSmallBranch(spinnerBranch.selectedItem.toString()))
+                                        tv_branch.text = spinnerBranch.selectedItem.toString()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["branch"] = ExtraFunctions.getSmallBranch(spinnerBranch.selectedItem.toString())
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            edit_semester.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.GONE
+                editProfileDialog.radioGroup_gender.visibility = View.GONE
+                editProfileDialog.sp_branch.visibility = View.GONE
+                editProfileDialog.sp_semester.visibility = View.VISIBLE
+                editProfileDialog.sp_college.visibility = View.GONE
+                editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (spinnerSemester.selectedItem.toString().trim { it <= ' ' } == "Select Semester") {
+                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "Semester Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("semester", ExtraFunctions.getSmallSemester(spinnerSemester.selectedItem.toString()))
+                                        tv_semester.text = spinnerSemester.selectedItem.toString()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["semester"] = ExtraFunctions.getSmallSemester(spinnerSemester.selectedItem.toString())
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            edit_college.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.GONE
+                editProfileDialog.radioGroup_gender.visibility = View.GONE
+                editProfileDialog.sp_branch.visibility = View.GONE
+                editProfileDialog.sp_semester.visibility = View.GONE
+                editProfileDialog.sp_college.visibility = View.VISIBLE
+                editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (spinnerCollege.selectedItem.toString().trim { it <= ' ' } == "Select College") {
+                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "College Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("college", spinnerCollege.selectedItem.toString())
+                                        tv_college.text = spinnerCollege.selectedItem.toString()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["college"] = spinnerCollege.selectedItem.toString()
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            edit_university.setOnClickListener {
+                editProfileDialog.show()
+                editProfileDialog.et_name.visibility = View.GONE
+                editProfileDialog.radioGroup_gender.visibility = View.GONE
+                editProfileDialog.sp_branch.visibility = View.GONE
+                editProfileDialog.sp_semester.visibility = View.GONE
+                editProfileDialog.sp_college.visibility = View.GONE
+                editProfileDialog.sp_university.visibility = View.VISIBLE
+                editProfileDialog.btn_submit.setOnClickListener {
+                    if (spinnerUniversity.selectedItem.toString().trim { it <= ' ' } == "Select University") {
+                        Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()
+                    } else {
+                        dialog.show()
+                        try {
+                            val url = ExtraFunctions.serverurl + "EditProfile.php"
+                            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                                //                progressBar.setVisibility(View.GONE)
+                                try {
+                                    val emp = JSONObject(response)
+                                    val result = emp.getString("result")
+                                    if (result == "successful") {
+                                        Toast.makeText(this, "University Changed", Toast.LENGTH_SHORT).show()
+                                        sharedPreferencesEdit.putString("university", ExtraFunctions.getSmallUniversity(spinnerUniversity.selectedItem.toString()))
+                                        tv_university.text = spinnerUniversity.selectedItem.toString()
+                                        editProfileDialog.dismiss()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                    }
+                                } catch (exception: Exception) {
+                                    Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                                }
+                            }, Response.ErrorListener {
+                            }) {
+                                override fun getParams(): Map<String, String> {
+                                    val MyData = HashMap<String, String>()
+                                    MyData["userid"] = userid
+                                    MyData["university"] = ExtraFunctions.getSmallUniversity(spinnerUniversity.selectedItem.toString())
+                                    return MyData
+                                }
+                            }
+                            requestQueue.add(stringRequest)
+                        } catch (e: java.lang.Exception) {
+                            Toast.makeText(this, "some error occured!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
         }
         if (profile == "OtherProfile") {
             postByUserId = intent.getStringExtra("userid")
@@ -130,6 +459,7 @@ class Profile : AppCompatActivity() {
             requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + postByUserDp, iv_profile_image))
             tv_name.setText(postByUserName)
             tv_branch.setText(ExtraFunctions.getFullBranch(postByUserBranch))
+            edit_name.visibility = View.GONE
             edit_gender.visibility = View.GONE
             edit_semester.visibility = View.GONE
             edit_branch.visibility = View.GONE
@@ -316,7 +646,7 @@ class Profile : AppCompatActivity() {
                     }
                     val postDoubtsProfileAdapter = MyRecyclerPostDoubtsAdapter(dialog, requestQueue, this, userid, useridpostlist, userdppostlist, usernamepostlist,
                             userbranchpostlist, posttimepostlist, postimagepostlist, postdoubtidpostlist, posttextpostlist)
-                    recyclerViewProfilePostsDoubts.adapter=postDoubtsProfileAdapter
+                    recyclerViewProfilePostsDoubts.adapter = postDoubtsProfileAdapter
                 }
             } catch (exception: Exception) {
                 Toast.makeText(this, "some error occured! try again", Toast.LENGTH_SHORT).show()

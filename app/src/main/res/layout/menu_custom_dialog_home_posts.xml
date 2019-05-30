@@ -14,7 +14,8 @@
         android:textSize="17sp"
         android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_002_delete"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@color/verydarkgrey"
+        />
 
     <TextView
         android:id="@+id/tv_share_post"
