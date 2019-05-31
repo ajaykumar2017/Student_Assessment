@@ -143,9 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intProfile);
                 break;
             case R.id.nav_practice:
-                Intent intSp=new Intent(this,SinglePostsActivity.class);
-                intSp.putExtra("postid","36");
-                startActivity(intSp);
                 break;
             case R.id.nav_performance:
                 Toast.makeText(this, "Performance", Toast.LENGTH_SHORT).show();

@@ -4,22 +4,18 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,7 +26,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
@@ -42,7 +37,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import cc.cloudist.acplibrary.ACProgressConstant;
 import cc.cloudist.acplibrary.ACProgressFlower;
 
 public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerHomePostsAdapter.HomePostsHolder> {
@@ -56,6 +50,8 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
     private ArrayList<String> mposttextlist;
     private ArrayList<String> mpostfilelist;
     private ArrayList<String> msubjectlist;
+    private ArrayList<String> mlikelist;
+    private ArrayList<String> mcommentlist;
     String mMyuserid;
     RequestQueue mRequestQueue;
     ACProgressFlower mDialog;
@@ -65,7 +61,8 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                       ArrayList<String> userdplist, ArrayList<String> usernamelist,
                                       ArrayList<String> userbranchlist, ArrayList<String> posttimelist,
                                       ArrayList<String> postfilelist, ArrayList<String> postidlist,
-                                      ArrayList<String> posttextlist, ArrayList<String> subjectlist) {
+                                      ArrayList<String> posttextlist, ArrayList<String> subjectlist,
+                                      ArrayList<String> postlikelist, ArrayList<String> commentlist) {
         mSharedPreferences=sharedPreferences;
         mSharedPreferencesLike = sharedPreferencesLike;
         mDialog = dialog;
@@ -81,6 +78,8 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         mposttextlist = posttextlist;
         mpostfilelist = postfilelist;
         msubjectlist = subjectlist;
+        mlikelist=postlikelist;
+        mcommentlist=commentlist;
     }
 
     @NonNull
@@ -101,10 +100,13 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         final String mPostText = mposttextlist.get(position);
         final String mPostFile = mpostfilelist.get(position);
         final String mSubject = msubjectlist.get(position);
+        final String mLikes=mlikelist.get(position);
+        final String mComments=mcommentlist.get(position);
         String viewLink = "";
         String type = "";
 
         mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + mUserdp, homePostsHolder.iv_profile_image));
+        mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl+"userdp/"+mSharedPreferences.getString("userdp",""),homePostsHolder.my_profile_image));
         homePostsHolder.iv_username.setText(mUserName);
         homePostsHolder.ivdate_and_branch_subject.setText(mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase() + "  " + "\u2022" + " " + mSubject);
         homePostsHolder.iv_post_text.setText(mPostText);
@@ -217,13 +219,14 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
             public void onClick(View view) {
                 final Dialog dialogMenu = new Dialog(mContext);
                 // Include dialog.xml file
-                dialogMenu.setContentView(R.layout.menu_custom_dialog_home_posts);
+                dialogMenu.setContentView(R.layout.custom_dialog_menu_posts_home);
                 // Set dialog title
                 dialogMenu.setTitle("Custom Dialog");
                 TextView tv_delete_post = (TextView) dialogMenu.findViewById(R.id.tv_delete_post);
                 TextView tv_share_post = (TextView) dialogMenu.findViewById(R.id.tv_share_post);
                 TextView save_to_notes = (TextView) dialogMenu.findViewById(R.id.save_to_notes);
                 TextView tv_turn_on_post_notif = (TextView) dialogMenu.findViewById(R.id.tv_turn_on_post_notif);
+                TextView tv_share_link=(TextView)dialogMenu.findViewById(R.id.tv_share_link);
                 TextView tv_report_post = (TextView) dialogMenu.findViewById(R.id.tv_report_post);
                 dialogMenu.show();
                 if (!mUserId.equals(mMyuserid))
@@ -303,6 +306,31 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                 dialogMenu.dismiss();
                             }
                         }, 500);
+                    }
+                });
+
+                tv_share_link.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                            mDialog.show();
+                            final String shareString = "https://sas.a3creators.co.in/StudentAssessment/post?id="+mPostId;
+                            mDialog.dismiss();
+                            Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                            intentShareFile.setType("text/plain");
+                            intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                                    "Sharing File...");
+                            intentShareFile.putExtra(Intent.EXTRA_TEXT, shareString);
+                            mContext.startActivity(Intent.createChooser(intentShareFile, "Share"));
+                        } else {
+                            Toast.makeText(mContext, "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                        }
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                dialogMenu.dismiss();
+                            }
+                        }, 200);
                     }
                 });
 
@@ -399,6 +427,47 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
         });
         //menu part end
 
+        homePostsHolder.iv_post_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intSp=new Intent(mContext,SinglePostsActivity.class);
+                intSp.putExtra("postid",mPostId);
+                mContext.startActivity(intSp);
+            }
+        });
+        //post likes
+        int likes=Integer.parseInt(mLikes);
+        if (mLikes.equals("0")||mLikes.equals("1")) {
+            if (mSharedPreferencesLike.getString(mPostId, "").equals("liked")){
+                homePostsHolder.likes_count.setText("Liked by you and "+(likes-1)+" Others");
+            }else{
+                homePostsHolder.likes_count.setText(mLikes + " Like");
+            }
+        } else{
+            if (mSharedPreferencesLike.getString(mPostId, "").equals("liked")){
+                homePostsHolder.likes_count.setText("Liked by you and "+(likes-1)+" Others");
+            }else{
+                homePostsHolder.likes_count.setText(mLikes + " Likes");
+            }
+        }
+        //comments count
+        if (mComments.equals("0")) {
+            homePostsHolder.comments_count.setText("No Comments");
+        }else if (mComments.equals("1")){
+            homePostsHolder.comments_count.setText("View 1 comment");
+        }
+        else{
+            homePostsHolder.comments_count.setText("View all "+mComments+" comments");
+        }
+        //comments click
+        homePostsHolder.ll_view_comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent postIntent=new Intent(mContext,CommentsPostHome.class);
+                postIntent.putExtra("postid",mPostId);
+                mContext.startActivity(postIntent);
+            }
+        });
         //like part start
         homePostsHolder.ivlike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -419,6 +488,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                         speLike.apply();
                                         DrawableCompat.setTint(homePostsHolder.ivlike.getDrawable(), ContextCompat.getColor(mContext, R.color.vectordrawablelike));
                                         homePostsHolder.ivlike.setPadding(1, 0, 1, 0);
+                                        homePostsHolder.likes_count.setText(mLikes+" Likes");
                                         Toast.makeText(mContext, "Post Unliked", Toast.LENGTH_SHORT).show();
                                     }
                                     if (result.equals("error")) {
@@ -460,6 +530,7 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
                                         speLike.apply();
                                         DrawableCompat.setTint(homePostsHolder.ivlike.getDrawable(), ContextCompat.getColor(mContext, R.color.colorPrimary));
                                         homePostsHolder.ivlike.setPadding(1, 0, 1, 0);
+                                        homePostsHolder.likes_count.setText("Liked by you and "+mLikes+" Others");
                                         Toast.makeText(mContext, "Post Liked successfully", Toast.LENGTH_SHORT).show();
                                     }
                                     if (result.equals("error")) {
@@ -591,8 +662,9 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
     }
 
     class HomePostsHolder extends RecyclerView.ViewHolder {
-        ImageView iv_profile_image, iv_post_image, iv_menu_btn, ivlike, ivreply, ivshare;
-        TextView iv_username, ivdate_and_branch_subject, iv_post_text;
+        ImageView iv_profile_image, iv_post_image, iv_menu_btn, ivlike, ivreply, ivshare, my_profile_image;
+        TextView iv_username, ivdate_and_branch_subject, iv_post_text, likes_count, comments_count;
+        LinearLayout ll_view_comments;
 
         HomePostsHolder(@NonNull View itemView) {
             super(itemView);
@@ -605,6 +677,10 @@ public class MyRecyclerHomePostsAdapter extends RecyclerView.Adapter<MyRecyclerH
             ivlike = itemView.findViewById(R.id.ivlike);
             ivreply = itemView.findViewById(R.id.ivreply);
             ivshare = itemView.findViewById(R.id.ivshare);
+            my_profile_image=itemView.findViewById(R.id.my_profile_image);
+            likes_count=itemView.findViewById(R.id.count_likes);
+            comments_count=itemView.findViewById(R.id.count_comments);
+            ll_view_comments=itemView.findViewById(R.id.view_comments);
         }
     }
 }

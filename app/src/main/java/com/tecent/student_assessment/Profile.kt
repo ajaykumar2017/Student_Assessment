@@ -41,6 +41,8 @@ class Profile : AppCompatActivity() {
     internal lateinit var posttextlist: ArrayList<String>
     internal lateinit var postfilelist: ArrayList<String>
     internal lateinit var subjectlist: ArrayList<String>
+    internal lateinit var likeslist: ArrayList<String>
+    internal lateinit var commentslist: ArrayList<String>
     //doubts
     internal lateinit var useridpostlist: ArrayList<String>
     internal lateinit var usernamepostlist: ArrayList<String>
@@ -129,22 +131,22 @@ class Profile : AppCompatActivity() {
 
             val spinnerBranch = editProfileDialog.findViewById<Spinner>(id.sp_branch)
             val valuesBranch = resources.getStringArray(array.branches)
-            val adapterBranch = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesBranch)
+            val adapterBranch = ArrayAdapter<String>(this, R.layout.spinner_item, valuesBranch)
             spinnerBranch.setAdapter(adapterBranch)
 
             val spinnerSemester = editProfileDialog.findViewById<Spinner>(id.sp_semester)
             val valuesSemester = resources.getStringArray(array.semester)
-            val adapterSemester = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesSemester)
+            val adapterSemester = ArrayAdapter<String>(this, R.layout.spinner_item, valuesSemester)
             spinnerSemester.setAdapter(adapterSemester)
 
             val spinnerCollege = editProfileDialog.findViewById<Spinner>(id.sp_college)
             val valuesCollege = resources.getStringArray(array.collegelist)
-            val adapterCollege = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesCollege)
+            val adapterCollege = ArrayAdapter<String>(this, R.layout.spinner_item, valuesCollege)
             spinnerCollege.setAdapter(adapterCollege)
 
             val spinnerUniversity = editProfileDialog.findViewById<Spinner>(id.sp_university)
             val valuesUniversity = resources.getStringArray(array.university)
-            val adapterUniversity = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesUniversity)
+            val adapterUniversity = ArrayAdapter<String>(this, R.layout.spinner_item, valuesUniversity)
             spinnerUniversity.setAdapter(adapterUniversity)
 
             editProfileDialog.et_name.visibility = View.GONE
@@ -573,6 +575,8 @@ class Profile : AppCompatActivity() {
         postdoubtidpostlist = ArrayList()
         posttextpostlist = ArrayList()
         postimagepostlist = ArrayList()
+        likeslist = ArrayList<String>()
+        commentslist = ArrayList<String>()
     }
 
     fun volleyPostDataRequest(userid: String) {
@@ -593,6 +597,8 @@ class Profile : AppCompatActivity() {
                         posttextlist.clear()
                         postfilelist.clear()
                         subjectlist.clear()
+                        likeslist.clear()
+                        commentslist.clear()
 
                         val useridarray = emp.getJSONArray("userid")
                         val usernamearray = emp.getJSONArray("name")
@@ -603,6 +609,8 @@ class Profile : AppCompatActivity() {
                         val posttextarray = emp.getJSONArray("posttext")
                         val postfilearray = emp.getJSONArray("filename")
                         val postsubjectarray = emp.getJSONArray("subject")
+                        val postlikesarray = emp.getJSONArray("likes")
+                        val postcommentsarray = emp.getJSONArray("comments")
 
                         if (useridarray != null) {
                             val len = useridarray.length()
@@ -616,10 +624,12 @@ class Profile : AppCompatActivity() {
                                 posttextlist.add(posttextarray.get(i).toString())
                                 postfilelist.add(postfilearray.get(i).toString())
                                 subjectlist.add(postsubjectarray.get(i).toString())
+                                likeslist.add(postlikesarray.get(i).toString())
+                                commentslist.add(postcommentsarray.get(i).toString())
                             }
                         }
                         val profilePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
-                                userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist)
+                                userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
                         recyclerViewProfile.adapter = profilePostsAdapter
                     }
                 } catch (exception: Exception) {

@@ -1,45 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ivcardview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="10dp"
-    android:elevation="0dp"
-    app:cardElevation="0dp"
-    android:orientation="vertical"
     android:background="?android:attr/selectableItemBackground"
-    android:id="@+id/ivcardview"
-    >
+    android:elevation="0dp"
+    android:orientation="vertical"
+    app:cardElevation="0dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="5dp"
-        android:paddingTop="10dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:orientation="horizontal">
+            android:paddingRight="10dp">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2">
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/iv_profile_image"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="2dp"
-                        android:layout_alignParentTop="true"
-                        android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_boy"
-                        app:civ_border_color="@color/smalldarkgrey"
-                        app:civ_border_width="0.5dp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/iv_profile_image"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:src="@drawable/ic_boy"
+                    app:civ_border_color="@color/smalldarkgrey"
+                    app:civ_border_width="0.5dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -52,11 +51,11 @@
                     android:id="@+id/ivusername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="User Name"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
                     android:maxLines="1"
-                    android:textColor="@color/verydarkgrey"/>
+                    android:text="User Name"
+                    android:textColor="@color/verydarkgrey"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/iv_datetime_branch_subject"
@@ -67,10 +66,10 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ivmenubtn"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:id="@+id/ivmenubtn">
+                android:layout_weight="0.1">
 
                 <ImageView
                     android:id="@+id/iv_menu"
@@ -88,33 +87,48 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:text="this is a post"
-            android:textSize="17sp"
-            android:textColor="@color/verydarkgrey"
+            android:maxLines="5"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:maxLines="5"/>
+            android:text="this is a post"
+            android:textColor="@color/verydarkgrey"
+            android:textSize="17sp" />
 
         <ImageView
             android:id="@+id/iv_post_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/loader"
             android:scaleType="fitCenter"
-            />
+            android:src="@drawable/loader" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:layout_below="@+id/textView2"
-            android:background="@color/lightgrey1" />
+            android:background="@color/lightgrey" />
+
+        <TextView
+            android:id="@+id/count_likes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/verydarkgrey" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:layout_below="@+id/textView2"
+            android:background="@color/lightgrey" />
 
 
         <LinearLayout
+            android:id="@+id/ivbuttons"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:orientation="horizontal"
-            android:id="@+id/ivbuttons">
+            android:orientation="horizontal">
 
             <android.support.v7.widget.CardView
                 android:id="@+id/ivcvlike"
@@ -127,11 +141,11 @@
                     android:id="@+id/ivlike"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_001_thumb_up"
                     android:layout_gravity="center_horizontal"
-                    android:padding="5dp"
+                    android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"/>
+                    android:padding="5dp"
+                    android:src="@drawable/ic_001_thumb_up" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -145,10 +159,10 @@
                     android:id="@+id/ivreply"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_002_chat_comment_oval_speech_bubble_with_text_lines"
-                    android:padding="5dp"
+                    android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"/>
+                    android:padding="5dp"
+                    android:src="@drawable/ic_002_chat_comment_oval_speech_bubble_with_text_lines" />
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
@@ -162,20 +176,64 @@
                     android:id="@+id/ivshare"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_003_share"
-                    android:padding="5dp"
+                    android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
-                    android:clickable="true"/>
+                    android:padding="5dp"
+                    android:src="@drawable/ic_003_share" />
             </android.support.v7.widget.CardView>
         </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
             android:layout_below="@+id/textView2"
             android:background="@color/lightgrey" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/count_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="15dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="5dp"
+                android:textColor="@color/darkgrey"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="15dp">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/my_profile_image"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="2dp"
+                    android:paddingRight="5dp"
+                    android:src="@drawable/ic_boy"
+                    app:civ_border_color="@color/verydarkgrey"
+                    app:civ_border_width="0.5dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingStart="10dp"
+                    android:text="Add a comment..."
+                    android:textColor="@color/smalldarkgrey1" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </android.support.v7.widget.CardView>

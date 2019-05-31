@@ -69,22 +69,22 @@ public class StudentRegistration extends AppCompatActivity {
         checkBox = (CheckBox) findViewById(R.id.checkbox_meat);
         spinnerBranch = findViewById(R.id.sp_branch);
         final String[] valuesBranch = getResources().getStringArray(R.array.branches);
-        final ArrayAdapter<String> adapterBranch = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesBranch);
+        final ArrayAdapter<String> adapterBranch = new ArrayAdapter<String>(this, R.layout.spinner_item, valuesBranch);
         spinnerBranch.setAdapter(adapterBranch);
 
         spinnerSemester = findViewById(R.id.sp_semester);
         String[] valuesSemesters = getResources().getStringArray(R.array.semester);
-        ArrayAdapter<String> adapterSemester = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesSemesters);
+        ArrayAdapter<String> adapterSemester = new ArrayAdapter<String>(this, R.layout.spinner_item, valuesSemesters);
         spinnerSemester.setAdapter(adapterSemester);
 
         spinnerCollege = findViewById(R.id.sp_college);
         String[] valuesColleges = getResources().getStringArray(R.array.collegelist);
-        ArrayAdapter<String> adapterColleges = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesColleges);
+        ArrayAdapter<String> adapterColleges = new ArrayAdapter<String>(this, R.layout.spinner_item, valuesColleges);
         spinnerCollege.setAdapter(adapterColleges);
 
         spinnerUniversity = findViewById(R.id.sp_university);
         String[] valuesUniversity = getResources().getStringArray(R.array.university);
-        ArrayAdapter<String> adapterUniversity = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, valuesUniversity);
+        ArrayAdapter<String> adapterUniversity = new ArrayAdapter<String>(this, R.layout.spinner_item, valuesUniversity);
         spinnerUniversity.setAdapter(adapterUniversity);
 
         buttonRegister = findViewById(R.id.btnRegister);

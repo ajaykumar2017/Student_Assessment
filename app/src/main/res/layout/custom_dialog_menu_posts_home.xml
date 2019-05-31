@@ -51,13 +51,24 @@
         android:textSize="17sp"
         android:textColor="@color/verydarkgrey"/>
     <TextView
+        android:id="@+id/tv_share_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="    Share Link"
+        android:drawableLeft="@drawable/ic_share_link"
+        android:layout_below="@+id/tv_turn_on_post_notif"
+        android:textSize="17sp"
+        android:textColor="@color/verydarkgrey"/>
+    <TextView
         android:id="@+id/tv_report_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="    Report post"
         android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_005_ban"
-        android:layout_below="@+id/tv_turn_on_post_notif"
+        android:layout_below="@+id/tv_share_link"
         android:textSize="17sp"
         android:textColor="@color/verydarkgrey"/>
 

@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:background="@layout/rounded_border_edittext"
+        android:background="@layout/rounded_border_spinner"
         android:entries="@array/branches" />
 
     <Spinner
@@ -72,7 +72,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:background="@layout/rounded_border_edittext"
+        android:background="@layout/rounded_border_spinner"
         android:entries="@array/semester" />
 
     <Spinner
@@ -80,7 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:background="@layout/rounded_border_edittext"
+        android:background="@layout/rounded_border_spinner"
         android:entries="@array/collegelist" />
 
     <Spinner
@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginBottom="20dp"
-        android:background="@layout/rounded_border_edittext"
+        android:background="@layout/rounded_border_spinner"
         android:entries="@array/university" />
     <Button
         android:id="@+id/btn_submit"

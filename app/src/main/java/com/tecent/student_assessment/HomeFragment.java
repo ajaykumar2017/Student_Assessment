@@ -57,6 +57,8 @@ public class HomeFragment extends Fragment {
     ArrayList<String> posttextlist;
     ArrayList<String> postfilelist;
     ArrayList<String> subjectlist;
+    ArrayList<String> likeslist;
+    ArrayList<String> commentslist;
     String userid;
 
     @Nullable
@@ -78,6 +80,8 @@ public class HomeFragment extends Fragment {
         posttextlist = new ArrayList<String>();
         postfilelist = new ArrayList<String>();
         subjectlist=new ArrayList<String>();
+        likeslist=new ArrayList<String>();
+        commentslist=new ArrayList<String>();
 
         sharedPreferences=this.getActivity().getSharedPreferences("studentAssessment", Context.MODE_PRIVATE);
         sharedPreferencesLike=this.getActivity().getSharedPreferences("postLikes", Context.MODE_PRIVATE);
@@ -159,6 +163,8 @@ public class HomeFragment extends Fragment {
                             posttextlist.clear();
                             postfilelist.clear();
                             subjectlist.clear();
+                            likeslist.clear();
+                            commentslist.clear();
 
                             JSONArray useridarray = emp.getJSONArray("userid");
                             JSONArray usernamearray = emp.getJSONArray("name");
@@ -169,6 +175,8 @@ public class HomeFragment extends Fragment {
                             JSONArray posttextarray = emp.getJSONArray("posttext");
                             JSONArray postfilearray = emp.getJSONArray("filename");
                             JSONArray postsubjectarray = emp.getJSONArray("subject");
+                            JSONArray postlikesarray=emp.getJSONArray("likes");
+                            JSONArray postcommentsarray=emp.getJSONArray("comments");
 
                             if (useridarray != null) {
                                 int len = useridarray.length();
@@ -182,10 +190,12 @@ public class HomeFragment extends Fragment {
                                     posttextlist.add(posttextarray.get(i).toString());
                                     postfilelist.add(postfilearray.get(i).toString());
                                     subjectlist.add(postsubjectarray.get(i).toString());
+                                    likeslist.add(postlikesarray.get(i).toString());
+                                    commentslist.add(postcommentsarray.get(i).toString());
                                 }
                             }
                             MyRecyclerHomePostsAdapter homePostsAdapter = new MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, getActivity(), userid, useridlist, userdplist, usernamelist,
-                                    userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist);
+                                    userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist);
                             mRecyclerViewPostHome.setAdapter(homePostsAdapter);
                         }
                     } catch (Exception exception) {

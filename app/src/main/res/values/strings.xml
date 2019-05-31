@@ -19,6 +19,7 @@
         <item>Mechanical Engineering</item>
         <item>Electrical Engineering</item>
         <item>Civil Engineering</item>
+        <item>Others</item>
     </string-array>
 
     <string-array name="semester">
@@ -35,7 +36,6 @@
 
     <string-array name="collegelist">
         <item>Select College</item>
-        <item>All</item>
         <item>BIT Sindri</item>
         <item>University College of Engineering &amp; Technology</item>
         <item>Chaibasa Engineering College</item>
@@ -57,7 +57,6 @@
 
     <string-array name="university">
         <item>Select University</item>
-        <item>All</item>
         <item>Jharkhand University of Technology</item>
         <item>Kolhan University</item>
         <item>Others</item>
