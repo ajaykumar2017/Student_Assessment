@@ -85,8 +85,7 @@
                 android:textSize="17sp"
                 android:textColor="@color/verydarkgrey"
                 android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:maxLines="5" />
+                android:paddingRight="10dp" />
 
             <ImageView
                 android:id="@+id/iv_post_image"

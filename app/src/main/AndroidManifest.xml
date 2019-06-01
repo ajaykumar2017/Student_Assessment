@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SinglePostsActivity"></activity>
+        <activity android:name=".DashBoardMenuWebView"
+            android:theme="@style/AppThemeDashboardWebview"/>
+        <activity android:name=".SinglePostsActivity" />
         <activity android:name=".AnswersDoubtsPostsDoubts" />
         <activity
             android:name=".Profile"

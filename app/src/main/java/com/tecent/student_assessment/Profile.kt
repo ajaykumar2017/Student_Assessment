@@ -1,10 +1,13 @@
 package com.tecent.student_assessment
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
@@ -21,11 +24,17 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.*
+import com.theartofdev.edmodo.cropper.CropImage
+import kotlinx.android.synthetic.main.activity_comments_post_home.*
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
 import kotlinx.android.synthetic.main.custom_dialog_edit_profile.*
 import kotlinx.android.synthetic.main.toolbar_main.*
+import org.json.JSONException
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileInputStream
 import java.util.ArrayList
 import java.util.HashMap
 
@@ -52,6 +61,7 @@ class Profile : AppCompatActivity() {
     internal lateinit var postdoubtidpostlist: ArrayList<String>
     internal lateinit var posttextpostlist: ArrayList<String>
     internal lateinit var postimagepostlist: ArrayList<String>
+    internal lateinit var postnoofanswerslist:ArrayList<String>
 
     lateinit var sharedPreferences: SharedPreferences
     lateinit var sharedPreferencesLike: SharedPreferences
@@ -60,6 +70,7 @@ class Profile : AppCompatActivity() {
     lateinit var requestQueue: RequestQueue
     lateinit var dialog: ACProgressFlower
     lateinit var userid: String
+    lateinit var userdp:String
     lateinit var postByUserId: String
     lateinit var postByUserName: String
     lateinit var postByUserDp: String
@@ -103,7 +114,7 @@ class Profile : AppCompatActivity() {
             val semester: String = sharedPreferences.getString("semester", "")
             val college: String = sharedPreferences.getString("college", "")
             val university: String = sharedPreferences.getString("university", "")
-            val userdp: String = sharedPreferences.getString("userdp", "")
+            userdp = sharedPreferences.getString("userdp", "")
             val joindate: String = sharedPreferences.getString("joindate", "")
             val posts: String = sharedPreferences.getString("posts", "")
             val doubts: String = sharedPreferences.getString("doubts", "")
@@ -503,6 +514,7 @@ class Profile : AppCompatActivity() {
             edit_branch.visibility = View.GONE
             edit_college.visibility = View.GONE
             edit_university.visibility = View.GONE
+            iv_change_dp.visibility=View.GONE
             if (ExtraFunctions.isNetworkStatusAvialable(this)) {
                 volleyPostDataRequest(postByUserId)
                 volleyDoubtsPostsDataRequest(postByUserId)
@@ -577,6 +589,7 @@ class Profile : AppCompatActivity() {
         postimagepostlist = ArrayList()
         likeslist = ArrayList<String>()
         commentslist = ArrayList<String>()
+        postnoofanswerslist= ArrayList<String>()
     }
 
     fun volleyPostDataRequest(userid: String) {
@@ -667,6 +680,7 @@ class Profile : AppCompatActivity() {
                     postdoubtidpostlist.clear()
                     posttextpostlist.clear()
                     postimagepostlist.clear()
+                    postnoofanswerslist.clear()
 
                     val useridpostarray = emp.getJSONArray("userid")
                     val usernamepostarray = emp.getJSONArray("name")
@@ -676,6 +690,7 @@ class Profile : AppCompatActivity() {
                     val postdoubtidpostarray = emp.getJSONArray("postdoubtid")
                     val posttextpostarray = emp.getJSONArray("posttext")
                     val postimagepostarray = emp.getJSONArray("postimage")
+                    val postnoofanswersarray=emp.getJSONArray("answers")
 
                     if (useridpostarray != null) {
                         val len = useridpostarray.length()
@@ -688,10 +703,11 @@ class Profile : AppCompatActivity() {
                             postdoubtidpostlist.add(postdoubtidpostarray.get(i).toString())
                             posttextpostlist.add(posttextpostarray.get(i).toString())
                             postimagepostlist.add(postimagepostarray.get(i).toString())
+                            postnoofanswerslist.add(postnoofanswersarray.get(i).toString())
                         }
                     }
                     val postDoubtsProfileAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, requestQueue, this, userid, useridpostlist, userdppostlist, usernamepostlist,
-                            userbranchpostlist, posttimepostlist, postimagepostlist, postdoubtidpostlist, posttextpostlist)
+                            userbranchpostlist, posttimepostlist, postimagepostlist, postdoubtidpostlist, posttextpostlist, postnoofanswerslist)
                     recyclerViewProfilePostsDoubts.adapter = postDoubtsProfileAdapter
                 }
             } catch (exception: Exception) {
@@ -708,6 +724,90 @@ class Profile : AppCompatActivity() {
         }
         requestQueue.add(stringRequest)
 
+    }
+
+    //image picker
+    fun openImagePicker(view: View) {
+        CropImage.activity().setAspectRatio(1, 1)
+                .start(this)
+    }
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK) {
+                val resultUri = result.uri
+                val path:String = resultUri.path
+                //now we have path of file we should compress image
+                iv_profile_image.setImageBitmap(compressImage(path))
+                volleyImageRequest()
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                //on error
+                dialog.dismiss()
+                Toast.makeText(this, "An error occured! Please try again later.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    fun compressImage(path: String?): Bitmap? {
+        var imageData: ByteArray? = null
+        try {
+            val THUMBNAIL_SIZE = 256
+            val fis = FileInputStream(File(path!!))
+            var imageBitmap = BitmapFactory.decodeStream(fis)
+            imageBitmap = Bitmap.createScaledBitmap(imageBitmap, THUMBNAIL_SIZE,
+                    THUMBNAIL_SIZE, false)
+            val baos = ByteArrayOutputStream()
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            imageData = baos.toByteArray()
+            return BitmapFactory.decodeByteArray(imageData, 0, imageData!!.size)
+        } catch (ex: Exception) {
+            return null
+        }
+
+    }
+
+    fun volleyImageRequest() {
+        val url = ExtraFunctions.serverurl + "ChangeProfilePicture.php"
+        val multipartRequest = object : VolleyMultipartRequest(Request.Method.POST, url, Response.Listener { response ->
+            val resultResponse = String(response.data)
+            try {
+                val result = JSONObject(resultResponse)
+                val status = result.getString("result")
+                if (status == "successful") {
+                    dialog.dismiss()
+                    Toast.makeText(this@Profile, "DP Changed", Toast.LENGTH_SHORT).show()
+                    requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+                }
+                if (status == "error") {
+                    dialog.dismiss()
+                    Toast.makeText(this@Profile, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: JSONException) {
+                dialog.dismiss()
+                e.printStackTrace()
+            }
+        }, Response.ErrorListener {
+            dialog.dismiss()
+            Toast.makeText(this@Profile, "Volley Error", Toast.LENGTH_SHORT).show()
+        }) {
+            override fun getParams(): Map<String, String> {
+                val params = HashMap<String, String>()
+                params["userid"] = userid
+                return params
+            }
+
+            override fun getByteData(): Map<String, DataPart>? {
+                val params = HashMap<String, DataPart>()
+                // file name could found file base or direct access from real path
+                // for now just get bitmap data from ImageView
+                params["profileimage"] = DataPart("profile_image.jpg", AppHelper.getFileDataFromDrawable(baseContext, iv_profile_image.getDrawable()), "image/jpeg")
+                //DataPart second parameter is byte[]
+                return params
+            }
+        }
+
+        VolleySingleton.getInstance(baseContext).addToRequestQueue(multipartRequest)
     }
 
 }

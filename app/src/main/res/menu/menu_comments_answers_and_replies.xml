@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/delete_comment"
+        android:title="Delete Comment" />
+    <item android:id="@+id/delete_answer"
+        android:title="Delete Answer" />
+    <item android:id="@+id/delete_reply"
+        android:title="Delete Reply" />
+</menu>

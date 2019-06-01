@@ -6,6 +6,7 @@ import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -64,6 +65,53 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                 , postCommentsHolder.iv_profile_image))
         postCommentsHolder.username.text = commentObject.userName + " " + "\u2022" + " "
         postCommentsHolder.commentTime.text = commentObject.commentTime
+        if (mMyuserid != commentObject.userId) {
+            postCommentsHolder.iv_delete_post.visibility = View.GONE
+        }
+        postCommentsHolder.iv_delete_post.setOnClickListener {
+            val popup = PopupMenu(mContext, postCommentsHolder.iv_delete_post)
+            //inflating menu from xml resource
+            popup.inflate(R.menu.menu_comments_answers_and_replies)
+            val popupMenu = popup.menu
+            popupMenu.findItem(R.id.delete_answer).isVisible = false
+            popupMenu.findItem(R.id.delete_reply).isVisible = false
+            popup.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.delete_comment ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                        val url = ExtraFunctions.serverurl + "deleteCommentsOfPosts.php"
+                        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+                            try {
+                                val emp = JSONObject(response)
+                                val result = emp.getString("result")
+                                if (result == "successful") {
+                                    Toast.makeText(mContext, "Comment Deleted successfully", Toast.LENGTH_SHORT).show()
+                                }
+                                if (result == "error") {
+                                    Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
+                                }
+                            } catch (exception: Exception) {
+                                exception.printStackTrace()
+                            }
+                        }, Response.ErrorListener { error ->
+                            Toast.makeText(mContext, error.toString(), Toast.LENGTH_SHORT).show()
+                            //                Toast.makeText(CreatePostQueryDoubts.this, "Error! Please try again later...", Toast.LENGTH_SHORT).show();
+                        }) {
+                            override fun getParams(): Map<String, String> {
+                                val MyData = HashMap<String, String>()
+                                MyData["commentid"] = commentObject.commentId
+                                return MyData
+                            }
+                        }
+                        mRequestQueue.add(stringRequest)
+                    } else {
+                        Toast.makeText(mContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                false
+                }
+            popup.show()
+            }
+
         postCommentsHolder.comment_text.text = commentObject.commentText
         if (commentObject.repliesCount == "0") {
             postCommentsHolder.view_all_replies.text = "No Replies"
@@ -102,7 +150,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
-        val adapter = MyRecyclerPostsCommentsRepliesAdapter(mRequestQueue, mContext, commentObject.replyObjectArrayList)
+        val adapter = MyRecyclerPostsCommentsRepliesAdapter(mRequestQueue, mContext, mMyuserid,commentObject.replyObjectArrayList)
         postCommentsHolder.comments_recyclerview.adapter = adapter
 
         postCommentsHolder.tv_reply_btn.setOnClickListener {
@@ -123,14 +171,14 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                 override fun afterTextChanged(editable: Editable) {}
             })
             dialogReply.btn_reply.setOnClickListener {
-                if (dialogReply.editText_reply.text.length<1){
+                if (dialogReply.editText_reply.text.length < 1) {
                     Toast.makeText(mContext, "Please write something..", Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     mDialog.show()
                     try {
                         val url = ExtraFunctions.serverurl + "PostsCommentsReplyData.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
-//                progressBar.setVisibility(View.GONE)
+                            //                progressBar.setVisibility(View.GONE)
                             try {
                                 val emp = JSONObject(response)
                                 val result = emp.getString("result")
@@ -149,7 +197,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                                 val MyData = HashMap<String, String>()
                                 MyData["commentid"] = commentObject.commentId
                                 MyData["userid"] = mMyuserid
-                                MyData["replytext"] = dialogReply.editText_reply.text.toString()
+                                MyData["replytext"] = dialogReply.editText_reply.text.toString().trim().replace("'", "\\'")
                                 return MyData
                             }
                         }
@@ -168,6 +216,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
     inner class PostsCommentsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var iv_profile_image: ImageView
         var comment_image: ImageView
+        var iv_delete_post: ImageView
         var username: TextView
         var commentTime: TextView
         var comment_text: TextView
@@ -184,6 +233,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
             view_all_replies = itemView.findViewById(R.id.view_all_replies)
             tv_reply_btn = itemView.findViewById(R.id.tv_reply_btn)
             comments_recyclerview = itemView.findViewById(R.id.comments_recyclerview)
+            iv_delete_post = itemView.findViewById(R.id.iv_delete_post)
         }
     }
 }

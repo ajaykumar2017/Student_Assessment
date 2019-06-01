@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DashBoardMenuWebView">
+
+    <include
+        android:id="@+id/include2"
+        layout="@layout/toolbar_main" />
+    <WebView
+        android:id="@+id/dashboard_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/include2"/>
+    <ProgressBar
+        android:id="@+id/progress_bar_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="250dp"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/include2"
+        android:indeterminateTint="@color/colorPrimary"/>
+
+</RelativeLayout>

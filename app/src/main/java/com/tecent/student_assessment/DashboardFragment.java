@@ -25,7 +25,22 @@ public class DashboardFragment extends Fragment {
         cv_quizes=view.findViewById(R.id.quizes);
         cv_tutorials=view.findViewById(R.id.tutorials);
         cv_useful_links=view.findViewById(R.id.useful_links);
-
+        cv_prepare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intDashBoardPrepare=new Intent(getActivity(),DashBoardMenuWebView.class);
+                intDashBoardPrepare.putExtra("title","Prepare");
+                startActivity(intDashBoardPrepare);
+            }
+        });
+        cv_prep_materials.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intDashBoardPrepMaterials=new Intent(getActivity(),DashBoardMenuWebView.class);
+                intDashBoardPrepMaterials.putExtra("title","Prepare Materials");
+                startActivity(intDashBoardPrepMaterials);
+            }
+        });
         cv_results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -33,7 +48,30 @@ public class DashboardFragment extends Fragment {
                 startActivity(intSubResult);
             }
         });
-
+        cv_quizes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intDashBoardQuizes=new Intent(getActivity(),DashBoardMenuWebView.class);
+                intDashBoardQuizes.putExtra("title","Quizes");
+                startActivity(intDashBoardQuizes);
+            }
+        });
+        cv_tutorials.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intDashBoardTut=new Intent(getActivity(),DashBoardMenuWebView.class);
+                intDashBoardTut.putExtra("title","Tutorials");
+                startActivity(intDashBoardTut);
+            }
+        });
+        cv_useful_links.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intDashBoardUseFulLinks=new Intent(getActivity(),DashBoardMenuWebView.class);
+                intDashBoardUseFulLinks.putExtra("title","Useful Links");
+                startActivity(intDashBoardUseFulLinks);
+            }
+        });
 
 
 

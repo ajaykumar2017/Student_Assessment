@@ -56,6 +56,7 @@ public class DoubtsFragment extends Fragment {
     ArrayList<String> postdoubtidlist;
     ArrayList<String> posttextlist;
     ArrayList<String> postimagelist;
+    ArrayList<String> noofanswerslist;
     String userid;
 
     @Nullable
@@ -90,6 +91,7 @@ public class DoubtsFragment extends Fragment {
         userbranchlist = new ArrayList<String>();
         posttextlist = new ArrayList<String>();
         postimagelist = new ArrayList<String>();
+        noofanswerslist=new ArrayList<String>();
 
         requestQueue = Volley.newRequestQueue(getActivity());
         sharedPreferences = this.getActivity().getSharedPreferences("studentAssessment", Context.MODE_PRIVATE);
@@ -146,6 +148,7 @@ public class DoubtsFragment extends Fragment {
                         postdoubtidlist.clear();
                         posttextlist.clear();
                         postimagelist.clear();
+                        noofanswerslist.clear();
 
                         JSONArray useridarray = emp.getJSONArray("userid");
                         JSONArray usernamearray = emp.getJSONArray("name");
@@ -155,6 +158,7 @@ public class DoubtsFragment extends Fragment {
                         JSONArray postdoubtidarray = emp.getJSONArray("postdoubtid");
                         JSONArray posttextarray = emp.getJSONArray("posttext");
                         JSONArray postimagearray = emp.getJSONArray("postimage");
+                        JSONArray postNoofAnswersarray=emp.getJSONArray("answers");
 
                         if (useridarray != null) {
                             int len = useridarray.length();
@@ -167,10 +171,11 @@ public class DoubtsFragment extends Fragment {
                                 postdoubtidlist.add(postdoubtidarray.get(i).toString());
                                 posttextlist.add(posttextarray.get(i).toString());
                                 postimagelist.add(postimagearray.get(i).toString());
+                                noofanswerslist.add(postNoofAnswersarray.get(i).toString());
                             }
                         }
                         MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
-                                userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist);
+                                userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist);
                         mRecyclerViewPost.setAdapter(postDoubtsAdapter);
                     }
                 } catch (Exception exception) {

@@ -8,8 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.database.Cursor
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -17,91 +18,126 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.design.chip.Chip
 import android.support.design.widget.Snackbar
-import android.text.Html
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
-import cc.cloudist.acplibrary.ACProgressConstant
-import cc.cloudist.acplibrary.ACProgressFlower
+
+import com.android.volley.NetworkResponse
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import kotlinx.android.synthetic.main.activity_create_post_home.*
-import kotlinx.android.synthetic.main.toolbar_main.*
+import com.theartofdev.edmodo.cropper.CropImage
+
+import org.json.JSONException
 import org.json.JSONObject
+
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.util.HashMap
 
-@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
-class CreatePostHome : AppCompatActivity() {
+import cc.cloudist.acplibrary.ACProgressConstant
+import cc.cloudist.acplibrary.ACProgressFlower
+import com.tecent.student_assessment.VolleyMultipartRequest.DataPart
+import kotlinx.android.synthetic.main.activity_create_post_home.*
 
-    lateinit var selectedSubject:String
-    lateinit var userid:String
-    lateinit var postText:String
+class CreatePostQueryDoubts : AppCompatActivity() {
+    lateinit var iv_cancel_post: ImageView
+    lateinit var iv_profile_image: ImageView
+    lateinit var iv_set_image: ImageView
+    lateinit var tv_username: TextView
+    lateinit var tv_btn_post: TextView
+    lateinit var path_image: TextView
+    lateinit var et_post_text: EditText
     private val READ_REQUEST_CODE = 42
     private lateinit var filename: String
     private var filefullpath = ""
     lateinit var fileName: String
-    internal lateinit var uploadHelper:UploadHelper
-    lateinit var sharedPreferences:SharedPreferences
-    lateinit var dialog:ACProgressFlower
-    internal lateinit var requestQueue: RequestQueue
+    lateinit var postText: String
+    internal lateinit var uploadHelper: UploadHelper
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var dialog: ACProgressFlower
+    lateinit var requestQueue: RequestQueue
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_create_post_home)
-        setSupportActionBar(findViewById(R.id.toolbar_main))
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
-        supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
-        supportActionBar!!.setTitle(Html.fromHtml("<font color='#000'>Create Post</font>"))
-        toolbar_main.setNavigationOnClickListener {
-            finish()
-        }
-        postText=""
-        selectedSubject=""
-        fileName=""
-        sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        setContentView(R.layout.activity_create_post_query)
+        iv_cancel_post = findViewById(R.id.iv_cancel_post)
+        iv_profile_image = findViewById(R.id.iv_profile_image)
+        tv_username = findViewById(R.id.tv_username)
+        et_post_text = findViewById(R.id.et_post_text)
+        tv_btn_post = findViewById(R.id.tv_btn_post)
+        path_image = findViewById(R.id.path_image)
+        iv_set_image = findViewById(R.id.iv_set_image)
         requestQueue = Volley.newRequestQueue(this)
+        sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        val userdp = sharedPreferences.getString("userdp", "")
+        requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+        val name = sharedPreferences.getString("name", "")
+        val userid = sharedPreferences.getString("userid", "")
+        postText = ""
+        fileName = ""
+        tv_username.text = name
+        //progress dialog
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.WHITE).text("Uploading....")
                 .fadeColor(Color.BLACK).build()
-        chipGroup.setOnCheckedChangeListener{group,checkedId:Int ->
-            // Get the checked chip instance from chip group
-            val chip:Chip? = findViewById(checkedId)
+        dialog.setCancelable(false)
 
-            chip?.let {
-                selectedSubject="${it.text}"
-            }
-        }
-
-        btn_post.setOnClickListener {
-            postText = et_text_post.text.toString().replace("'", "\\'")
-            if (postText.trim().length<5){
+        iv_cancel_post.setOnClickListener { finish() }
+        //post button
+        tv_btn_post.setOnClickListener {
+            postText = et_post_text.text.toString().replace("'", "\\'")
+            if (postText.trim().length < 5) {
                 toast("please write at least 5 characters")
-            }else if (selectedSubject==""){
-                toast("Please select a subject")
-            } else if(!image_path.text.equals("")) {
-//                Toast.makeText(this, postText + " " + selectedSubject, Toast.LENGTH_SHORT).show()
-                uploadFileStatus()
-            }
-            else{
-                dialog.show()
-                sendDataHomeToServer(
-                        sharedPreferences.getString("userid", ""),
-                        postText, selectedSubject, fileName)
+            } else if (!path_image.text.equals("")) {
+                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                    uploadFileStatus()
+                } else {
+                    dialog.dismiss()
+                    Toast.makeText(this@CreatePostQueryDoubts, "No internet connection!", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                    dialog.show()
+                    sendDataHomeToServer(
+                            sharedPreferences.getString("userid", ""),
+                            postText, fileName)
+                } else {
+                    Toast.makeText(this@CreatePostQueryDoubts, "No internet connection!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
+
+        et_post_text.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
+            override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
+                if (et_post_text.text.toString().trim { it <= ' ' }.length >= 5) {
+                    tv_btn_post.setBackgroundResource(R.color.green)
+                } else if (et_post_text.text.toString().trim { it <= ' ' }.length < 5) {
+                    tv_btn_post.setBackgroundResource(R.color.smalldarkgrey)
+                }
+                //                Toast.makeText(CreatePostQueryDoubts.this, String.valueOf(et_post_text.getText().toString().trim().length()), Toast.LENGTH_SHORT).show();
+            }
+
+            override fun afterTextChanged(editable: Editable) {}
+        })
 
     }
 
+    //image picker
     fun addAttachment(view: View) {
-        val mimeTypes = arrayOf("image/*", "application/pdf")
+        val mimeTypes = arrayOf("image/*")
 
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -143,14 +179,14 @@ class CreatePostHome : AppCompatActivity() {
                     if (file.length() < 10 * 1024 * 1024) {
                         filefullpath = path
 //                        setpostbuttonstatus()
-                        filename = filefullpath.substring(filefullpath.lastIndexOf("/") + 1)
-                        image_path.setText(filename)
-                        if (!filename.endsWith(".pdf") && !filename.endsWith(".PDF")) {
+                        fileName = filefullpath.substring(filefullpath.lastIndexOf("/") + 1)
+                        path_image.text = fileName
+                        if (!fileName.endsWith(".pdf") && !fileName.endsWith(".PDF")) {
 //                            filefullpath = createthumbnailbig(path, filename)
                         }
                     } else {
                         val snackbar = Snackbar.make(findViewById(android.R.id.content),
-                                "File too large." + " Use Dashboard-> Contribute to upload file upto 200MB",
+                                "File too you can upload upto 1MB",
                                 Snackbar.LENGTH_INDEFINITE)
                         snackbar.setAction("OK") { snackbar.dismiss() }
                         snackbar.show()
@@ -171,8 +207,7 @@ class CreatePostHome : AppCompatActivity() {
                     if (file.length() < 10 * 1024 * 1024) {
                         val uri = Uri.fromFile(file)
                         val temp = getPath(this, uri)
-                        if (temp!!.endsWith(".pdf") || temp.endsWith(".jpg") || temp.endsWith(".png") || temp.endsWith(".jpeg") ||
-                                temp.endsWith(".PDF") || temp.endsWith(".JPG") || temp.endsWith(".PNG") || temp.endsWith(".JPEG")) {
+                        if (temp!!.endsWith(".jpg") || temp.endsWith(".png") || temp.endsWith(".jpeg") || temp.endsWith(".JPG") || temp.endsWith(".PNG") || temp.endsWith(".JPEG")) {
                             //Toast.makeText(this, temp,Toast.LENGTH_LONG).show();
                             var path = "/storage/" + temp.substring(temp.lastIndexOf("/") + 1)
                             path = path.replace("%3A", "/")
@@ -180,7 +215,7 @@ class CreatePostHome : AppCompatActivity() {
                             path = path.replace("%20", " ")
                             filefullpath = path
                             filename = filefullpath.substring(filefullpath.lastIndexOf("/") + 1)
-                            image_path.setText(filename)
+                            path_image.setText(filename)
                             if (!filename.endsWith(".pdf") && !filename.endsWith(".PDF")) {
 //                                filefullpath = createthumbnailbig(path, filename)
                             }
@@ -189,7 +224,7 @@ class CreatePostHome : AppCompatActivity() {
                         }
                     } else {
                         val snackbar = Snackbar.make(findViewById(android.R.id.content),
-                                "File size too large. If you want to upload large study material, upload it through" + " Contribute menu in Dashboard.",
+                                "File size too! you can upload file upto 1 MB",
                                 Snackbar.LENGTH_INDEFINITE)
                         snackbar.setAction("OK") { snackbar.dismiss() }
                         snackbar.show()
@@ -302,49 +337,51 @@ class CreatePostHome : AppCompatActivity() {
         return "com.android.providers.media.documents" == uri.authority
     }
 
-    fun Context.toast(message:String)=
-            Toast.makeText(this,message,Toast.LENGTH_SHORT).show()
+    fun Context.toast(message: String) =
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
 
     override fun onDestroy() {
         super.onDestroy()
         try {
             uploadHelper.cancel(true)
-        }catch (e:Exception){}
+        } catch (e: Exception) {
+        }
     }
-    fun uploadFileStatus(){
-        uploadHelper= @SuppressLint("StaticFieldLeak")
-        object :UploadHelper(ExtraFunctions.serverurl + "uploadFileHome.php")
-        {
+
+    fun uploadFileStatus() {
+        uploadHelper = @SuppressLint("StaticFieldLeak")
+        object : UploadHelper(ExtraFunctions.serverurl + "uploadFileDoubts.php") {
             override fun onPostExecute(response: String?) {
                 val emp = JSONObject(response)
                 val result = emp.getString("result")
-                if (result == "successful"){
+                if (result == "successful") {
                     dialog.dismiss()
                     fileName = emp.getString("filename")
                     sendDataHomeToServer(
                             sharedPreferences.getString("userid", ""),
-                            postText, selectedSubject, fileName)
-                }else{
+                            postText, fileName)
+                } else {
                     dialog.dismiss()
                     toast("An error has occurred. Please try again.")
                 }
 
                 super.onPostExecute(response)
             }
+
             override fun onPreExecute() {
                 dialog.show()
                 super.onPreExecute()
             }
         }
         if (filefullpath.startsWith("/storage/primary/"))
-            filefullpath=filefullpath.replace("/storage/primary/",ExtraFunctions.ROOTMAIN)
-        Log.d("filepath",filefullpath)
+            filefullpath = filefullpath.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
 //        toast(filefullpath)
         uploadHelper.execute(filefullpath)
     }
-    fun sendDataHomeToServer(userid:String, postText:String, selectedSubject:String, fileName:String){
-        val url = ExtraFunctions.serverurl + "uploadFileHomeData.php"
+
+    fun sendDataHomeToServer(userid: String, postText: String, fileName: String) {
+        val url = ExtraFunctions.serverurl + "uploadFileDoubtsData.php"
         val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener {
             dialog.dismiss()
             toast("Error! Please try again later...")
@@ -353,22 +390,22 @@ class CreatePostHome : AppCompatActivity() {
                 val MyData = HashMap<String, String>()
                 MyData["userid"] = userid
                 MyData["posttext"] = postText
-                MyData["subject"] = selectedSubject
                 MyData["filename"] = fileName
                 return MyData
             }
         }
         requestQueue.add(stringRequest)
     }
+
     fun jsonParser(jsontext: String) {
         try {
             val emp = JSONObject(jsontext)
             val result = emp.getString("result")
             if (result == "successful") {
                 dialog.dismiss()
-                toast("post uploaded successfully")
+                toast("doubt uploaded successfully")
                 val sharedPreferencesEditPosts = sharedPreferences.edit()
-                sharedPreferencesEditPosts.putString("posts",(Integer.parseInt(sharedPreferences.getString("posts", "")!!) + 1).toString())
+                sharedPreferencesEditPosts.putString("doubts", (Integer.parseInt(sharedPreferences.getString("doubts", "")!!) + 1).toString())
                 sharedPreferencesEditPosts.apply()
                 finish()
             } else if (result == "error") {
@@ -381,5 +418,4 @@ class CreatePostHome : AppCompatActivity() {
         }
 
     }
-
 }
