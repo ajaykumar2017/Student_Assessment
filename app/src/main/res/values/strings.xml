@@ -11,6 +11,7 @@
     <string name="add_image_or_pdf">ADD IMAGE / PDF</string>
     <string name="subjecttest">COMPUTER ORGANISATION AND ARCHITECTURE 2019 Test Series 1</string>
     <string name="subjecttestpractice">COMPUTER ORGANISATION AND ARCHITECTURE Practice Set 1</string>
+    <string name="transition_string">myTransition</string>
 
     <string-array name="branches">
         <item>Select Branch</item>

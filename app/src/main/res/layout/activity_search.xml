@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:iconifiedByDefault="false"
+        android:transitionName="@string/transition_string"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No such notice found."
+        android:textSize="18sp"
+        android:visibility="gone"
+        android:textAlignment="center"
+        android:drawableTop="@drawable/ic_mood_bad_black_24dp"
+        android:layout_margin="20dp"
+        android:id="@+id/tvEmpty"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recyclerView" />
+</LinearLayout>
