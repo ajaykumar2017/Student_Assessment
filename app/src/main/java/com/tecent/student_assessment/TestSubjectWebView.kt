@@ -28,7 +28,7 @@ class TestSubjectWebView : AppCompatActivity() {
         val type:String=intent.getStringExtra("test")
         val sharedPreferences= getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
         val userid:String=sharedPreferences.getString("userid","")
-        supportActionBar!!.setTitle(testType.trim())
+        supportActionBar!!.setTitle(testSubjectShort.trim().toUpperCase()+" "+testType.trim())
         toolbar_main.setNavigationOnClickListener(View.OnClickListener {
             finish()
         })
@@ -40,7 +40,18 @@ class TestSubjectWebView : AppCompatActivity() {
             }
         }
         if (type=="Practice"){
-            webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"algorithmPracticeSet.php?userid="+userid)
+            if (testSubjectShort=="algo"){
+                webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"algorithmPracticeSet.php?userid="+userid)
+            }else if (testSubjectShort=="ds"){
+                webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"dataStructurePracticeSet.php?userid="+userid)
+            }else if (testSubjectShort=="dl"){
+                webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"digitalLogicPracticeSet.php?userid="+userid)
+            }else if (testSubjectShort=="c"){
+                webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"CLanguagePracticeSet.php?userid="+userid)
+            }else{
+                webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"algorithmPracticeSet.php?userid="+userid)
+            }
+
         }else{
             webView.loadUrl(ExtraFunctions.serverurl+"testSeries/"+"algorithmTestSeries.php?userid="+userid)
         }

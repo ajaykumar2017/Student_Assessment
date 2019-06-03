@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
@@ -27,6 +29,7 @@ import android.support.v7.widget.Toolbar
 
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import java.io.ByteArrayOutputStream
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var drawerLayout: DrawerLayout? = null
@@ -69,7 +72,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         requestQueue = Volley.newRequestQueue(this)
         fab = findViewById(R.id.fab_post)
-        sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE)
         val name = sharedPreferences.getString("name", "")
         val email = sharedPreferences.getString("email", "")
@@ -103,8 +106,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val fIntent = Intent(this@MainActivity, CreatePostHome::class.java)
             startActivity(fIntent)
         }
+        userProfileImage.setOnClickListener {
+            animateIntent(userProfileImage)
+        }
 
+    }
 
+    fun animateIntent(view: ImageView) {
+        val intent = Intent(this, ImageViewerActivity::class.java)
+        intent.putExtra("intentType", "byteArray")
+        intent.putExtra(
+                "imageByteArray",
+                getFileDataFromDrawable(baseContext, view.drawable)
+        )
+        val transitionName = getString(R.string.transition_string)
+
+        val options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        view, // Starting view
+                        transitionName    // The String
+                )
+        ActivityCompat.startActivity(this, intent, options.toBundle())
+    }
+
+    fun getFileDataFromDrawable(context: Context, drawable: Drawable): ByteArray {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

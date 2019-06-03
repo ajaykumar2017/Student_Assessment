@@ -83,8 +83,8 @@ public class HomeFragment extends Fragment {
         likeslist=new ArrayList<String>();
         commentslist=new ArrayList<String>();
 
-        sharedPreferences=this.getActivity().getSharedPreferences("studentAssessment", Context.MODE_PRIVATE);
-        sharedPreferencesLike=this.getActivity().getSharedPreferences("postLikes", Context.MODE_PRIVATE);
+        sharedPreferences=this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE);
+        sharedPreferencesLike=this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE);
         String email=sharedPreferences.getString("email","");
         String passw=sharedPreferences.getString("passw","");
         String name=sharedPreferences.getString("name","");

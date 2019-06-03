@@ -94,7 +94,7 @@ public class DoubtsFragment extends Fragment {
         noofanswerslist=new ArrayList<String>();
 
         requestQueue = Volley.newRequestQueue(getActivity());
-        sharedPreferences = this.getActivity().getSharedPreferences("studentAssessment", Context.MODE_PRIVATE);
+        sharedPreferences = this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE);
         String name = sharedPreferences.getString("name", "");
         userid=sharedPreferences.getString("userid","");
         post_name_with_text.setText("Hi " + name + " Do you want to ask a doubt?");

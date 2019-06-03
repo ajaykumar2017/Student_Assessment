@@ -19,6 +19,8 @@ import com.android.volley.toolbox.Volley;
 public class ExtraFunctions {
     public static String serverurl="https://www.sas.a3creators.co.in/project/";
     public static  String rootdir= Environment.getExternalStorageDirectory() +"/Android/data/com.tecent.studentAssessment/";
+    public static String sharedPreferencesId="studentAssessment";
+    public static String sharedPreferencesLikeId="postLikes";
     public static String ROOTMAIN=Environment.getExternalStorageDirectory()+"/";
     public static String getFullBranch(String branch){
         switch (branch){
