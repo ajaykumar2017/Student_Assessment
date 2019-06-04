@@ -150,7 +150,7 @@ class CreatePostHome : AppCompatActivity() {
                         }
                     } else {
                         val snackbar = Snackbar.make(findViewById(android.R.id.content),
-                                "File too large." + " Use Dashboard-> Contribute to upload file upto 200MB",
+                                "File too large." + " Maximum size to upload is 1 MB",
                                 Snackbar.LENGTH_INDEFINITE)
                         snackbar.setAction("OK") { snackbar.dismiss() }
                         snackbar.show()

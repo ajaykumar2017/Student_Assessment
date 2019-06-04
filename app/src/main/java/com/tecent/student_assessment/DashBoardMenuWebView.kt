@@ -46,6 +46,8 @@ class DashBoardMenuWebView : AppCompatActivity() {
             dashboard_webview.loadUrl("https://www.tutorials.a3creators.co.in")
         } else if (title == "Useful Links") {
             dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/usefulLinksDashboard.php")
+        } else if (title == "Practice") {
+            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/Practice.php")
         }
 
     }

@@ -106,6 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val fIntent = Intent(this@MainActivity, CreatePostHome::class.java)
             startActivity(fIntent)
         }
+        nav_header_imageView.setOnClickListener {
+            animateIntent(nav_header_imageView)
+        }
         userProfileImage.setOnClickListener {
             animateIntent(userProfileImage)
         }
@@ -162,8 +165,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intProfile)
             }
             R.id.nav_practice -> {
+                val intDashBoardQuizes = Intent(this, DashBoardMenuWebView::class.java)
+                intDashBoardQuizes.putExtra("title", "Practice")
+                startActivity(intDashBoardQuizes)
             }
-            R.id.nav_performance -> Toast.makeText(this, "Performance", Toast.LENGTH_SHORT).show()
+            R.id.nav_performance -> {
+                val intSubResult = Intent(this, ShowResultFromDashboard::class.java)
+                startActivity(intSubResult)
+            }
             R.id.nav_notes -> Toast.makeText(this, "Notes", Toast.LENGTH_SHORT).show()
             R.id.nav_appSettings -> {
                 val intentSettings = Intent(this@MainActivity, Settings::class.java)

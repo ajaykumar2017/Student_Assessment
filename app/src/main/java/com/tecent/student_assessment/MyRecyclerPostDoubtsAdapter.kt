@@ -1,12 +1,17 @@
 package com.tecent.student_assessment
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -40,6 +45,7 @@ import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import java.io.ByteArrayOutputStream
 
 class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mDialog: ACProgressFlower, internal var mRequestQueue: RequestQueue, private val mContext: Context, internal var mMyuserid: String, private val museridlist: ArrayList<String>,
                                   private val muserdplist: ArrayList<String>, private val musernamelist: ArrayList<String>,
@@ -74,9 +80,7 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
             postDoubtsHolder.iv_post_image.visibility = View.GONE
         val viewLink = ExtraFunctions.serverurl + "postdoubts/" + mPostImage
         postDoubtsHolder.iv_post_image.setOnClickListener {
-            val intent = Intent(mContext, ImagePdfWebView::class.java)
-            intent.putExtra("viewLink", viewLink)
-            mContext.startActivity(intent)
+            animateIntent(postDoubtsHolder.iv_post_image)
         }
 
         postDoubtsHolder.iv_menu_btn.setOnClickListener {
@@ -337,5 +341,24 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
             btn_answer_now = itemView.findViewById(R.id.btn_answer_now)
             tv_no_of_answers = itemView.findViewById(R.id.tv_no_of_answers)
         }
+    }
+
+
+    fun animateIntent(view: ImageView) {
+        val intent = Intent(mContext, ImageViewerActivity::class.java)
+        intent.putExtra("intentType", "byteArray")
+        intent.putExtra(
+                "imageByteArray",
+                getFileDataFromDrawable(mContext, view.drawable)
+        )
+        val transitionName = mContext.getString(R.string.transition_string)
+        val options= ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
+        ActivityCompat.startActivity(mContext, intent, options.toBundle())
+    }
+    fun getFileDataFromDrawable(context: Context, drawable: Drawable): ByteArray {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
 }

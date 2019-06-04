@@ -10,66 +10,73 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="    Delete Post"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:textSize="17sp"
         android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_002_delete"
-        android:textColor="@color/verydarkgrey"
+        android:textColor="@android:color/black"
         />
 
     <TextView
         android:id="@+id/tv_share_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:drawableLeft="@drawable/ic_001_share"
         android:text="    Share Post"
         android:background="?attr/selectableItemBackground"
         android:layout_below="@+id/tv_delete_post"
         android:textSize="17sp"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@android:color/black"/>
     <TextView
         android:id="@+id/save_to_notes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="?attr/selectableItemBackground"
         android:text="    Save to my notes"
         android:drawableLeft="@drawable/ic_003_save_button"
         android:layout_below="@+id/tv_share_post"
         android:textSize="17sp"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@android:color/black"/>
     <TextView
         android:id="@+id/tv_turn_on_post_notif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="?attr/selectableItemBackground"
         android:text="    Turn on Post notifications"
         android:drawableLeft="@drawable/ic_004_notification"
         android:layout_below="@+id/save_to_notes"
         android:textSize="17sp"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@android:color/black"/>
     <TextView
         android:id="@+id/tv_share_link"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="?attr/selectableItemBackground"
         android:text="    Share Link"
         android:drawableLeft="@drawable/ic_share_link"
         android:layout_below="@+id/tv_turn_on_post_notif"
         android:textSize="17sp"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@android:color/black"/>
     <TextView
         android:id="@+id/tv_report_post"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="    Report post"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="?attr/selectableItemBackground"
         android:drawableLeft="@drawable/ic_005_ban"
         android:layout_below="@+id/tv_share_link"
         android:textSize="17sp"
-        android:textColor="@color/verydarkgrey"/>
+        android:textColor="@android:color/black"/>
 
 </RelativeLayout>

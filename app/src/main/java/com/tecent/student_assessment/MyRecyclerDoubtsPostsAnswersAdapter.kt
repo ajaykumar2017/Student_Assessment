@@ -1,9 +1,16 @@
 package com.tecent.student_assessment
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
@@ -29,6 +36,7 @@ import kotlinx.android.synthetic.main.activity_comments_post_home.*
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
@@ -112,6 +120,9 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
             popup.show()
         }
         postCommentsHolder.comment_text.text = answerObject.answerText
+        postCommentsHolder.comment_image.setOnClickListener {
+            animateIntent(postCommentsHolder.comment_image)
+        }
         if (answerObject.repliesCount == "0") {
             postCommentsHolder.view_all_replies.text = "No Replies"
         } else if (answerObject.repliesCount == "1") {
@@ -234,5 +245,24 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
             comments_recyclerview = itemView.findViewById(R.id.comments_recyclerview)
             iv_delete_post = itemView.findViewById(R.id.iv_delete_post)
         }
+    }
+
+
+    fun animateIntent(view: ImageView) {
+        val intent = Intent(mContext, ImageViewerActivity::class.java)
+        intent.putExtra("intentType", "byteArray")
+        intent.putExtra(
+                "imageByteArray",
+                getFileDataFromDrawable(mContext, view.drawable)
+        )
+        val transitionName = mContext.getString(R.string.transition_string)
+        val options= ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
+        ActivityCompat.startActivity(mContext, intent, options.toBundle())
+    }
+    fun getFileDataFromDrawable(context: Context, drawable: Drawable): ByteArray {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
 }

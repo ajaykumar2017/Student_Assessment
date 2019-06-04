@@ -1,12 +1,18 @@
 package com.tecent.student_assessment
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
+import android.provider.Settings.Global.getString
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.RecyclerView
@@ -37,6 +43,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressFlower
+import java.io.ByteArrayOutputStream
 
 class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mSharedPreferencesLike: SharedPreferences, internal var mDialog: ACProgressFlower, internal var mRequestQueue: RequestQueue, private val mContext: Context, internal var mMyuserid: String, private val museridlist: ArrayList<String>,
                                  private val muserdplist: ArrayList<String>, private val musernamelist: ArrayList<String>,
@@ -144,15 +151,14 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         val finalType = type
         homePostsHolder.iv_post_image.setOnClickListener {
             if (finalType == "pdf") {
-                //                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalViewLink));
-                //                    mContext.startActivity(browserIntent);
                 val intent = Intent(mContext, ImagePdfWebView::class.java)
                 intent.putExtra("viewLink", finalViewLink)
                 mContext.startActivity(intent)
             } else {
-                val intent = Intent(mContext, ImagePdfWebView::class.java)
-                intent.putExtra("viewLink", finalViewLink)
-                mContext.startActivity(intent)
+//                val intent = Intent(mContext, ImagePdfWebView::class.java)
+//                intent.putExtra("viewLink", finalViewLink)
+//                mContext.startActivity(intent)
+                  animateIntent(homePostsHolder.iv_post_image)
             }
         }
         //onclick post image end
@@ -557,5 +563,23 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
             ll_view_comments = itemView.findViewById(R.id.view_comments)
         }
     }
+    fun animateIntent(view: ImageView) {
+        val intent = Intent(mContext, ImageViewerActivity::class.java)
+        intent.putExtra("intentType", "byteArray")
+        intent.putExtra(
+                "imageByteArray",
+                getFileDataFromDrawable(mContext, view.drawable)
+        )
+        val transitionName = mContext.getString(R.string.transition_string)
+        val options=ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
+        ActivityCompat.startActivity(mContext, intent, options.toBundle())
+    }
+    fun getFileDataFromDrawable(context: Context, drawable: Drawable): ByteArray {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
+    }
+
 }
 

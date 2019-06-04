@@ -113,6 +113,7 @@ public class HomeFragment extends Fragment {
                 startSmoothScroll(smoothScroller);
             }
         };
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerViewPostHome.setLayoutManager(layoutManager);
 
         requestQueue = Volley.newRequestQueue(getActivity());
