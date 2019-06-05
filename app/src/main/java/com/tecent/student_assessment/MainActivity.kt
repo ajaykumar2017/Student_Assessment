@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.view.Gravity
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit internal var sharedPreferencesLike: SharedPreferences
     lateinit internal var requestQueue: RequestQueue
     lateinit  internal var fab: FloatingActionButton
+    var doubleBackToExitPressedOnce = false
 
     private val navigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
         var selectedFragment: Fragment? = null
@@ -148,14 +150,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onBackPressed() {
-        if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout!!.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -217,4 +211,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     )
             ActivityCompat.startActivity(this, intent, options.toBundle())
         }
+
+
+    override fun onBackPressed() {
+        if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout!!.closeDrawer(GravityCompat.START)
+        } else {
+            if (doubleBackToExitPressedOnce){
+                super.onBackPressed()
+                return
+            }
+            this.doubleBackToExitPressedOnce = true
+            Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
+             Handler().postDelayed(Runnable() {
+                doubleBackToExitPressedOnce = false;
+
+        }, 2000)
+        }
+    }
 }

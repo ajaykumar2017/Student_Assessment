@@ -9,9 +9,13 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -131,6 +135,9 @@ class Profile : AppCompatActivity() {
             tv_posts.setText(posts)
             tv_doubts.setText(doubts)
             tv_answers.setText(answers)
+            iv_profile_image.setOnClickListener {
+                animateIntent(iv_profile_image)
+            }
             if (ExtraFunctions.isNetworkStatusAvialable(this)) {
                 volleyPostDataRequest(userid)
                 volleyDoubtsPostsDataRequest(userid)
@@ -506,6 +513,9 @@ class Profile : AppCompatActivity() {
             postByUserBranch = intent.getStringExtra("userbranch")
             supportActionBar!!.setTitle(postByUserName + "'s Profile")
             requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + postByUserDp, iv_profile_image))
+            iv_profile_image.setOnClickListener {
+                animateIntent(iv_profile_image)
+            }
             tv_name.setText(postByUserName)
             tv_branch.setText(ExtraFunctions.getFullBranch(postByUserBranch))
             edit_name.visibility = View.GONE
@@ -808,6 +818,31 @@ class Profile : AppCompatActivity() {
         }
 
         VolleySingleton.getInstance(baseContext).addToRequestQueue(multipartRequest)
+    }
+
+    fun animateIntent(view: ImageView) {
+        val intent = Intent(this, ImageViewerActivity::class.java)
+        intent.putExtra("intentType", "byteArray")
+        intent.putExtra(
+                "imageByteArray",
+                getFileDataFromDrawable(baseContext, view.drawable)
+        )
+        val transitionName = getString(R.string.transition_string)
+
+        val options =
+                ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        this,
+                        view, // Starting view
+                        transitionName    // The String
+                )
+        ActivityCompat.startActivity(this, intent, options.toBundle())
+    }
+
+    fun getFileDataFromDrawable(context: Context, drawable: Drawable): ByteArray {
+        val bitmap = (drawable as BitmapDrawable).bitmap
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
 
 }

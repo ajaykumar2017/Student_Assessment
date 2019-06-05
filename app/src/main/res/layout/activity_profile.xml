@@ -52,7 +52,7 @@
                             android:layout_alignParentTop="true"
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center_horizontal"
-                            android:src="@drawable/ic_boy"
+                            android:src="@drawable/ic_usernew"
                             app:civ_border_color="@color/smalldarkgrey"
                             app:civ_border_width="0.5dp" />
                             <ImageView
