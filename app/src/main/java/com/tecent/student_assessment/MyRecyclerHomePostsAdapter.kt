@@ -332,7 +332,20 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         }
         //menu part end
 
+        //post text onClick
         homePostsHolder.iv_post_text.setOnClickListener {
+            val intSp = Intent(mContext, SinglePostsActivity::class.java)
+            intSp.putExtra("postid", mPostId)
+            mContext.startActivity(intSp)
+        }
+        //get the length of words
+        val getLen:Int=mPostText.split(" ").size
+        homePostsHolder.iv_post_text_more.visibility=View.GONE
+        if (getLen>30){
+            homePostsHolder.iv_post_text_more.visibility=View.VISIBLE
+        }
+        //on click more
+        homePostsHolder.iv_post_text_more.setOnClickListener {
             val intSp = Intent(mContext, SinglePostsActivity::class.java)
             intSp.putExtra("postid", mPostId)
             mContext.startActivity(intSp)
@@ -543,6 +556,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         var iv_username: TextView
         var ivdate_and_branch_subject: TextView
         var iv_post_text: TextView
+        var iv_post_text_more:TextView
         var likes_count: TextView
         var comments_count: TextView
         var ll_view_comments: LinearLayout
@@ -553,6 +567,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
             iv_username = itemView.findViewById(R.id.ivusername)
             ivdate_and_branch_subject = itemView.findViewById(R.id.iv_datetime_branch_subject)
             iv_post_text = itemView.findViewById(R.id.iv_post_text)
+            iv_post_text_more=itemView.findViewById(R.id.iv_post_text_more)
             iv_menu_btn = itemView.findViewById(R.id.iv_menu)
             ivlike = itemView.findViewById(R.id.ivlike)
             ivreply = itemView.findViewById(R.id.ivreply)

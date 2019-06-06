@@ -185,6 +185,7 @@ class Profile : AppCompatActivity() {
                 editProfileDialog.sp_semester.visibility = View.GONE
                 editProfileDialog.sp_college.visibility = View.GONE
                 editProfileDialog.sp_university.visibility = View.GONE
+                editProfileDialog.et_name.setText(this.sharedPreferences.getString("name",""),TextView.BufferType.EDITABLE)
                 editProfileDialog.btn_submit.setOnClickListener {
                     if (editProfileDialog.et_name.text.toString().trim() == "") {
                         Toast.makeText(this, "Please write your new Name", Toast.LENGTH_SHORT).show()

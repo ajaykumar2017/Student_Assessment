@@ -12,6 +12,7 @@
     <string name="subjecttest">COMPUTER ORGANISATION AND ARCHITECTURE 2019 Test Series 1</string>
     <string name="subjecttestpractice">COMPUTER ORGANISATION AND ARCHITECTURE Practice Set 1</string>
     <string name="transition_string">myTransition</string>
+    <string name="android">Search \"Android\"</string>
 
     <string-array name="branches">
         <item>Select Branch</item>

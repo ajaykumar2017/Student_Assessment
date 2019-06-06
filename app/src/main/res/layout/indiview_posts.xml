@@ -87,12 +87,23 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="5dp"
-            android:maxLines="5"
+            android:maxLines="8"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="this is a post"
             android:textColor="@color/verydarkgrey"
             android:textSize="17sp" />
+        <TextView
+            android:id="@+id/iv_post_text_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="more..."
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_marginBottom="5dp"/>
 
         <ImageView
             android:id="@+id/iv_post_image"

@@ -126,26 +126,32 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
         if (commentObject.repliesCount == "0") {
             postCommentsHolder.view_all_replies.text = "No Replies"
         } else if (commentObject.repliesCount == "1") {
-            postCommentsHolder.view_all_replies.text = "Hide " + commentObject.repliesCount + " Reply"
+            postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Reply"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
             postCommentsHolder.view_all_replies.setOnClickListener {
                 if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
                     postCommentsHolder.comments_recyclerview.visibility = View.GONE
-                    postCommentsHolder.view_all_replies.text = "Show " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.text = " Show " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_001_drop_down_arrow,0,0,0)
                 } else {
                     postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-                    postCommentsHolder.view_all_replies.text = "Hide " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
 
                 }
             }
         } else {
-            postCommentsHolder.view_all_replies.text = "Hide " + commentObject.repliesCount + " Replies"
+            postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Replies"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
             postCommentsHolder.view_all_replies.setOnClickListener {
                 if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
                     postCommentsHolder.comments_recyclerview.visibility = View.GONE
-                    postCommentsHolder.view_all_replies.text = "Show " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.text = " Show " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_001_drop_down_arrow,0,0,0)
                 } else {
                     postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-                    postCommentsHolder.view_all_replies.text = "Hide " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
 
                 }
             }

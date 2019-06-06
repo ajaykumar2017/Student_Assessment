@@ -37,7 +37,7 @@ class DashBoardMenuWebView : AppCompatActivity() {
         if (title=="Prepare"){
             dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepare.php")
         }
-        else if (title=="Prepare Materials"){
+        else if (title=="Preparation Materials"){
             dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepareMaterials.php")
         }
         else if (title == "Quizes") {

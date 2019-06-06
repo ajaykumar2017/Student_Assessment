@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit internal var nav_header_imageView: ImageView
     lateinit internal var userProfileImage: ImageView
     lateinit internal var menuBtn: ImageView
+    lateinit internal var etSearch: TextView
     lateinit internal var nav_header_textView_name: TextView
     lateinit internal var nav_header_textView_email: TextView
     lateinit internal var sharedPreferences: SharedPreferences
@@ -82,6 +83,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val userid = sharedPreferences.getString("userid", "")
         userProfileImage = findViewById(R.id.userDp)
         menuBtn = findViewById(R.id.menuBtn)
+        etSearch=findViewById(R.id.etSearch)
         menuBtn.setOnClickListener { drawerLayout!!.openDrawer(Gravity.LEFT) }
         requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, userProfileImage))
 
@@ -114,6 +116,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         userProfileImage.setOnClickListener {
             animateIntent(userProfileImage)
         }
+        Handler().postDelayed({
+            etSearch.text=resources.getString(R.string.android)
+        },10000)
 
     }
 
@@ -178,7 +183,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 intentHelp.data = Uri.parse("https://www.sas.a3creators.co.in/helpAndFaqs.php")
                 startActivity(intentHelp)
             }
-            R.id.nav_contactUs -> Toast.makeText(this, "Contact Us", Toast.LENGTH_SHORT).show()
+            R.id.nav_contactUs -> {
+                val intentContact = Intent(this@MainActivity, ContactUs::class.java)
+                startActivity(intentContact)
+            }
             R.id.nav_shareApp -> Toast.makeText(this, "Share App", Toast.LENGTH_SHORT).show()
             R.id.nav_rateApp -> Toast.makeText(this, "Rate App", Toast.LENGTH_SHORT).show()
             R.id.nav_checkForUpdates -> Toast.makeText(this, "Check For Updates", Toast.LENGTH_SHORT).show()

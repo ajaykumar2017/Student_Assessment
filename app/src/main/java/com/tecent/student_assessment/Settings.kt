@@ -33,7 +33,9 @@ class Settings : AppCompatActivity() {
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
         supportActionBar!!.setTitle(Html.fromHtml("<font color='#000'>Settings</font>"))
-
+        toolbar_main.setNavigationOnClickListener(View.OnClickListener {
+            finish()
+        })
         val switchnotification = findViewById<Switch>(R.id.switchnotification)
         val switchsound = findViewById<Switch>(R.id.switchsound)
         val btnchangepassword = findViewById<LinearLayout>(R.id.btnchangepassword)
@@ -41,8 +43,13 @@ class Settings : AppCompatActivity() {
         val userid:String=sharedPreferences.getString("userid","")
         val requestQueue = Volley.newRequestQueue(this)
         val btnlogout = findViewById<LinearLayout>(R.id.btnlogout)
+        //change password
+        btnchangepassword.setOnClickListener {
+           val intentPass=Intent(this,ChangePassword::class.java)
+            startActivity(intentPass)
+        }
+        //logout start
         btnlogout.setOnClickListener {
-
             val dialogClickListener = DialogInterface.OnClickListener { _, which ->
                 when (which) {
                     DialogInterface.BUTTON_POSITIVE -> {
@@ -95,9 +102,6 @@ class Settings : AppCompatActivity() {
             builder.show()
 
         }
-        toolbar_main.setNavigationOnClickListener(View.OnClickListener {
-            finish()
-        })
 
     }
 }

@@ -11,7 +11,7 @@
         android:id="@+id/iv_profile_image"
         android:layout_width="0dp"
         android:layout_weight="0.15"
-        android:layout_height="30dp"
+        android:layout_height="35dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         android:src="@drawable/ic_usernew"
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="Ajay Kumar"
                 android:textColor="@color/verydarkgrey"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold"/>
 
             <TextView
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="Time Ago"
                 android:textColor="@color/verydarkgrey"
-                android:textSize="10sp"/>
+                android:textSize="14sp"/>
         </LinearLayout>
 
         <TextView
@@ -57,7 +57,7 @@
             android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:textColor="@color/verydarkgrey"
-            android:textSize="12.5sp"/>
+            android:textSize="15sp"/>
 
     </LinearLayout>
         <ImageView

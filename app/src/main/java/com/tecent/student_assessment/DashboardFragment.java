@@ -9,8 +9,11 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 
 public class DashboardFragment extends Fragment {
+    TableRow tableRow;
     CardView cv_prepare, cv_prep_materials, cv_results, cv_quizes, cv_tutorials, cv_useful_links;
     @Nullable
     @Override
@@ -37,7 +40,7 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intDashBoardPrepMaterials=new Intent(getActivity(),DashBoardMenuWebView.class);
-                intDashBoardPrepMaterials.putExtra("title","Prepare Materials");
+                intDashBoardPrepMaterials.putExtra("title","Preparation Materials");
                 startActivity(intDashBoardPrepMaterials);
             }
         });
@@ -74,6 +77,12 @@ public class DashboardFragment extends Fragment {
         });
 
 
+        if(isAdded()){
+            tableRow = new TableRow(getContext());
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        }
 
         return view;
     }

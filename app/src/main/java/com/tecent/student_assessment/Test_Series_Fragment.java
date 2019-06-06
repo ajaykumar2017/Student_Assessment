@@ -8,10 +8,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Test_Series_Fragment extends Fragment {
+    TableRow tableRow;
     TextView  algorithm, data_structure, compiler_design, theory_of_computation, database, operating_system,
     digital_logic, computer_organization, computer_network, discrete_math, c_Lang, cpp_Lang, java_lang, python, androids, others;
     @Nullable
@@ -169,6 +172,12 @@ public class Test_Series_Fragment extends Fragment {
             }
         });
 
+        if(isAdded()){
+            tableRow = new TableRow(getContext());
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        }
 
         return view;
     }

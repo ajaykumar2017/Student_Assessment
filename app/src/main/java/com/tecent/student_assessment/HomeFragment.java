@@ -17,6 +17,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class HomeFragment extends Fragment {
     RequestQueue requestQueue;
     RecyclerView mRecyclerViewPostHome;
     ACProgressFlower dialog;
+    TableRow tableRow;
 
     ArrayList<String> useridlist;
     ArrayList<String> userdplist;
@@ -139,6 +142,12 @@ public class HomeFragment extends Fragment {
         catch (Exception e){
             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
         }
+        if(isAdded()){
+            tableRow = new TableRow(getContext());
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        }
 
         return view;
     }
@@ -224,9 +233,10 @@ public class HomeFragment extends Fragment {
 
     }
 
-//    @Override
-//    public void onResume() {
+
+    @Override
+    public void onResume() {
 //        volleyPostDataRequest();
-//        super.onResume();
-//    }
+        super.onResume();
+    }
 }

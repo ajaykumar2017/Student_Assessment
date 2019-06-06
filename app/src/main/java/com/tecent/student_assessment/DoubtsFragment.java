@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class DoubtsFragment extends Fragment {
     SwipeRefreshLayout swipeRefreshLayout;
     ProgressBar progressBar;
     ACProgressFlower dialog;
+    TableRow tableRow;
 
     ArrayList<String> useridlist;
     ArrayList<String> userdplist;
@@ -126,76 +129,87 @@ public class DoubtsFragment extends Fragment {
             }
         });
 
+        if(isAdded()){
+            tableRow = new TableRow(getContext());
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(
+                    TableLayout.LayoutParams.WRAP_CONTENT,
+                    TableLayout.LayoutParams.WRAP_CONTENT, 1.0f));
+        }
         return view;
     }
 
     public void volleyPostDataRequest() {
-        String url = ExtraFunctions.serverurl + "doubtPostsDataAdapter.php";
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
-                try {
-                    JSONObject emp = (new JSONObject(response));
-                    String result = emp.getString("result");
-                    if (result.equals("successful")) {
-                        useridlist.clear();
-                        usernamelist.clear();
-                        userdplist.clear();
-                        posttimelist.clear();
-                        userbranchlist.clear();
-                        postdoubtidlist.clear();
-                        posttextlist.clear();
-                        postimagelist.clear();
-                        noofanswerslist.clear();
+        try{
+            String url = ExtraFunctions.serverurl + "doubtPostsDataAdapter.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    progressBar.setVisibility(View.GONE);
+                    try {
+                        JSONObject emp = (new JSONObject(response));
+                        String result = emp.getString("result");
+                        if (result.equals("successful")) {
+                            useridlist.clear();
+                            usernamelist.clear();
+                            userdplist.clear();
+                            posttimelist.clear();
+                            userbranchlist.clear();
+                            postdoubtidlist.clear();
+                            posttextlist.clear();
+                            postimagelist.clear();
+                            noofanswerslist.clear();
 
-                        JSONArray useridarray = emp.getJSONArray("userid");
-                        JSONArray usernamearray = emp.getJSONArray("name");
-                        JSONArray userbrancharray = emp.getJSONArray("branch");
-                        JSONArray userdparray = emp.getJSONArray("userdp");
-                        JSONArray posttimearray = emp.getJSONArray("posttime");
-                        JSONArray postdoubtidarray = emp.getJSONArray("postdoubtid");
-                        JSONArray posttextarray = emp.getJSONArray("posttext");
-                        JSONArray postimagearray = emp.getJSONArray("postimage");
-                        JSONArray postNoofAnswersarray=emp.getJSONArray("answers");
+                            JSONArray useridarray = emp.getJSONArray("userid");
+                            JSONArray usernamearray = emp.getJSONArray("name");
+                            JSONArray userbrancharray = emp.getJSONArray("branch");
+                            JSONArray userdparray = emp.getJSONArray("userdp");
+                            JSONArray posttimearray = emp.getJSONArray("posttime");
+                            JSONArray postdoubtidarray = emp.getJSONArray("postdoubtid");
+                            JSONArray posttextarray = emp.getJSONArray("posttext");
+                            JSONArray postimagearray = emp.getJSONArray("postimage");
+                            JSONArray postNoofAnswersarray=emp.getJSONArray("answers");
 
-                        if (useridarray != null) {
-                            int len = useridarray.length();
-                            for (int i = 0; i < len; i++) {
-                                useridlist.add(useridarray.get(i).toString());
-                                usernamelist.add(usernamearray.get(i).toString());
-                                userdplist.add(userdparray.get(i).toString());
-                                posttimelist.add(posttimearray.get(i).toString());
-                                userbranchlist.add(userbrancharray.get(i).toString());
-                                postdoubtidlist.add(postdoubtidarray.get(i).toString());
-                                posttextlist.add(posttextarray.get(i).toString());
-                                postimagelist.add(postimagearray.get(i).toString());
-                                noofanswerslist.add(postNoofAnswersarray.get(i).toString());
+                            if (useridarray != null) {
+                                int len = useridarray.length();
+                                for (int i = 0; i < len; i++) {
+                                    useridlist.add(useridarray.get(i).toString());
+                                    usernamelist.add(usernamearray.get(i).toString());
+                                    userdplist.add(userdparray.get(i).toString());
+                                    posttimelist.add(posttimearray.get(i).toString());
+                                    userbranchlist.add(userbrancharray.get(i).toString());
+                                    postdoubtidlist.add(postdoubtidarray.get(i).toString());
+                                    posttextlist.add(posttextarray.get(i).toString());
+                                    postimagelist.add(postimagearray.get(i).toString());
+                                    noofanswerslist.add(postNoofAnswersarray.get(i).toString());
+                                }
                             }
+                            MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
+                                    userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist);
+                            mRecyclerViewPost.setAdapter(postDoubtsAdapter);
                         }
-                        MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
-                                userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist);
-                        mRecyclerViewPost.setAdapter(postDoubtsAdapter);
+                    } catch (Exception exception) {
+                        Toast.makeText(getActivity(), "some error occured! try again", Toast.LENGTH_SHORT).show();
                     }
-                } catch (Exception exception) {
-                    Toast.makeText(getActivity(), "some error occured! try again", Toast.LENGTH_SHORT).show();
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                swipeRefreshLayout.setRefreshing(false);
-                progressBar.setVisibility(View.GONE);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    swipeRefreshLayout.setRefreshing(false);
+                    progressBar.setVisibility(View.GONE);
 //                Toast.makeText(getActivity(), "Error! Please try again later...", Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            protected Map<String, String> getParams() {
-                Map<String, String> MyData = new HashMap<String, String>();
-                return MyData;
-            }
-        };
-        requestQueue.add(stringRequest);
+                }
+            }) {
+                protected Map<String, String> getParams() {
+                    Map<String, String> MyData = new HashMap<String, String>();
+                    return MyData;
+                }
+            };
+            requestQueue.add(stringRequest);
+        }catch (Exception e){
+            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
+
 
     }
     @Override
