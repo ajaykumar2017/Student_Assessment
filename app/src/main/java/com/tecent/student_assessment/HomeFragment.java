@@ -69,10 +69,11 @@ public class HomeFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.homefragment, container, false);
-        textView=view.findViewById(R.id.textView);
+        textView = view.findViewById(R.id.textView);
 
         useridlist = new ArrayList<String>();
         userdplist = new ArrayList<String>();
@@ -82,24 +83,24 @@ public class HomeFragment extends Fragment {
         userbranchlist = new ArrayList<String>();
         posttextlist = new ArrayList<String>();
         postfilelist = new ArrayList<String>();
-        subjectlist=new ArrayList<String>();
-        likeslist=new ArrayList<String>();
-        commentslist=new ArrayList<String>();
+        subjectlist = new ArrayList<String>();
+        likeslist = new ArrayList<String>();
+        commentslist = new ArrayList<String>();
 
-        sharedPreferences=this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE);
-        sharedPreferencesLike=this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE);
-        String email=sharedPreferences.getString("email","");
-        String passw=sharedPreferences.getString("passw","");
-        String name=sharedPreferences.getString("name","");
-        userid=sharedPreferences.getString("userid","");
+        sharedPreferences = this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE);
+        sharedPreferencesLike = this.getActivity().getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE);
+        String email = sharedPreferences.getString("email", "");
+        String passw = sharedPreferences.getString("passw", "");
+        String name = sharedPreferences.getString("name", "");
+        userid = sharedPreferences.getString("userid", "");
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-        progressBar=view.findViewById(R.id.progress_bar);
+        progressBar = view.findViewById(R.id.progress_bar);
         dialog = new ACProgressFlower.Builder(getActivity())
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.WHITE)
                 .fadeColor(Color.BLACK).build();
         dialog.setCancelable(false);
-        mRecyclerViewPostHome=view.findViewById(R.id.recycler_view_post_home);
+        mRecyclerViewPostHome = view.findViewById(R.id.recycler_view_post_home);
         mRecyclerViewPostHome.setHasFixedSize(false);
 //        mRecyclerViewPostHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity()) {
@@ -107,6 +108,7 @@ public class HomeFragment extends Fragment {
             public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
                 LinearSmoothScroller smoothScroller = new LinearSmoothScroller(getActivity()) {
                     private static final float SPEED = 300f;
+
                     @Override
                     protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
                         return SPEED / displayMetrics.densityDpi;
@@ -120,29 +122,30 @@ public class HomeFragment extends Fragment {
         mRecyclerViewPostHome.setLayoutManager(layoutManager);
 
         requestQueue = Volley.newRequestQueue(getActivity());
-        try{
-        if (ExtraFunctions.isNetworkStatusAvialable(getActivity())) {
-            volleyPostDataRequest();
-        } else {
-            Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
-        }
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if (ExtraFunctions.isNetworkStatusAvialable(getActivity()))
-                    volleyPostDataRequest();
-                else {
-                    swipeRefreshLayout.setRefreshing(false);
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
-                }
+
+        loadPostsFromSpf();
+        try {
+            if (ExtraFunctions.isNetworkStatusAvialable(getActivity())) {
+                volleyPostDataRequest();
+            } else {
+                Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
             }
-        });
-        }
-        catch (Exception e){
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if (ExtraFunctions.isNetworkStatusAvialable(getActivity()))
+                        volleyPostDataRequest();
+                    else {
+                        swipeRefreshLayout.setRefreshing(false);
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "No Internet Connection!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        } catch (Exception e) {
             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
         }
-        if(isAdded()){
+        if (isAdded()) {
             tableRow = new TableRow(getContext());
             tableRow.setLayoutParams(new TableLayout.LayoutParams(
                     TableLayout.LayoutParams.WRAP_CONTENT,
@@ -152,7 +155,61 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    public void loadPostsFromSpf() {
+        progressBar.setVisibility(View.GONE);
+        String response=sharedPreferences.getString("homeresponse","");
+        try {
+            JSONObject emp = (new JSONObject(response));
+            useridlist.clear();
+            usernamelist.clear();
+            userdplist.clear();
+            posttimelist.clear();
+            userbranchlist.clear();
+            postidlist.clear();
+            posttextlist.clear();
+            postfilelist.clear();
+            subjectlist.clear();
+            likeslist.clear();
+            commentslist.clear();
+
+            JSONArray useridarray = emp.getJSONArray("userid");
+            JSONArray usernamearray = emp.getJSONArray("name");
+            JSONArray userbrancharray = emp.getJSONArray("branch");
+            JSONArray userdparray = emp.getJSONArray("userdp");
+            JSONArray posttimearray = emp.getJSONArray("posttime");
+            JSONArray postdoubtidarray = emp.getJSONArray("postid");
+            JSONArray posttextarray = emp.getJSONArray("posttext");
+            JSONArray postfilearray = emp.getJSONArray("filename");
+            JSONArray postsubjectarray = emp.getJSONArray("subject");
+            JSONArray postlikesarray = emp.getJSONArray("likes");
+            JSONArray postcommentsarray = emp.getJSONArray("comments");
+
+            if (useridarray != null) {
+                int len = useridarray.length();
+                for (int i = 0; i < len; i++) {
+                    useridlist.add(useridarray.get(i).toString());
+                    usernamelist.add(usernamearray.get(i).toString());
+                    userdplist.add(userdparray.get(i).toString());
+                    posttimelist.add(posttimearray.get(i).toString());
+                    userbranchlist.add(userbrancharray.get(i).toString());
+                    postidlist.add(postdoubtidarray.get(i).toString());
+                    posttextlist.add(posttextarray.get(i).toString());
+                    postfilelist.add(postfilearray.get(i).toString());
+                    subjectlist.add(postsubjectarray.get(i).toString());
+                    likeslist.add(postlikesarray.get(i).toString());
+                    commentslist.add(postcommentsarray.get(i).toString());
+                }
+            }
+            MyRecyclerHomePostsAdapter homePostsAdapter = new MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, getActivity(), userid, useridlist, userdplist, usernamelist,
+                    userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist);
+            mRecyclerViewPostHome.setAdapter(homePostsAdapter);
+        } catch (Exception e) {
+
+        }
+    }
+
     public void volleyPostDataRequest() {
+        swipeRefreshLayout.setRefreshing(true);
         try {
             String url = ExtraFunctions.serverurl + "postsHomeDataAdapter.php";
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -163,6 +220,9 @@ public class HomeFragment extends Fragment {
                     try {
                         JSONObject emp = (new JSONObject(response));
                         String result = emp.getString("result");
+                        SharedPreferences.Editor spe = sharedPreferences.edit();
+                        spe.putString("homeresponse", response);
+                        spe.apply();
                         if (result.equals("successful")) {
                             useridlist.clear();
                             usernamelist.clear();
@@ -185,8 +245,8 @@ public class HomeFragment extends Fragment {
                             JSONArray posttextarray = emp.getJSONArray("posttext");
                             JSONArray postfilearray = emp.getJSONArray("filename");
                             JSONArray postsubjectarray = emp.getJSONArray("subject");
-                            JSONArray postlikesarray=emp.getJSONArray("likes");
-                            JSONArray postcommentsarray=emp.getJSONArray("comments");
+                            JSONArray postlikesarray = emp.getJSONArray("likes");
+                            JSONArray postcommentsarray = emp.getJSONArray("comments");
 
                             if (useridarray != null) {
                                 int len = useridarray.length();
@@ -226,8 +286,7 @@ public class HomeFragment extends Fragment {
                 }
             };
             requestQueue.add(stringRequest);
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
         }
 

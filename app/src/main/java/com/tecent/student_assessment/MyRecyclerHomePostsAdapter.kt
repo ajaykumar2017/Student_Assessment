@@ -354,13 +354,13 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         val likes = Integer.parseInt(mLikes)
         if (mLikes == "0" || mLikes == "1") {
             if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
-                homePostsHolder.likes_count.text = "Liked by you and " + (likes - 1) + " Others"
+                homePostsHolder.likes_count.text = "Liked by you and " + (likes - 1) + " others"
             } else {
                 homePostsHolder.likes_count.text = "$mLikes Like"
             }
         } else {
             if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
-                homePostsHolder.likes_count.text = "Liked by you and " + (likes - 1) + " Others"
+                homePostsHolder.likes_count.text = "Liked by you and " + (likes - 1) + " others"
             } else {
                 homePostsHolder.likes_count.text = "$mLikes Likes"
             }
@@ -430,7 +430,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                 speLike.apply()
                                 DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.colorPrimary))
                                 homePostsHolder.ivlike.setPadding(1, 0, 1, 0)
-                                homePostsHolder.likes_count.text = "Liked by you and $mLikes Others"
+                                homePostsHolder.likes_count.text = "Liked by you and $mLikes others"
                                 Toast.makeText(mContext, "Post Liked successfully", Toast.LENGTH_SHORT).show()
                             }
                             if (result == "error") {

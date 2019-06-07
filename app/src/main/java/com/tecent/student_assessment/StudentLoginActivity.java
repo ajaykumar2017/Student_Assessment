@@ -145,6 +145,7 @@ public class StudentLoginActivity extends AppCompatActivity {
     public void register(View view) {
         Intent intent = new Intent(this, StudentRegistration.class);
         startActivity(intent);
+        finish();
     }
 
 

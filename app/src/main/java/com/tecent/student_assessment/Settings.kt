@@ -90,7 +90,7 @@ class Settings : AppCompatActivity() {
                         }
                         val intent = Intent(this, StudentLoginActivity::class.java)
                         startActivity(intent)
-
+                        finishAffinity()
                     }
                 }
             }

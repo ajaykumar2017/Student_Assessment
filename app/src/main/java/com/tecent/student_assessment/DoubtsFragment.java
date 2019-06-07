@@ -111,6 +111,7 @@ public class DoubtsFragment extends Fragment {
 
         String userdp = sharedPreferences.getString("userdp", "");
         requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, profile_image));
+        loadDoubtsPostsFromSpf();
         if (ExtraFunctions.isNetworkStatusAvialable(getActivity())) {
             volleyPostDataRequest();
         } else {
@@ -138,6 +139,55 @@ public class DoubtsFragment extends Fragment {
         return view;
     }
 
+    public void loadDoubtsPostsFromSpf(){
+        swipeRefreshLayout.setRefreshing(true);
+        progressBar.setVisibility(View.GONE);
+        String response=sharedPreferences.getString("doubtresponse","");
+        try{
+            JSONObject emp = (new JSONObject(response));
+            useridlist.clear();
+            usernamelist.clear();
+            userdplist.clear();
+            posttimelist.clear();
+            userbranchlist.clear();
+            postdoubtidlist.clear();
+            posttextlist.clear();
+            postimagelist.clear();
+            noofanswerslist.clear();
+
+            JSONArray useridarray = emp.getJSONArray("userid");
+            JSONArray usernamearray = emp.getJSONArray("name");
+            JSONArray userbrancharray = emp.getJSONArray("branch");
+            JSONArray userdparray = emp.getJSONArray("userdp");
+            JSONArray posttimearray = emp.getJSONArray("posttime");
+            JSONArray postdoubtidarray = emp.getJSONArray("postdoubtid");
+            JSONArray posttextarray = emp.getJSONArray("posttext");
+            JSONArray postimagearray = emp.getJSONArray("postimage");
+            JSONArray postNoofAnswersarray=emp.getJSONArray("answers");
+
+            if (useridarray != null) {
+                int len = useridarray.length();
+                for (int i = 0; i < len; i++) {
+                    useridlist.add(useridarray.get(i).toString());
+                    usernamelist.add(usernamearray.get(i).toString());
+                    userdplist.add(userdparray.get(i).toString());
+                    posttimelist.add(posttimearray.get(i).toString());
+                    userbranchlist.add(userbrancharray.get(i).toString());
+                    postdoubtidlist.add(postdoubtidarray.get(i).toString());
+                    posttextlist.add(posttextarray.get(i).toString());
+                    postimagelist.add(postimagearray.get(i).toString());
+                    noofanswerslist.add(postNoofAnswersarray.get(i).toString());
+                }
+            }
+            MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
+                    userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist);
+            mRecyclerViewPost.setAdapter(postDoubtsAdapter);
+        }catch (Exception e){
+
+        }
+
+    }
+
     public void volleyPostDataRequest() {
         try{
             String url = ExtraFunctions.serverurl + "doubtPostsDataAdapter.php";
@@ -149,6 +199,9 @@ public class DoubtsFragment extends Fragment {
                     try {
                         JSONObject emp = (new JSONObject(response));
                         String result = emp.getString("result");
+                        SharedPreferences.Editor spe = sharedPreferences.edit();
+                        spe.putString("doubtresponse", response);
+                        spe.apply();
                         if (result.equals("successful")) {
                             useridlist.clear();
                             usernamelist.clear();

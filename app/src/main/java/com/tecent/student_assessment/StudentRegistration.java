@@ -95,26 +95,6 @@ public class StudentRegistration extends AppCompatActivity {
                 .fadeColor(Color.BLACK).build();
         dialog.setCancelable(false);
 
-        etEmail.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (!ExtraFunctions.isValidEmailId(charSequence.toString())) {
-                    Toast.makeText(StudentRegistration.this, "Enter valid email-Id", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
-
         //GET THE EDIT_TEXT String
         final Editable name = etName.getText();
         final Editable email = etEmail.getText();
@@ -129,7 +109,10 @@ public class StudentRegistration extends AppCompatActivity {
                         spinnerSemester.getSelectedItem().toString().trim().equals("Select Semester") || spinnerCollege.getSelectedItem().toString().trim().equals("Select College") ||
                         spinnerUniversity.getSelectedItem().toString().trim().equals("Select University")) {
                     Toast.makeText(StudentRegistration.this, "Please fill out all mandatary details!", Toast.LENGTH_SHORT).show();
-                } else if (createPassword.length() < 8) {
+                } else if (!ExtraFunctions.isValidEmailId(email.toString())){
+                    Toast.makeText(StudentRegistration.this, "Please enter valid email id!", Toast.LENGTH_SHORT).show();
+                }
+                else if (createPassword.length() < 8) {
                     Toast.makeText(StudentRegistration.this, "Password must be at least 8 characters long!", Toast.LENGTH_SHORT).show();
                 } else if (!ExtraFunctions.isValidEmailId(email.toString().trim())) {
                     Toast.makeText(StudentRegistration.this, "Invalid email address!", Toast.LENGTH_SHORT).show();
