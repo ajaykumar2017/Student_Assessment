@@ -59,7 +59,7 @@ class CommentsPostHome : AppCompatActivity() {
             finish()
         })
         requestQueue = Volley.newRequestQueue(this)
-        sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         userid = sharedPreferences.getString("userid", "")
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout)
         recyclerView=findViewById<RecyclerView>(R.id.recyclerView)
@@ -269,6 +269,7 @@ class CommentsPostHome : AppCompatActivity() {
                                 dialog, requestQueue,  postid, userid, this
                                 ,commentObjectArrayList
                         )
+                        adapter.setHasStableIds(true)
                         recyclerView.adapter = adapter
                         swipeRefreshLayout.isRefreshing=false
                     }

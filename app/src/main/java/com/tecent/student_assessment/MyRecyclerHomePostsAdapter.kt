@@ -597,6 +597,8 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
         return byteArrayOutputStream.toByteArray()
     }
-
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }
 

@@ -82,7 +82,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeNoActionBarHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>

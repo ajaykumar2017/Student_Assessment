@@ -654,6 +654,7 @@ class Profile : AppCompatActivity() {
                         }
                         val profilePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
                                 userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
+                        profilePostsAdapter.setHasStableIds(true)
                         recyclerViewProfile.adapter = profilePostsAdapter
                     }
                 } catch (exception: Exception) {
@@ -719,6 +720,7 @@ class Profile : AppCompatActivity() {
                     }
                     val postDoubtsProfileAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, requestQueue, this, userid, useridpostlist, userdppostlist, usernamepostlist,
                             userbranchpostlist, posttimepostlist, postimagepostlist, postdoubtidpostlist, posttextpostlist, postnoofanswerslist)
+                    postDoubtsProfileAdapter.setHasStableIds(true)
                     recyclerViewProfilePostsDoubts.adapter = postDoubtsProfileAdapter
                 }
             } catch (exception: Exception) {

@@ -21,32 +21,32 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, context:AnswersDoubtsPostsDoubts, doubtPostid:String, userid:String, replyObjectArrayList: ArrayList<ReplyObjectDoubtsPostsAnswers>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder>() {
-    var mRepliesObjectArrayList:ArrayList<ReplyObjectDoubtsPostsAnswers>
+class MyRecyclerPostsCommentsRepliesAdapterForSinglePosts(requestQueue: RequestQueue, context:Context, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<MyRecyclerPostsCommentsRepliesAdapterForSinglePosts.PostsCommentsRepliesHolder>() {
+    var mRepliesObjectArrayList:ArrayList<ReplyObject>
     var mRequestQueue:RequestQueue
-    var mContext:AnswersDoubtsPostsDoubts
-    var mDoubtPostId:String
+    var mContext:Context
+    var mPostid:String
     var mMyuserid:String
     init {
         this.mRequestQueue=requestQueue
         this.mContext=context
-        mDoubtPostId=doubtPostid
+        mPostid=postid
         this.mMyuserid=userid
         this.mRepliesObjectArrayList=replyObjectArrayList
     }
-    override fun onBindViewHolder(doubtsPostsAnswersRepliesHolder: DoubtsPostsAnswersRepliesHolder, position: Int) {
+    override fun onBindViewHolder(postsCommentsRepliesHolder: PostsCommentsRepliesHolder, position: Int) {
         val replyObject= mRepliesObjectArrayList[position]
         mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl+"userdp/"+replyObject.userDp
-                ,doubtsPostsAnswersRepliesHolder.iv_profile_image))
-        doubtsPostsAnswersRepliesHolder.username.text=replyObject.userName+" "+"\u2022"+" "
-        doubtsPostsAnswersRepliesHolder.replyText.text=replyObject.replyText
-        doubtsPostsAnswersRepliesHolder.timeAgo.text=replyObject.replyTime
+                ,postsCommentsRepliesHolder.iv_profile_image))
+        postsCommentsRepliesHolder.username.text=replyObject.userName+" "+"\u2022"+" "
+        postsCommentsRepliesHolder.replyText.text=replyObject.replyText
+        postsCommentsRepliesHolder.timeAgo.text=replyObject.replyTime
         if (mMyuserid!=replyObject.userId){
-            doubtsPostsAnswersRepliesHolder.iv_delete_post_reply.visibility=View.GONE
+            postsCommentsRepliesHolder.iv_delete_post_reply.visibility=View.GONE
         }
-        doubtsPostsAnswersRepliesHolder.iv_delete_post_reply.setOnClickListener {
-            val popup = PopupMenu(mContext, doubtsPostsAnswersRepliesHolder.iv_delete_post_reply)
+        postsCommentsRepliesHolder.iv_delete_post_reply.setOnClickListener {
+            val popup = PopupMenu(mContext, postsCommentsRepliesHolder.iv_delete_post_reply)
             //inflating menu from xml resource
             popup.inflate(R.menu.menu_comments_answers_and_replies)
             val popupMenu = popup.menu
@@ -55,14 +55,13 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.delete_reply ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
-                        val url = ExtraFunctions.serverurl + "deleteAnswersRepliesOfDoubtsPosts.php"
+                        val url = ExtraFunctions.serverurl + "deleteCommentsRepliesOfPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
                                 val emp = JSONObject(response)
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Reply Deleted successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyAnswerDataRequest(mDoubtPostId)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
@@ -89,21 +88,22 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
             }
             popup.show()
         }
+
     }
 
     override fun getItemCount(): Int {
         return mRepliesObjectArrayList.size
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder {
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyRecyclerPostsCommentsRepliesAdapterForSinglePosts.PostsCommentsRepliesHolder {
         val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_post_comment_replies, p0, false)
-        return DoubtsPostsAnswersRepliesHolder(view)
+        return PostsCommentsRepliesHolder(view)
     }
 
 
 
 
-    inner class DoubtsPostsAnswersRepliesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PostsCommentsRepliesHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var iv_profile_image: ImageView
         var iv_delete_post_reply:ImageView
         var username: TextView

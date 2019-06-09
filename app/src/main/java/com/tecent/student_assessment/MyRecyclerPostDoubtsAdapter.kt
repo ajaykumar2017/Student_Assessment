@@ -363,4 +363,7 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
         return byteArrayOutputStream.toByteArray()
     }
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

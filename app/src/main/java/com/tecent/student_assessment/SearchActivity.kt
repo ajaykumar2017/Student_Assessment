@@ -164,6 +164,7 @@ class SearchActivity : AppCompatActivity() {
                             recyclerView.visibility=View.VISIBLE
                             val homePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
                                     userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
+                            homePostsAdapter.setHasStableIds(true)
                             recyclerView.adapter = homePostsAdapter
                         }else{
 //                            tvEmpty.visibility=View.VISIBLE
@@ -235,6 +236,7 @@ class SearchActivity : AppCompatActivity() {
                         recyclerViewDoubtsPosts.visibility=View.VISIBLE
                         val postDoubtsAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, requestQueue, this, userid, useridpostdoubtslist, userdppostdoubtslist, usernamepostdoubtslist,
                                 userbranchpostdoubtslist, posttimepostdoubtslist, postimagepostdoubtslist, postdoubtidpostdoubtslist, posttextpostdoubtslist, noofanswerspostdoubtslist)
+                        postDoubtsAdapter.setHasStableIds(true)
                         recyclerViewDoubtsPosts.setAdapter(postDoubtsAdapter)
                     }else{
                         makeGoneRecyclerView()

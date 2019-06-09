@@ -41,11 +41,13 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, postid:String, userid: String, context: CommentsPostHome, commentObjectArrayList: ArrayList<CommentObject>) : RecyclerView.Adapter<MyRecyclerPostsCommentsAdapter.PostsCommentsHolder>() {
+class MyRecyclerHomePostsCommentsForSingleActivity(dialog: ACProgressFlower, requestQueue: RequestQueue,
+                                                   postid:String, userid: String, context: Context,
+                                                   commentObjectArrayList: ArrayList<CommentObject>) : RecyclerView.Adapter<MyRecyclerHomePostsCommentsForSingleActivity.PostsCommentsHolder>() {
     var mDialog: ACProgressFlower
     var mRequestQueue: RequestQueue
     var mPostid: String
-    var mContext: CommentsPostHome
+    var mContext: Context
     var mMyuserid: String
     var mCommentObjectArrayList: ArrayList<CommentObject>
 
@@ -95,7 +97,6 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Comment Deleted successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyCommentDataRequest(mPostid)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
@@ -119,9 +120,9 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                     }
                 }
                 false
-                }
-            popup.show()
             }
+            popup.show()
+        }
         postCommentsHolder.comment_image.setOnClickListener {
             animateIntent(postCommentsHolder.comment_image)
         }
@@ -169,7 +170,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
-        val adapter = MyRecyclerPostsCommentsRepliesAdapter(mRequestQueue, mContext,  mPostid, mMyuserid,commentObject.replyObjectArrayList)
+        val adapter = MyRecyclerPostsCommentsRepliesAdapterForSinglePosts(mRequestQueue, mContext,  mPostid, mMyuserid,commentObject.replyObjectArrayList)
         postCommentsHolder.comments_recyclerview.adapter = adapter
 
         postCommentsHolder.tv_reply_btn.setOnClickListener {
@@ -203,7 +204,6 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Replied successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyCommentDataRequest(mPostid)
                                     dialogReply.dismiss()
                                     mDialog.dismiss()
                                 }

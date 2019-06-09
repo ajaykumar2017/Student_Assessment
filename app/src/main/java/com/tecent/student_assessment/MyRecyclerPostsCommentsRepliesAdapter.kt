@@ -119,4 +119,7 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
             timeAgo = itemView.findViewById(R.id.timeAgo)
         }
     }
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
 }

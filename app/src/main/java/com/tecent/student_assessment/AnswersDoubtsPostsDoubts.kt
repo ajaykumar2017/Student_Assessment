@@ -279,6 +279,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                                 dialog, requestQueue, postDoubtId, userid, this
                                 , answerObjectArrayList
                         )
+                        adapter.setHasStableIds(true)
                         recyclerView.adapter = adapter
                         swipeRefreshLayout.isRefreshing = false
                     }

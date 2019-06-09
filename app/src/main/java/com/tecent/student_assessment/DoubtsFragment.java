@@ -239,6 +239,7 @@ public class DoubtsFragment extends Fragment {
                             }
                             MyRecyclerPostDoubtsAdapter postDoubtsAdapter = new MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog,requestQueue,getActivity(), userid, useridlist, userdplist, usernamelist,
                                     userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist);
+                            postDoubtsAdapter.setHasStableIds(true);
                             mRecyclerViewPost.setAdapter(postDoubtsAdapter);
                         }
                     } catch (Exception exception) {

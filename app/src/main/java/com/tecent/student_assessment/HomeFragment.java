@@ -266,6 +266,7 @@ public class HomeFragment extends Fragment {
                             }
                             MyRecyclerHomePostsAdapter homePostsAdapter = new MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, getActivity(), userid, useridlist, userdplist, usernamelist,
                                     userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist);
+                            homePostsAdapter.setHasStableIds(true);
                             mRecyclerViewPostHome.setAdapter(homePostsAdapter);
                         }
                     } catch (Exception exception) {

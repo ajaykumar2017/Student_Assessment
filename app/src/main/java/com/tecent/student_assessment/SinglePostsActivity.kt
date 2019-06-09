@@ -1,16 +1,25 @@
 package com.tecent.student_assessment
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
+import cc.cloudist.acplibrary.ACProgressConstant
+import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_profile.iv_profile_image
 import kotlinx.android.synthetic.main.activity_single_posts.*
@@ -18,9 +27,13 @@ import kotlinx.android.synthetic.main.toolbar_main.*
 import org.json.JSONObject
 import java.util.HashMap
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class SinglePostsActivity : AppCompatActivity() {
 
     lateinit var requestQueue: RequestQueue
+    lateinit var dialog: ACProgressFlower
+    lateinit var sharedPreferences: SharedPreferences
+    lateinit var recyclerViewSinglePost:RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_posts)
@@ -28,14 +41,27 @@ class SinglePostsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
-        supportActionBar!!.setTitle("Posts")
+        supportActionBar!!.setTitle("Post")
         toolbar_main.setNavigationOnClickListener(View.OnClickListener {
             finish()
         })
+        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val intent = intent
         val postid:String=intent.getStringExtra("postid")
         requestQueue = Volley.newRequestQueue(this)
+        recyclerViewSinglePost = findViewById<RecyclerView>(R.id.recyclerViewSinglePost)
+        recyclerViewSinglePost.setHasFixedSize(true)
+        recyclerViewSinglePost.setLayoutManager(LinearLayoutManager(this))
+        dialog = ACProgressFlower.Builder(this)
+                .direction(ACProgressConstant.DIRECT_CLOCKWISE)
+                .themeColor(Color.BLUE).text("Uploading....")
+                .fadeColor(Color.WHITE).build()
+        volleySinglePostDataRequest(postid)
+        volleyCommentDataRequest(postid)
+    }
 
+    fun volleySinglePostDataRequest(postid: String)
+    {
         val url = ExtraFunctions.serverurl + "SinglePostsData.php"
         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
             try {
@@ -74,5 +100,49 @@ class SinglePostsActivity : AppCompatActivity() {
             }
         }
         requestQueue.add(stringRequest)
+    }
+
+    fun volleyCommentDataRequest(postid:String){
+        try {
+            val url = ExtraFunctions.serverurl + "commentsPostsDataAdapter.php"
+            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+//                progressBar.setVisibility(View.GONE)
+                try {
+                    val emp = JSONObject(response)
+                    val result = emp.getString("result")
+                    if (result == "successful") {
+                        val json = emp.getString("commentList")
+                        val builder = GsonBuilder()
+                        val gson = builder.create()
+                        val commentObjectArrayList:ArrayList<CommentObject> = gson.fromJson(
+                                json,
+                                object : TypeToken<List<CommentObject>>() {
+                                }.type
+                        )
+                        val adapter = MyRecyclerHomePostsCommentsForSingleActivity(
+                                dialog, requestQueue,  postid, sharedPreferences.getString("userid",""), this
+                                ,commentObjectArrayList
+                        )
+                        adapter.setHasStableIds(true)
+                        recyclerViewSinglePost.adapter = adapter
+                    }
+                } catch (exception: Exception) {
+                    Toast.makeText(this, exception.toString(), Toast.LENGTH_SHORT).show()
+                }
+            }, Response.ErrorListener {
+//                progressBar.setVisibility(View.GONE)
+                //                    Toast.makeText(getActivity(), "Error! Please try again later...", Toast.LENGTH_SHORT).show();
+            }) {
+                override fun getParams(): Map<String, String> {
+                    val MyData = HashMap<String, String>()
+                    MyData["postid"] = postid
+                    return MyData
+                }
+            }
+            requestQueue.add(stringRequest)
+        } catch (e: Exception) {
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
