@@ -97,12 +97,6 @@ public class StudentRegistration extends AppCompatActivity {
                 .fadeColor(Color.BLACK).build();
         dialog.setCancelable(false);
 
-        //GET THE EDIT_TEXT String
-        /*final Editable name = etName.getText();
-        final Editable email = etEmail.getText();
-        final Editable createPassword = etCreatePassword.getText();
-        final Editable confirmPassword = etConfirmPassword.getText();*/
-
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -110,7 +104,7 @@ public class StudentRegistration extends AppCompatActivity {
                 email = etEmail.getText().toString();
                 createPassword = etCreatePassword.getText().toString();
                 confirmPassword = etConfirmPassword.getText().toString();
-                if (name.toString().equals("") || email.toString().equals("") || createPassword.toString().equals("") || confirmPassword.toString().equals("") ||
+                if (name.equals("") || email.equals("") || createPassword.equals("") || confirmPassword.equals("") ||
                         rgGender.getCheckedRadioButtonId() == -1 || spinnerBranch.getSelectedItem().toString().trim().equals("Select Branch") ||
                         spinnerSemester.getSelectedItem().toString().trim().equals("Select Semester") || spinnerCollege.getSelectedItem().toString().trim().equals("Select College") ||
                         spinnerUniversity.getSelectedItem().toString().trim().equals("Select University")) {
@@ -129,9 +123,9 @@ public class StudentRegistration extends AppCompatActivity {
                 } else {
 //                    Toast.makeText(StudentRegistration.this, "All are filled", Toast.LENGTH_SHORT).show();
 
-                    String nameValue = name.toString();
-                    String emailValue = email.toString();
-                    String passwordValue = createPassword.toString();
+                    String nameValue = name;
+                    String emailValue = email;
+                    String passwordValue = createPassword;
                     int selectedIdRadio = rgGender.getCheckedRadioButtonId();
                     // find the radiobutton by returned id
                     RadioButton radioButton = (RadioButton) findViewById(selectedIdRadio);

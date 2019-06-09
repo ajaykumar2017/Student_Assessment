@@ -81,7 +81,6 @@
                             android:layout_width="0dp"
                             android:layout_weight="0.9"
                             android:layout_height="match_parent"
-                            android:text="Ajay Kumar"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:maxLines="1"
@@ -134,7 +133,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:paddingTop="10dp"
-                                    android:text="125"
                                     android:textColor="@color/colorPrimary"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
@@ -159,7 +157,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:paddingTop="10dp"
-                                    android:text="1205"
                                     android:textColor="@color/colorPrimary"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
@@ -184,7 +181,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:paddingTop="10dp"
-                                    android:text="360"
                                     android:textColor="@color/colorPrimary"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
@@ -225,7 +221,6 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="0.6"
                             android:paddingLeft="20dp"
-                            android:text="Since 17 jun 2018"
                             android:textSize="15sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -250,7 +245,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
-                            android:text="Wiliam@gmail.com"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -275,7 +269,6 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
                             android:paddingEnd="20dp"
-                            android:text="Male"
                             android:textStyle="bold" />
                         <ImageView
                             android:id="@+id/edit_gender"
@@ -306,7 +299,6 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
                             android:paddingEnd="20dp"
-                            android:text="Branch"
                             android:textStyle="bold" />
                         <ImageView
                             android:id="@+id/edit_branch"
@@ -337,7 +329,6 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
                             android:paddingEnd="20dp"
-                            android:text="Semseter"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -369,7 +360,6 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
                             android:paddingEnd="20dp"
-                            android:text="College"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -401,7 +391,6 @@
                             android:layout_gravity="center_vertical"
                             android:paddingLeft="20dp"
                             android:paddingEnd="20dp"
-                            android:text="University"
                             android:textStyle="bold" />
                         <ImageView
                             android:id="@+id/edit_university"
