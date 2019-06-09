@@ -103,11 +103,11 @@ class CommentsPostHome : AppCompatActivity() {
                     dialog.show()
                 }
         }
-        volleyCommentDataRequest()
+        volleyCommentDataRequest(postid)
 
         swipeRefreshLayout.setOnRefreshListener {
             if (ExtraFunctions.isNetworkStatusAvialable(this))
-                volleyCommentDataRequest()
+                volleyCommentDataRequest(postid)
             else {
                 swipeRefreshLayout.isRefreshing = false
 //                progressBar.setVisibility(View.GONE)
@@ -170,7 +170,7 @@ class CommentsPostHome : AppCompatActivity() {
                     dialog.dismiss()
                     editText.setText("")
                     Toast.makeText(this@CommentsPostHome, "Comment uploaded successfully", Toast.LENGTH_SHORT).show()
-                    volleyCommentDataRequest()
+                    volleyCommentDataRequest(postid)
                 }
                 if (status == "error") {
                     dialog.dismiss()
@@ -234,7 +234,7 @@ class CommentsPostHome : AppCompatActivity() {
                 editText.setText("")
                 dialog.dismiss()
                 Toast.makeText(this@CommentsPostHome, "Comment uploaded successfully", Toast.LENGTH_SHORT).show()
-                volleyCommentDataRequest()
+                volleyCommentDataRequest(postid)
             }
             if (result == "error") {
                 dialog.dismiss()
@@ -247,7 +247,7 @@ class CommentsPostHome : AppCompatActivity() {
 
     }
     //Comments data request
-    fun volleyCommentDataRequest(){
+    fun volleyCommentDataRequest(postid:String){
         try {
             val url = ExtraFunctions.serverurl + "commentsPostsDataAdapter.php"
             val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
@@ -266,7 +266,7 @@ class CommentsPostHome : AppCompatActivity() {
                                 }.type
                         )
                         val adapter = MyRecyclerPostsCommentsAdapter(
-                                dialog, requestQueue,  userid, this
+                                dialog, requestQueue,  postid, userid, this
                                 ,commentObjectArrayList
                         )
                         recyclerView.adapter = adapter
@@ -292,9 +292,9 @@ class CommentsPostHome : AppCompatActivity() {
         }
 
     }
-    public override fun onResume() {
-        volleyCommentDataRequest()
-        super.onResume()
-    }
+//    public override fun onResume() {
+//        volleyCommentDataRequest(postid)
+//        super.onResume()
+//    }
 
 }

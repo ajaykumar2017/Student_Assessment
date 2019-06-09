@@ -265,9 +265,4 @@ public class DoubtsFragment extends Fragment {
 
 
     }
-    @Override
-    public void onResume() {
-        volleyPostDataRequest();
-        super.onResume();
-    }
 }

@@ -21,14 +21,16 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, context:Context,userid:String, replyObjectArrayList: ArrayList<ReplyObjectDoubtsPostsAnswers>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder>() {
+class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, context:AnswersDoubtsPostsDoubts, doubtPostid:String, userid:String, replyObjectArrayList: ArrayList<ReplyObjectDoubtsPostsAnswers>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder>() {
     var mRepliesObjectArrayList:ArrayList<ReplyObjectDoubtsPostsAnswers>
     var mRequestQueue:RequestQueue
-    var mContext:Context
+    var mContext:AnswersDoubtsPostsDoubts
+    var mDoubtPostId:String
     var mMyuserid:String
     init {
         this.mRequestQueue=requestQueue
         this.mContext=context
+        mDoubtPostId=doubtPostid
         this.mMyuserid=userid
         this.mRepliesObjectArrayList=replyObjectArrayList
     }
@@ -60,6 +62,7 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Reply Deleted successfully", Toast.LENGTH_SHORT).show()
+                                    mContext.volleyAnswerDataRequest(mDoubtPostId)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()

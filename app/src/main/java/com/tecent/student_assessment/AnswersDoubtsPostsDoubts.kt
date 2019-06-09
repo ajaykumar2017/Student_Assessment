@@ -110,11 +110,11 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                 dialog.show()
             }
         }
-        volleyAnswerDataRequest()
+        volleyAnswerDataRequest(postDoubtid)
 
         swipeRefreshLayout.setOnRefreshListener {
             if (ExtraFunctions.isNetworkStatusAvialable(this))
-                volleyAnswerDataRequest()
+                volleyAnswerDataRequest(postDoubtid)
             else {
                 swipeRefreshLayout.isRefreshing = false
 //                progressBar.setVisibility(View.GONE)
@@ -180,7 +180,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                     sharedPreferencesEditDoubtsAnswers.putString("doubts", (Integer.parseInt(sharedPreferences.getString("doubts", "")!!) + 1).toString())
                     sharedPreferencesEditDoubtsAnswers.apply()
                     editText.setText("")
-                    volleyAnswerDataRequest()
+                    volleyAnswerDataRequest(postDoubtid)
                 }
                 if (status == "error") {
                     dialog.dismiss()
@@ -243,7 +243,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                 dialog.dismiss()
                 Toast.makeText(this@AnswersDoubtsPostsDoubts, "Answer uploaded successfully", Toast.LENGTH_SHORT).show()
                 editText.setText("")
-                volleyAnswerDataRequest()
+                volleyAnswerDataRequest(postDoubtid)
             }
             if (result == "error") {
                 dialog.dismiss()
@@ -257,7 +257,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     }
 
     //Comments data request
-    fun volleyAnswerDataRequest() {
+    fun volleyAnswerDataRequest(postDoubtId:String) {
         try {
             val url = ExtraFunctions.serverurl + "answersDoubtsPostsDataAdapter.php"
             val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
@@ -276,7 +276,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                                 }.type
                         )
                         val adapter = MyRecyclerDoubtsPostsAnswersAdapter(
-                                dialog, requestQueue, userid, this
+                                dialog, requestQueue, postDoubtId, userid, this
                                 , answerObjectArrayList
                         )
                         recyclerView.adapter = adapter
@@ -292,7 +292,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
             }) {
                 override fun getParams(): Map<String, String> {
                     val MyData = HashMap<String, String>()
-                    MyData["postdoubtid"] = postDoubtid
+                    MyData["postdoubtid"] = postDoubtId
                     return MyData
                 }
             }
@@ -303,10 +303,10 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
 
     }
 
-    public override fun onResume() {
-        volleyAnswerDataRequest()
-        super.onResume()
-    }
+//    public override fun onResume() {
+//        volleyAnswerDataRequest(postDoubtid)
+//        super.onResume()
+//    }
 
 }
 

@@ -21,14 +21,16 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:Context, userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<MyRecyclerPostsCommentsRepliesAdapter.PostsCommentsRepliesHolder>() {
+class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:CommentsPostHome, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<MyRecyclerPostsCommentsRepliesAdapter.PostsCommentsRepliesHolder>() {
     var mRepliesObjectArrayList:ArrayList<ReplyObject>
     var mRequestQueue:RequestQueue
-    var mContext:Context
+    var mContext:CommentsPostHome
+    var mPostid:String
     var mMyuserid:String
     init {
         this.mRequestQueue=requestQueue
         this.mContext=context
+        mPostid=postid
         this.mMyuserid=userid
         this.mRepliesObjectArrayList=replyObjectArrayList
     }
@@ -60,6 +62,7 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Reply Deleted successfully", Toast.LENGTH_SHORT).show()
+                                    mContext.volleyCommentDataRequest(mPostid)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()

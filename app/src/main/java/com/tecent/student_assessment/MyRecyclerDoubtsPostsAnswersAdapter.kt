@@ -41,16 +41,18 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, userid: String, context: Context, answerObjectArrayList: ArrayList<AnswerObject>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersAdapter.DoubtsPostsAnswersHolder>() {
+class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, doubtPostId:String, userid: String, context: AnswersDoubtsPostsDoubts, answerObjectArrayList: ArrayList<AnswerObject>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersAdapter.DoubtsPostsAnswersHolder>() {
     var mDialog: ACProgressFlower
     var mRequestQueue: RequestQueue
-    var mContext: Context
+    var doubtPostId: String
+    var mContext: AnswersDoubtsPostsDoubts
     var mMyuserid: String
     var mAnswerObjectArrayList: ArrayList<AnswerObject>
 
     init {
         this.mDialog = dialog
         this.mRequestQueue = requestQueue
+        this.doubtPostId=doubtPostId
         this.mMyuserid = userid
         this.mContext = context
         this.mAnswerObjectArrayList = answerObjectArrayList
@@ -93,6 +95,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Answer Deleted successfully", Toast.LENGTH_SHORT).show()
+                                    mContext.volleyAnswerDataRequest(doubtPostId)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
@@ -160,7 +163,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
-        val adapter = MyRecyclerDoubtsPostsAnswersRepliesAdapter(mRequestQueue, mContext, mMyuserid, answerObject.replyObjectArrayList)
+        val adapter = MyRecyclerDoubtsPostsAnswersRepliesAdapter(mRequestQueue, mContext, doubtPostId, mMyuserid, answerObject.replyObjectArrayList)
         postCommentsHolder.comments_recyclerview.adapter = adapter
 
         postCommentsHolder.tv_reply_btn.setOnClickListener {
@@ -194,6 +197,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Replied successfully", Toast.LENGTH_SHORT).show()
+                                    mContext.volleyAnswerDataRequest(doubtPostId)
                                     dialogReply.dismiss()
                                     mDialog.dismiss()
                                 }

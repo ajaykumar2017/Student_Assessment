@@ -47,7 +47,9 @@ import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import java.io.ByteArrayOutputStream
 
-class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mDialog: ACProgressFlower, internal var mRequestQueue: RequestQueue, private val mContext: Context, internal var mMyuserid: String, private val museridlist: ArrayList<String>,
+class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mDialog: ACProgressFlower,
+                                  internal var mRequestQueue: RequestQueue, private val mContext: Context,
+                                  internal var mMyuserid: String, private val museridlist: ArrayList<String>,
                                   private val muserdplist: ArrayList<String>, private val musernamelist: ArrayList<String>,
                                   private val muserbranchlist: ArrayList<String>, private val mposttimelist: ArrayList<String>,
                                   private val mpostimagelist: ArrayList<String>, private val mpostdoubtidlist: ArrayList<String>,

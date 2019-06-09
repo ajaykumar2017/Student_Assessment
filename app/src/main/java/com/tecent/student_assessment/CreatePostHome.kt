@@ -50,6 +50,7 @@ class CreatePostHome : AppCompatActivity() {
     lateinit var sharedPreferences:SharedPreferences
     lateinit var dialog:ACProgressFlower
     internal lateinit var requestQueue: RequestQueue
+    private lateinit var homeFragment: HomeFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ class CreatePostHome : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
-        supportActionBar!!.setTitle(Html.fromHtml("<font color='#000'>Create Post</font>"))
+        supportActionBar!!.title = "Create Post"
         toolbar_main.setNavigationOnClickListener {
             finish()
         }
@@ -371,6 +372,7 @@ class CreatePostHome : AppCompatActivity() {
                 sharedPreferencesEditPosts.putString("posts",(Integer.parseInt(sharedPreferences.getString("posts", "")!!) + 1).toString())
                 sharedPreferencesEditPosts.apply()
                 finish()
+                homeFragment.volleyPostDataRequest()
             } else if (result == "error") {
                 dialog.dismiss()
                 toast("An error has occured. Please try again")

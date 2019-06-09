@@ -67,6 +67,7 @@ class CreatePostQueryDoubts : AppCompatActivity() {
     lateinit var sharedPreferences: SharedPreferences
     lateinit var dialog: ACProgressFlower
     lateinit var requestQueue: RequestQueue
+    private lateinit var doubtsFragment: DoubtsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -407,6 +408,7 @@ class CreatePostQueryDoubts : AppCompatActivity() {
                 val sharedPreferencesEditPosts = sharedPreferences.edit()
                 sharedPreferencesEditPosts.putString("doubts", (Integer.parseInt(sharedPreferences.getString("doubts", "")!!) + 1).toString())
                 sharedPreferencesEditPosts.apply()
+                doubtsFragment.volleyPostDataRequest()
                 finish()
             } else if (result == "error") {
                 dialog.dismiss()
