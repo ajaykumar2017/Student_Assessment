@@ -47,6 +47,8 @@ public class StudentRegistration extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     RequestQueue requestQueue;
 
+    String name,email,createPassword,confirmPassword;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +98,18 @@ public class StudentRegistration extends AppCompatActivity {
         dialog.setCancelable(false);
 
         //GET THE EDIT_TEXT String
-        final Editable name = etName.getText();
+        /*final Editable name = etName.getText();
         final Editable email = etEmail.getText();
         final Editable createPassword = etCreatePassword.getText();
-        final Editable confirmPassword = etConfirmPassword.getText();
+        final Editable confirmPassword = etConfirmPassword.getText();*/
 
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                name = etName.getText().toString();
+                email = etEmail.getText().toString();
+                createPassword = etCreatePassword.getText().toString();
+                confirmPassword = etConfirmPassword.getText().toString();
                 if (name.toString().equals("") || email.toString().equals("") || createPassword.toString().equals("") || confirmPassword.toString().equals("") ||
                         rgGender.getCheckedRadioButtonId() == -1 || spinnerBranch.getSelectedItem().toString().trim().equals("Select Branch") ||
                         spinnerSemester.getSelectedItem().toString().trim().equals("Select Semester") || spinnerCollege.getSelectedItem().toString().trim().equals("Select College") ||
