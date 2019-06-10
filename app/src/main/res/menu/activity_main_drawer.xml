@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:id="@+id/nav_profile"
+    <group
+        android:id="@+id/group1">
+        <item
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_001_user"
             android:title="My Profile" />
-        <item android:id="@+id/nav_practice"
+        <item
+            android:id="@+id/nav_practice"
             android:icon="@drawable/ic_002_clipboard"
             android:title="Practice" />
-        <item android:id="@+id/nav_performance"
+        <item
+            android:id="@+id/nav_performance"
             android:icon="@drawable/ic_003_seo_performance_marketing_graphic"
             android:title="My Performance" />
-        <item android:id="@+id/nav_notes"
+        <item
+            android:id="@+id/nav_notes"
             android:icon="@drawable/ic_004_books_stack_of_three"
             android:title="My Notes" />
-        <item android:id="@+id/nav_appSettings"
+    </group>
+    <group
+        android:id="@+id/group2">
+        <item
+            android:id="@+id/nav_appSettings"
             android:icon="@drawable/ic_settings_black_24dp"
             android:title="App Settings" />
-        <item android:id="@+id/nav_helpAndFaqs"
+        <item
+            android:id="@+id/nav_helpAndFaqs"
             android:icon="@drawable/ic_005_information"
             android:title="Help and FAQS" />
-        <item android:id="@+id/nav_contactUs"
+        <item
+            android:id="@+id/nav_contactUs"
             android:icon="@drawable/ic_006_feedback"
-            android:title="Contact Us"/>
-        <item android:id="@+id/nav_shareApp"
+            android:title="Contact Us" />
+    </group>
+    <group
+        android:id="@+id/group3">
+        <item
+            android:id="@+id/nav_shareApp"
             android:icon="@drawable/ic_007_share"
-            android:title="Share App"/>
-        <item android:id="@+id/nav_rateApp"
+            android:title="Share App" />
+        <item
+            android:id="@+id/nav_rateApp"
             android:icon="@drawable/ic_008_favorites"
-            android:title="Rate App"/>
-        <item android:id="@+id/nav_checkForUpdates"
+            android:title="Rate App" />
+        <item
+            android:id="@+id/nav_checkForUpdates"
             android:icon="@drawable/ic_009_refresh"
-            android:title="Check for Updates"/>
-        <item android:id="@+id/nav_visitWebsite"
+            android:title="Check for Updates" />
+        <item
+            android:id="@+id/nav_visitWebsite"
             android:icon="@drawable/ic_internet"
-            android:title="Visit Website"/>
-        <item android:id="@+id/nav_privacyPolicy"
+            android:title="Visit Website" />
+        <item
+            android:id="@+id/nav_privacyPolicy"
             android:icon="@drawable/pprivacypolicy"
-            android:title="Privacy policy"/>
+            android:title="Privacy policy" />
+    </group>
 
 </menu>
