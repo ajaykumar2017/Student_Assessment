@@ -80,7 +80,7 @@ class CreatePostQueryDoubts : AppCompatActivity() {
         path_image = findViewById(R.id.path_image)
         iv_set_image = findViewById(R.id.iv_set_image)
         requestQueue = Volley.newRequestQueue(this)
-        sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val userdp = sharedPreferences.getString("userdp", "")
         requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
         val name = sharedPreferences.getString("name", "")

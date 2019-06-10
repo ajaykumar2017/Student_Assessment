@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ContactUs"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:theme="@style/AppThemeContactUs"/>
         <activity
             android:name=".ChangePassword"
@@ -46,6 +47,7 @@
         <activity android:name=".Settings" />
         <activity
             android:name=".CreatePostQueryDoubts"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:theme="@style/AppThemeCreatePostQueryDoubts" />
         <activity android:name=".SetUpActivity" />
         <activity android:name=".StudentRegistration" />
