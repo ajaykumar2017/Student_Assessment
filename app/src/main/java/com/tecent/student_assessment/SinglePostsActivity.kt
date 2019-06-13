@@ -1,5 +1,7 @@
 package com.tecent.student_assessment
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -58,6 +60,14 @@ class SinglePostsActivity : AppCompatActivity() {
                 .fadeColor(Color.WHITE).build()
         volleySinglePostDataRequest(postid)
         volleyCommentDataRequest(postid)
+        //long press click copy text
+        iv_post_text.setOnLongClickListener {
+            var cm:ClipboardManager= getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            var clip:ClipData=ClipData.newPlainText(iv_post_text.text.toString(),iv_post_text.text)
+            cm.primaryClip=clip
+        Toast.makeText(this, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
     }
 
     fun volleySinglePostDataRequest(postid: String)

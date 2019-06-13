@@ -1,5 +1,7 @@
 package com.tecent.student_assessment
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
@@ -41,6 +43,15 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
                 ,doubtsPostsAnswersRepliesHolder.iv_profile_image))
         doubtsPostsAnswersRepliesHolder.username.text=replyObject.userName+" "+"\u2022"+" "
         doubtsPostsAnswersRepliesHolder.replyText.text=replyObject.replyText
+        //long press click copy text
+        doubtsPostsAnswersRepliesHolder.replyText.setOnLongClickListener {
+            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            var clip: ClipData = ClipData.newPlainText(doubtsPostsAnswersRepliesHolder.replyText.text.toString(),doubtsPostsAnswersRepliesHolder.replyText.text)
+            cm.primaryClip=clip
+            Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
+
         doubtsPostsAnswersRepliesHolder.timeAgo.text=replyObject.replyTime
         if (mMyuserid!=replyObject.userId){
             doubtsPostsAnswersRepliesHolder.iv_delete_post_reply.visibility=View.GONE

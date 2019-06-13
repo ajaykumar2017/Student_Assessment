@@ -92,7 +92,8 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:textColor="@color/verydarkgrey"
-                        android:textSize="17sp" />
+                        android:textSize="17sp"
+                        android:autoLink="web" />
 
                     <ImageView
                         android:id="@+id/iv_post_image"

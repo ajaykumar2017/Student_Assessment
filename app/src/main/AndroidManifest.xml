@@ -16,9 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ContactUs"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:theme="@style/AppThemeContactUs"/>
+        <activity android:name=".ForgetPasswordActivity"></activity>
+        <activity
+            android:name=".ContactUs"
+            android:theme="@style/AppThemeContactUs"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ChangePassword"
             android:theme="@style/AppThemeChangePassword" />
@@ -28,7 +30,9 @@
             android:name=".DashBoardMenuWebView"
             android:theme="@style/AppThemeDashboardWebview" />
         <activity android:name=".SinglePostsActivity" />
-        <activity android:name=".AnswersDoubtsPostsDoubts" />
+        <activity
+            android:name=".AnswersDoubtsPostsDoubts"
+            android:theme="@style/AppThemeAnswersDoubtPost" />
         <activity
             android:name=".Profile"
             android:theme="@style/AppThemeProfile" />
@@ -47,8 +51,8 @@
         <activity android:name=".Settings" />
         <activity
             android:name=".CreatePostQueryDoubts"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-            android:theme="@style/AppThemeCreatePostQueryDoubts" />
+            android:theme="@style/AppThemeCreatePostQueryDoubts"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".SetUpActivity" />
         <activity android:name=".StudentRegistration" />
         <activity android:name=".StudentLoginActivity" />

@@ -2,6 +2,8 @@ package com.tecent.student_assessment
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -123,6 +125,14 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
             popup.show()
         }
         postCommentsHolder.comment_text.text = answerObject.answerText
+        //long press click copy text
+        postCommentsHolder.comment_text.setOnLongClickListener {
+            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            var clip: ClipData = ClipData.newPlainText(postCommentsHolder.comment_text.text.toString(),postCommentsHolder.comment_text.text)
+            cm.primaryClip=clip
+            Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
         postCommentsHolder.comment_image.setOnClickListener {
             animateIntent(postCommentsHolder.comment_image)
         }

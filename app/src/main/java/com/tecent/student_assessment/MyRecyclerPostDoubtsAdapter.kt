@@ -2,9 +2,7 @@ package com.tecent.student_assessment
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
@@ -75,6 +73,15 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         postDoubtsHolder.iv_username.text = mUserName
         postDoubtsHolder.ivdate_and_branch.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase()
         postDoubtsHolder.iv_post_text.text = mPostText
+        //long press click copy text
+        postDoubtsHolder.iv_post_text.setOnLongClickListener {
+            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            var clip: ClipData = ClipData.newPlainText(postDoubtsHolder.iv_post_text.text.toString(),postDoubtsHolder.iv_post_text.text)
+            cm.primaryClip=clip
+            Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
+
         postDoubtsHolder.tv_no_of_answers.text = "$mPostAnswers Answers"
         if (mPostImage != "")
             mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "postdoubts/" + mPostImage, postDoubtsHolder.iv_post_image))

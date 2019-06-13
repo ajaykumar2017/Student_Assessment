@@ -122,6 +122,8 @@
                     android:layout_weight="0.9"
                     android:maxLines="1"
                     android:background="@null"
+                    android:drawableEnd="@drawable/ic_visible_eye"
+                    android:paddingEnd="10dp"
                     android:hint="Create Password (8-32 chars)"
                     android:inputType="textPassword"
                     android:textSize="18sp" />
@@ -154,6 +156,8 @@
                     android:layout_weight="0.9"
                     android:background="@null"
                     android:maxLines="1"
+                    android:drawableEnd="@drawable/ic_visible_eye"
+                    android:paddingEnd="10dp"
                     android:hint="Confirm Password"
                     android:inputType="textPassword"
                     android:textSize="18sp" />

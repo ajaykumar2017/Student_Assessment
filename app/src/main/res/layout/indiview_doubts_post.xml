@@ -97,7 +97,8 @@
             android:layout_marginBottom="10dp"
             android:text="this is a post"
             android:textSize="17dp"
-            android:textColor="@color/verydarkgrey"/>
+            android:textColor="@color/verydarkgrey"
+            android:autoLink="web"/>
 
         <ImageView
             android:id="@+id/iv_post_image"

@@ -2,9 +2,7 @@ package com.tecent.student_assessment
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -14,6 +12,7 @@ import android.provider.Settings.Global.getString
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -43,6 +42,7 @@ import java.util.ArrayList
 import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressFlower
+import kotlinx.android.synthetic.main.activity_single_posts.*
 import java.io.ByteArrayOutputStream
 
 class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mSharedPreferencesLike: SharedPreferences,
@@ -79,6 +79,15 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         homePostsHolder.iv_username.text = mUserName
         homePostsHolder.ivdate_and_branch_subject.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase() + "  " + "\u2022" + " " + mSubject
         homePostsHolder.iv_post_text.text = mPostText
+        //long press click copy text
+        homePostsHolder.iv_post_text.setOnLongClickListener {
+            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            var clip: ClipData = ClipData.newPlainText(homePostsHolder.iv_post_text.text.toString(),homePostsHolder.iv_post_text.text)
+            cm.primaryClip=clip
+            Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
+            return@setOnLongClickListener true
+        }
+
         if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
             //            homePostsHolder.ivlike.setBackgroundResource(R.drawable.ic_thumb_up_blue);
             DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.colorPrimary))

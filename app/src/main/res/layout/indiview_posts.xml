@@ -92,7 +92,8 @@
             android:paddingRight="10dp"
             android:text="this is a post"
             android:textColor="@color/verydarkgrey"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:autoLink="web" />
         <TextView
             android:id="@+id/iv_post_text_more"
             android:layout_width="wrap_content"
