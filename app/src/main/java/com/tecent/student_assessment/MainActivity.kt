@@ -232,9 +232,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             this.doubleBackToExitPressedOnce = true
             Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show()
              Handler().postDelayed(Runnable() {
-                doubleBackToExitPressedOnce = false;
+                doubleBackToExitPressedOnce = false
 
         }, 2000)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (sharedPreferences.getBoolean("dataChange",false)){
+            sharedPreferences.edit().putBoolean("dataChange",false).apply()
+            recreate()
         }
     }
 }

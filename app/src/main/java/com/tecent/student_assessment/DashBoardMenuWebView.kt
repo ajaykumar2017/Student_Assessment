@@ -34,20 +34,13 @@ class DashBoardMenuWebView : AppCompatActivity() {
                 progress_bar_dashboard.visibility = View.GONE
             }
         }
-        if (title=="Prepare"){
-            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepare.php")
-        }
-        else if (title=="Preparation Materials"){
-            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepareMaterials.php")
-        }
-        else if (title == "Quizes") {
-            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardQuizes.php")
-        } else if (title == "Tutorials") {
-            dashboard_webview.loadUrl("https://www.tutorials.a3creators.co.in")
-        } else if (title == "Useful Links") {
-            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/usefulLinksDashboard.php")
-        } else if (title == "Practice") {
-            dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/Practice.php")
+        when (title) {
+            "Prepare" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepare.php")
+            "Preparation Materials" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepareMaterials.php")
+            "Quizes" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardQuizes.php")
+            "Tutorials" -> dashboard_webview.loadUrl("https://www.tutorials.a3creators.co.in")
+            "Useful Links" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/usefulLinksDashboard.php")
+            "Practice" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/Practice.php")
         }
 
     }

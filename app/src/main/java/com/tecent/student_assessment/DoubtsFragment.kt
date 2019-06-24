@@ -248,4 +248,11 @@ class DoubtsFragment : Fragment() {
 
 
     }
+    override fun onResume() {
+        super.onResume()
+        if (sharedPreferences.getBoolean("newDoubtPost",false)){
+            sharedPreferences.edit().putBoolean("newDoubtPost",false).apply()
+            volleyPostDataRequest()
+        }
+    }
 }

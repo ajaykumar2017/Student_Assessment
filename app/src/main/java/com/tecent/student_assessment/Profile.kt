@@ -201,6 +201,7 @@ class Profile : AppCompatActivity() {
                                     if (result == "successful") {
                                         Toast.makeText(this, "Name Changed", Toast.LENGTH_SHORT).show()
                                         sharedPreferencesEdit.putString("name", editProfileDialog.et_name.text.toString().trim())
+                                        sharedPreferencesEdit.putBoolean("dataChange",true)
                                         sharedPreferencesEdit.apply()
                                         tv_name.text = editProfileDialog.et_name.text.toString().trim()
                                         editProfileDialog.dismiss()
@@ -791,6 +792,9 @@ class Profile : AppCompatActivity() {
                     dialog.dismiss()
                     Toast.makeText(this@Profile, "DP Changed", Toast.LENGTH_SHORT).show()
                     requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+                    val sharedPreferencesEdit = sharedPreferences.edit()
+                    sharedPreferencesEdit.putBoolean("dataChange",true)
+                    sharedPreferencesEdit.apply()
                 }
                 if (status == "error") {
                     dialog.dismiss()

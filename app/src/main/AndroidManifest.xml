@@ -29,7 +29,8 @@
         <activity
             android:name=".DashBoardMenuWebView"
             android:theme="@style/AppThemeDashboardWebview" />
-        <activity android:name=".SinglePostsActivity" />
+        <activity android:name=".SinglePostsActivity"
+            android:theme="@style/AppThemeProfile"/>
         <activity
             android:name=".AnswersDoubtsPostsDoubts"
             android:theme="@style/AppThemeAnswersDoubtPost" />

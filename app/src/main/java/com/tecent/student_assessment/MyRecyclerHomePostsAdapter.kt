@@ -285,7 +285,6 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                 val tv_btn_report = dialogReport.findViewById<TextView>(R.id.tv_btn_report)
                 val selectedIdRadio = radioGroup.checkedRadioButtonId
                 // find the radiobutton by returned id
-                val radioButton = dialogReport.findViewById<RadioButton>(selectedIdRadio)
                 tv_btn_cancel.setOnClickListener { dialogReport.dismiss() }
                 tv_btn_report.setOnClickListener {
                     var reportValue = ""

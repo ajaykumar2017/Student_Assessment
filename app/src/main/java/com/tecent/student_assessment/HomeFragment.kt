@@ -270,5 +270,11 @@ class HomeFragment : Fragment() {
             Toast.makeText(mainActivity, e.toString(), Toast.LENGTH_SHORT).show()
         }
 
+    } override fun onResume() {
+        super.onResume()
+        if (sharedPreferences.getBoolean("newPost",false)){
+            sharedPreferences.edit().putBoolean("newPost",false).apply()
+            volleyPostDataRequest()
+        }
     }
 }

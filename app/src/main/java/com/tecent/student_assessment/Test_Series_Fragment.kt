@@ -75,7 +75,7 @@ class Test_Series_Fragment : Fragment() {
             startActivity(intent)
         }
         database.setOnClickListener {
-            intent.putExtra("testSubjectShort", "db")
+            intent.putExtra("testSubjectShort", "dbms")
             intent.putExtra("testsubject", database.text.toString())
             startActivity(intent)
         }

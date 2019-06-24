@@ -116,6 +116,7 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Post Deleted successfully", Toast.LENGTH_SHORT).show()
+                                    museridlist.removeAt(position)
                                     val sharedPreferencesEditPostDoubts = mSharedPreferences.edit()
                                     sharedPreferencesEditPostDoubts.putString("doubts", (Integer.parseInt(mSharedPreferences.getString("doubts", "")!!) - 1).toString())
                                     sharedPreferencesEditPostDoubts.apply()
@@ -212,7 +213,6 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                         val tv_btn_report = dialogReport.findViewById<View>(R.id.tv_btn_report) as TextView
                         val selectedIdRadio = radioGroup.checkedRadioButtonId
                         // find the radiobutton by returned id
-                        val radioButton = dialogReport.findViewById<View>(selectedIdRadio) as RadioButton
                         tv_btn_cancel.setOnClickListener { dialogReport.dismiss() }
                         tv_btn_report.setOnClickListener {
                             var reportValue = ""

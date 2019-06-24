@@ -370,6 +370,7 @@ class CreatePostHome : AppCompatActivity() {
                 toast("post uploaded successfully")
                 val sharedPreferencesEditPosts = sharedPreferences.edit()
                 sharedPreferencesEditPosts.putString("posts",(Integer.parseInt(sharedPreferences.getString("posts", "")!!) + 1).toString())
+                sharedPreferencesEditPosts.putBoolean("newPost",true)
                 sharedPreferencesEditPosts.apply()
                 finish()
                 homeFragment.volleyPostDataRequest()
