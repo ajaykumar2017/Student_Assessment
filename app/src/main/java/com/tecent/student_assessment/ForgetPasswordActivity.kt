@@ -42,6 +42,8 @@ class ForgetPasswordActivity : AppCompatActivity() {
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
         supportActionBar!!.title = "Forget Password"
         toolbar_main.setNavigationOnClickListener {
+            var intent: Intent = Intent(this,StudentLoginActivity::class.java)
+            startActivity(intent)
             finish()
         }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT  //Prevent landscape mode

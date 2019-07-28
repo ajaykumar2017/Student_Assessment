@@ -1,6 +1,8 @@
 package com.tecent.student_assessment;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -211,6 +213,15 @@ public class ExtraFunctions {
     }
     static boolean isValidPostId(String postId){
         return postId.matches("[0-9]+");
+    }
+
+    static void logOut(Activity context){
+        context.getSharedPreferences(ExtraFunctions.sharedPreferencesId, 0)
+                .edit().clear().apply();
+        context.getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, 0)
+                .edit().clear().apply();
+        context.startActivity(new Intent(context,StudentLoginActivity.class));
+        context.finish();
     }
 
 }

@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.HashMap
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class Settings : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +40,8 @@ class Settings : AppCompatActivity() {
         val switchnotification = findViewById<Switch>(R.id.switchnotification)
         val switchsound = findViewById<Switch>(R.id.switchsound)
         val btnchangepassword = findViewById<LinearLayout>(R.id.btnchangepassword)
-        val sharedPreferences: SharedPreferences = getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        val sharedPreferencesLike: SharedPreferences = getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
         val userid:String=sharedPreferences.getString("userid","")
         val requestQueue = Volley.newRequestQueue(this)
         val btnlogout = findViewById<LinearLayout>(R.id.btnlogout)
@@ -67,29 +69,11 @@ class Settings : AppCompatActivity() {
                         requestQueue.add(stringRequest)
                         //volley part end
 
-                        val spe = sharedPreferences.edit()
-                        spe.putString("userid", "")
-                        spe.putString("name", "")
-                        spe.putString("gender", "")
-                        spe.putString("branch", "")
-                        spe.putString("semester", "")
-                        spe.putString("college", "")
-                        spe.putString("university", "")
-                        spe.putString("verified", "")
-                        spe.putString("ban", "")
-                        spe.putString("joindate", "")
-                        spe.putString("userdp", "")
-                        spe.putString("email", "")
-                        spe.putString("passw", "")
-                        spe.putString("points", "")
-                        spe.putString("login", "false")
-                        spe.commit()
+                        ExtraFunctions.logOut(this)
                         val file = File(ExtraFunctions.rootdir + "userdp/" + sharedPreferences.getString("userdp", ""))
                         if (file.exists()) {
                             file.delete()
                         }
-                        val intent = Intent(this, StudentLoginActivity::class.java)
-                        startActivity(intent)
                         finishAffinity()
                     }
                 }
