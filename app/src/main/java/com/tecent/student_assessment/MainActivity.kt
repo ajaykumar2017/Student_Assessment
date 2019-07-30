@@ -173,6 +173,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 startActivity(intSubResult)
             }
             R.id.nav_notes -> Toast.makeText(this, "Notes", Toast.LENGTH_SHORT).show()
+            R.id.nav_discussion_forum->{
+                val intentDiscussionForum=Intent(this,DiscussionForum::class.java)
+                startActivity(intentDiscussionForum)
+            }
             R.id.nav_appSettings -> {
                 val intentSettings = Intent(this@MainActivity, Settings::class.java)
                 startActivity(intentSettings)

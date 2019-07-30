@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DiscussionForum">
+    <include layout="@layout/toolbar_main"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@+id/toolbar_main"
+            android:id="@+id/recyclerViewDisForum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true">
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="0.8dp"
+            android:background="@color/smalldarkgrey"
+            tools:layout_editor_absoluteX="0dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="4dp"
+            android:padding="5dp">
+
+            <EditText
+                android:id="@+id/et_message"
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="match_parent"
+                android:hint="Type a message"
+                android:background="@null"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"/>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_send_button"
+                android:paddingRight="5dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

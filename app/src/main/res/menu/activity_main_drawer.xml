@@ -18,6 +18,10 @@
             android:id="@+id/nav_notes"
             android:icon="@drawable/ic_004_books_stack_of_three"
             android:title="My Notes" />
+        <item
+            android:id="@+id/nav_discussion_forum"
+            android:icon="@drawable/ic_chat"
+            android:title="Discussion Forum" />
     </group>
     <group
         android:id="@+id/group2">
