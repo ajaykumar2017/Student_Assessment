@@ -60,12 +60,12 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
     }
 
     override fun onBindViewHolder(homePostsHolder: HomePostsHolder, position: Int) {
+        val mPostId = mpostidlist[position]
         val mUserId = museridlist[position]
         val mUserdp = muserdplist[position]
         val mUserName = musernamelist[position]
         val mPostDateTime = mposttimelist[position]
         val mBranch = muserbranchlist[position]
-        val mPostId = mpostidlist[position]
         val mPostText = mposttextlist[position]
         val mPostFile = mpostfilelist[position]
         val mSubject = msubjectlist[position]
