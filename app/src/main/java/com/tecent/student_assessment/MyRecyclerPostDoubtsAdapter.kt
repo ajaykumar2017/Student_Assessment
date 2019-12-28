@@ -162,8 +162,7 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                                 mDialog.dismiss()
                                 val intentShareFile = Intent(Intent.ACTION_SEND)
                                 intentShareFile.type = "image/*"
-                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"
-                                        + ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
+                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
                                 intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                         "New post from \'Hints\' app.")
                                 intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
@@ -178,8 +177,7 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                                                 mDialog.dismiss()
                                                 val intentShareFile = Intent(Intent.ACTION_SEND)
                                                 intentShareFile.type = "image/*"
-                                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"
-                                                        + ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
+                                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
                                                 intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                                         "Sharing File...")
                                                 intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)

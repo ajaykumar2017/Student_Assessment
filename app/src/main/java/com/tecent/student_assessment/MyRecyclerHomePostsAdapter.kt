@@ -503,8 +503,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                         mDialog.dismiss()
                         val intentShareFile = Intent(Intent.ACTION_SEND)
                         intentShareFile.type = "image/*"
-                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"
-                                + ExtraFunctions.rootdir + "posts/" + mPostFile))
+                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "posts/" + mPostFile))
                         intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                 "New post from \'Hints\' app.")
                         intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
@@ -529,8 +528,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                         mDialog.dismiss()
                                         val intentShareFile = Intent(Intent.ACTION_SEND)
                                         intentShareFile.type = "image/*"
-                                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"
-                                                + ExtraFunctions.rootdir + "posts/" + fDnld))
+                                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "posts/" + fDnld))
                                         intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                                 "Sharing File...")
                                         intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
