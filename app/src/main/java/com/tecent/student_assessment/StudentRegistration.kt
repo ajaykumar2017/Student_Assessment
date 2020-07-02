@@ -8,8 +8,6 @@ import android.graphics.Color
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.MotionEvent
 import android.view.View
@@ -25,7 +23,6 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 
@@ -34,9 +31,9 @@ import org.json.JSONObject
 import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressConstant
-import cc.cloudist.acplibrary.ACProgressCustom
 import cc.cloudist.acplibrary.ACProgressFlower
-import kotlinx.android.synthetic.main.activity_student_login.*
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions.getSmallBranch
 
 class StudentRegistration : AppCompatActivity() {
 
@@ -183,13 +180,13 @@ class StudentRegistration : AppCompatActivity() {
                 // find the radiobutton by returned id
                 val radioButton = findViewById<View>(selectedIdRadio) as RadioButton
                 val genderValue = radioButton.text.toString()
-                val branchValue = ExtraFunctions.getSmallBranch(spinnerBranch.selectedItem.toString())
+                val branchValue = getSmallBranch(spinnerBranch.selectedItem.toString())
                 val semesterValue = ExtraFunctions.getSmallSemester(spinnerSemester.selectedItem.toString())
                 val collegeValue = spinnerCollege.selectedItem.toString()
                 val universityValue = ExtraFunctions.getSmallUniversity(spinnerUniversity.selectedItem.toString())
 
                 //Toast.makeText(StudentRegistration.this, nameValue+" "+emailValue+" "+passwordValue+" "+" "+gender+" "+branchValue+" "+semesterValue+" "+collegeValue+" "+" "+universityValue, Toast.LENGTH_SHORT).show();
-                if (ExtraFunctions.isNetworkStatusAvialable(this@StudentRegistration)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(this@StudentRegistration)) {
                     try {
                         dialog.show()
                         volleytest(nameValue, emailValue, passwordValue, genderValue, branchValue, semesterValue, collegeValue, universityValue)

@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -23,7 +22,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_comments_post_home.*
+import com.tecent.student_assessment.adapters.MyRecyclerDiscussionForumAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_discussion_forum.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import org.json.JSONObject
@@ -55,13 +55,14 @@ class DiscussionForum : AppCompatActivity() {
                 .themeColor(Color.BLUE)
                 .fadeColor(Color.WHITE).build()
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout)
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         userid = sharedPreferences.getString("userid", "")
 
         recyclerViewDiscusForum=findViewById<RecyclerView>(R.id.recyclerViewDisForum)
         recyclerViewDiscusForum.setHasFixedSize(true)
         recyclerViewDiscusForum.setLayoutManager(LinearLayoutManager(this))
-        if (ExtraFunctions.isNetworkStatusAvialable(this)){
+        if (ExtraFunctions.isNetworkStatusAvailable(this)){
             volleyDiscussionForumDataRequest()
         }else{
             Toast.makeText(this,"No Internet connection!", Toast.LENGTH_SHORT).show()
@@ -76,7 +77,7 @@ class DiscussionForum : AppCompatActivity() {
         }
         loadDiscussionForumDataRequestFromSpf()
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(this))
+            if (ExtraFunctions.isNetworkStatusAvailable(this))
                 volleyDiscussionForumDataRequest()
             else {
                 swipeRefreshLayout.isRefreshing = false
@@ -154,9 +155,10 @@ class DiscussionForum : AppCompatActivity() {
                         object : TypeToken<List<DiscussionForumObject>>() {
                         }.type
                 )
-                val adapter = MyRecyclerDiscussionForumAdapter(
-                        dialog, requestQueue, userid, this, discussionForumObjectArrayList
-                )
+                val adapter =
+                  MyRecyclerDiscussionForumAdapter(
+                      dialog, requestQueue, userid, this, discussionForumObjectArrayList
+                  )
                 adapter.setHasStableIds(true)
                 recyclerViewDiscusForum.adapter = adapter
             }
@@ -186,9 +188,10 @@ class DiscussionForum : AppCompatActivity() {
                                 object : TypeToken<List<DiscussionForumObject>>() {
                                 }.type
                         )
-                        val adapter = MyRecyclerDiscussionForumAdapter(
-                                dialog, requestQueue, userid, this, discussionForumObjectArrayList
-                        )
+                        val adapter =
+                          MyRecyclerDiscussionForumAdapter(
+                              dialog, requestQueue, userid, this, discussionForumObjectArrayList
+                          )
                         adapter.setHasStableIds(true)
                         recyclerViewDiscusForum.adapter = adapter
                         swipeRefreshLayout.isRefreshing=false

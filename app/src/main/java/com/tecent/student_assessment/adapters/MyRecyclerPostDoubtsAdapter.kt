@@ -1,10 +1,9 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -13,8 +12,6 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -28,9 +25,7 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 import com.downloader.Error
 import com.downloader.OnDownloadListener
 import com.downloader.PRDownloader
@@ -41,8 +36,16 @@ import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
 
-import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.tecent.student_assessment.AnswersDoubtsPostsDoubts
+import com.tecent.student_assessment.ImageViewerActivity
+import com.tecent.student_assessment.Profile
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.R.menu
+import com.tecent.student_assessment.R.string
+import com.tecent.student_assessment.adapters.MyRecyclerPostDoubtsAdapter.PostDoubtsHolder
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import java.io.ByteArrayOutputStream
 
 class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mDialog: ACProgressFlower,
@@ -51,10 +54,11 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                                   private val muserdplist: ArrayList<String>, private val musernamelist: ArrayList<String>,
                                   private val muserbranchlist: ArrayList<String>, private val mposttimelist: ArrayList<String>,
                                   private val mpostimagelist: ArrayList<String>, private val mpostdoubtidlist: ArrayList<String>,
-                                  private val mposttextlist: ArrayList<String>, private val manswerslist: ArrayList<String>) : RecyclerView.Adapter<MyRecyclerPostDoubtsAdapter.PostDoubtsHolder>() {
+                                  private val mposttextlist: ArrayList<String>, private val manswerslist: ArrayList<String>) : RecyclerView.Adapter<PostDoubtsHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): PostDoubtsHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_doubts_post, viewGroup, false)
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_doubts_post, viewGroup, false)
         return PostDoubtsHolder(view)
     }
 
@@ -69,7 +73,9 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         val mPostImage = mpostimagelist[position]
         val mPostAnswers = manswerslist[position]
 
-        mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + mUserdp, postDoubtsHolder.iv_profile_image))
+        mRequestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + mUserdp, postDoubtsHolder.iv_profile_image))
         postDoubtsHolder.iv_username.text = mUserName
         postDoubtsHolder.ivdate_and_branch.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase()
         postDoubtsHolder.iv_post_text.text = mPostText
@@ -84,7 +90,9 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
 
         postDoubtsHolder.tv_no_of_answers.text = "$mPostAnswers Answers"
         if (mPostImage != "")
-            mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "postdoubts/" + mPostImage, postDoubtsHolder.iv_post_image))
+            mRequestQueue.add<Bitmap>(
+                ExtraFunctions.createImageRequestFromUrl(
+                    ExtraFunctions.serverurl + "postdoubts/" + mPostImage, postDoubtsHolder.iv_post_image))
         else
             postDoubtsHolder.iv_post_image.visibility = View.GONE
         val viewLink = ExtraFunctions.serverurl + "postdoubts/" + mPostImage
@@ -95,20 +103,28 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         postDoubtsHolder.iv_menu_btn.setOnClickListener {
             val popup = PopupMenu(mContext, postDoubtsHolder.iv_menu_btn)
             //inflating menu from xml resource
-            popup.inflate(R.menu.doubts_post_menu)
+            popup.inflate(menu.doubts_post_menu)
 
             val popupMenu = popup.menu
             if (mUserId != mMyuserid)
-                popupMenu.findItem(R.id.delete_post).isVisible = false
+                popupMenu.findItem(
+                    id.delete_post
+                ).isVisible = false
             else {
-                popupMenu.findItem(R.id.save_to_notes).isVisible = false
-                popupMenu.findItem(R.id.turn_on_post_notifi).isVisible = false
-                popupMenu.findItem(R.id.report_post).isVisible = false
+                popupMenu.findItem(
+                    id.save_to_notes
+                ).isVisible = false
+                popupMenu.findItem(
+                    id.turn_on_post_notifi
+                ).isVisible = false
+                popupMenu.findItem(
+                    id.report_post
+                ).isVisible = false
 
             }
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.delete_post -> if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    id.delete_post -> if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                         val url = ExtraFunctions.serverurl + "deleteDoubtPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
@@ -141,9 +157,9 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                     } else {
                         Toast.makeText(mContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.save_to_notes -> Toast.makeText(mContext, "save to notes", Toast.LENGTH_SHORT).show()
-                    R.id.turn_on_post_notifi -> Toast.makeText(mContext, "turn on notif", Toast.LENGTH_SHORT).show()
-                    R.id.share_post -> if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    id.save_to_notes -> Toast.makeText(mContext, "save to notes", Toast.LENGTH_SHORT).show()
+                    id.turn_on_post_notifi -> Toast.makeText(mContext, "turn on notif", Toast.LENGTH_SHORT).show()
+                    id.share_post -> if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                         mDialog.show()
                         val extrastring = "\n\nThis doubt is posted by " + mUserName + " in \'Student Assessment\' app." +
                                 "\nTo get such updates regularly download \'Student Assessment\' app now." +
@@ -157,18 +173,21 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                             intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
                             mContext.startActivity(Intent.createChooser(intentShareFile, "Share"))
                         } else {
-                            val f = File(ExtraFunctions.rootdir + "postdoubts/" + mPostImage)
+                            val f = File(
+                                ExtraFunctions.rootdir + "postdoubts/" + mPostImage)
                             if (f.exists()) {
                                 mDialog.dismiss()
                                 val intentShareFile = Intent(Intent.ACTION_SEND)
                                 intentShareFile.type = "image/*"
-                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
+                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+                                    ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
                                 intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                         "New post from \'Hints\' app.")
                                 intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
                                 mContext.startActivity(Intent.createChooser(intentShareFile, "Share"))
                             } else {
-                                PRDownloader.download(ExtraFunctions.serverurl + "postdoubts/" + mPostImage,
+                                PRDownloader.download(
+                                    ExtraFunctions.serverurl + "postdoubts/" + mPostImage,
                                         ExtraFunctions.rootdir + "postdoubts/",
                                         mPostImage)
                                         .build()
@@ -177,7 +196,8 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                                                 mDialog.dismiss()
                                                 val intentShareFile = Intent(Intent.ACTION_SEND)
                                                 intentShareFile.type = "image/*"
-                                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
+                                                intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+                                                    ExtraFunctions.rootdir + "postdoubts/" + mPostImage))
                                                 intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                                         "Sharing File...")
                                                 intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
@@ -194,21 +214,41 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                     } else {
                         Toast.makeText(mContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
                     }
-                    R.id.report_post -> {
+                    id.report_post -> {
                         val dialogReport = Dialog(mContext)
                         // Include dialog.xml file
-                        dialogReport.setContentView(R.layout.report_post_home)
+                        dialogReport.setContentView(
+                            layout.report_post_home
+                        )
                         // Set dialog title
                         dialogReport.setTitle("Custom Dialog")
-                        val radioGroup = dialogReport.findViewById<View>(R.id.radiogroup) as RadioGroup
-                        val spamnpromotion = dialogReport.findViewById<View>(R.id.spamnpromotion) as RadioButton
-                        val violencenharassment = dialogReport.findViewById<View>(R.id.violencenharassment) as RadioButton
-                        val wrong = dialogReport.findViewById<View>(R.id.wrong) as RadioButton
-                        val copyrightviolation = dialogReport.findViewById<View>(R.id.copyrightviolation) as RadioButton
-                        val shouldnotbe = dialogReport.findViewById<View>(R.id.shouldnotbe) as RadioButton
-                        val et_explain = dialogReport.findViewById<View>(R.id.et_explain) as EditText
-                        val tv_btn_cancel = dialogReport.findViewById<View>(R.id.tv_btn_cancel) as TextView
-                        val tv_btn_report = dialogReport.findViewById<View>(R.id.tv_btn_report) as TextView
+                        val radioGroup = dialogReport.findViewById<View>(
+                            id.radiogroup
+                        ) as RadioGroup
+                        val spamnpromotion = dialogReport.findViewById<View>(
+                            id.spamnpromotion
+                        ) as RadioButton
+                        val violencenharassment = dialogReport.findViewById<View>(
+                            id.violencenharassment
+                        ) as RadioButton
+                        val wrong = dialogReport.findViewById<View>(
+                            id.wrong
+                        ) as RadioButton
+                        val copyrightviolation = dialogReport.findViewById<View>(
+                            id.copyrightviolation
+                        ) as RadioButton
+                        val shouldnotbe = dialogReport.findViewById<View>(
+                            id.shouldnotbe
+                        ) as RadioButton
+                        val et_explain = dialogReport.findViewById<View>(
+                            id.et_explain
+                        ) as EditText
+                        val tv_btn_cancel = dialogReport.findViewById<View>(
+                            id.tv_btn_cancel
+                        ) as TextView
+                        val tv_btn_report = dialogReport.findViewById<View>(
+                            id.tv_btn_report
+                        ) as TextView
                         val selectedIdRadio = radioGroup.checkedRadioButtonId
                         // find the radiobutton by returned id
                         tv_btn_cancel.setOnClickListener { dialogReport.dismiss() }
@@ -339,14 +379,30 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         var btn_answer_now: Button
 
         init {
-            iv_profile_image = itemView.findViewById(R.id.iv_profile_image)
-            iv_post_image = itemView.findViewById(R.id.iv_post_image)
-            iv_username = itemView.findViewById(R.id.tv_username)
-            ivdate_and_branch = itemView.findViewById(R.id.ivdate_and_branch)
-            iv_post_text = itemView.findViewById(R.id.iv_post_text)
-            iv_menu_btn = itemView.findViewById(R.id.iv_menu)
-            btn_answer_now = itemView.findViewById(R.id.btn_answer_now)
-            tv_no_of_answers = itemView.findViewById(R.id.tv_no_of_answers)
+            iv_profile_image = itemView.findViewById(
+                id.iv_profile_image
+            )
+            iv_post_image = itemView.findViewById(
+                id.iv_post_image
+            )
+            iv_username = itemView.findViewById(
+                id.tv_username
+            )
+            ivdate_and_branch = itemView.findViewById(
+                id.ivdate_and_branch
+            )
+            iv_post_text = itemView.findViewById(
+                id.iv_post_text
+            )
+            iv_menu_btn = itemView.findViewById(
+                id.iv_menu
+            )
+            btn_answer_now = itemView.findViewById(
+                id.btn_answer_now
+            )
+            tv_no_of_answers = itemView.findViewById(
+                id.tv_no_of_answers
+            )
         }
     }
 
@@ -358,7 +414,9 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
                 "imageByteArray",
                 getFileDataFromDrawable(mContext, view.drawable)
         )
-        val transitionName = mContext.getString(R.string.transition_string)
+        val transitionName = mContext.getString(
+            string.transition_string
+        )
         val options= ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
         ActivityCompat.startActivity(mContext, intent, options.toBundle())
     }

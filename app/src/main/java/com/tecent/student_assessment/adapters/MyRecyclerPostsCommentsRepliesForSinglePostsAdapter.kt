@@ -1,32 +1,35 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import org.json.JSONArray
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.R.menu
+import com.tecent.student_assessment.ReplyObject
+import com.tecent.student_assessment.adapters.MyRecyclerPostsCommentsRepliesForSinglePostsAdapter.PostsCommentsRepliesHolder
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import org.json.JSONObject
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:CommentsPostHome, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<MyRecyclerPostsCommentsRepliesAdapter.PostsCommentsRepliesHolder>() {
+class MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(requestQueue: RequestQueue, context:Context, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<PostsCommentsRepliesHolder>() {
     var mRepliesObjectArrayList:ArrayList<ReplyObject>
     var mRequestQueue:RequestQueue
-    var mContext:CommentsPostHome
+    var mContext:Context
     var mPostid:String
     var mMyuserid:String
     init {
@@ -38,7 +41,8 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
     }
     override fun onBindViewHolder(postsCommentsRepliesHolder: PostsCommentsRepliesHolder, position: Int) {
         val replyObject= mRepliesObjectArrayList[position]
-        mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
+        mRequestQueue.add(
+            ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl+"userdp/"+replyObject.userDp
                 ,postsCommentsRepliesHolder.iv_profile_image))
         postsCommentsRepliesHolder.username.text=replyObject.userName+" "+"\u2022"+" "
@@ -51,6 +55,7 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
+
         postsCommentsRepliesHolder.timeAgo.text=replyObject.replyTime
         if (mMyuserid!=replyObject.userId){
             postsCommentsRepliesHolder.iv_delete_post_reply.visibility=View.GONE
@@ -58,13 +63,15 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
         postsCommentsRepliesHolder.iv_delete_post_reply.setOnClickListener {
             val popup = PopupMenu(mContext, postsCommentsRepliesHolder.iv_delete_post_reply)
             //inflating menu from xml resource
-            popup.inflate(R.menu.menu_comments_answers_and_replies)
+            popup.inflate(
+                menu.menu_comments_answers_and_replies
+            )
             val popupMenu = popup.menu
-            popupMenu.findItem(R.id.delete_answer).isVisible = false
-            popupMenu.findItem(R.id.delete_comment).isVisible = false
+            popupMenu.findItem(id.delete_answer).isVisible = false
+            popupMenu.findItem(id.delete_comment).isVisible = false
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.delete_reply ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    id.delete_reply ->if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                         val url = ExtraFunctions.serverurl + "deleteCommentsRepliesOfPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
@@ -72,7 +79,6 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Reply Deleted successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyCommentDataRequest(mPostid)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
@@ -106,8 +112,9 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
         return mRepliesObjectArrayList.size
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyRecyclerPostsCommentsRepliesAdapter.PostsCommentsRepliesHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_post_comment_replies, p0, false)
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): PostsCommentsRepliesHolder {
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_post_comment_replies, p0, false)
         return PostsCommentsRepliesHolder(view)
     }
 
@@ -122,11 +129,21 @@ class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context:
         var timeAgo: TextView
 
         init {
-            iv_profile_image = itemView.findViewById(R.id.iv_profile_image)
-            iv_delete_post_reply=itemView.findViewById(R.id.iv_delete_post_reply)
-            username = itemView.findViewById(R.id.username)
-            replyText = itemView.findViewById(R.id.replyText)
-            timeAgo = itemView.findViewById(R.id.timeAgo)
+            iv_profile_image = itemView.findViewById(
+                id.iv_profile_image
+            )
+            iv_delete_post_reply=itemView.findViewById(
+                id.iv_delete_post_reply
+            )
+            username = itemView.findViewById(
+                id.username
+            )
+            replyText = itemView.findViewById(
+                id.replyText
+            )
+            timeAgo = itemView.findViewById(
+                id.timeAgo
+            )
         }
     }
     override fun getItemViewType(position: Int): Int {

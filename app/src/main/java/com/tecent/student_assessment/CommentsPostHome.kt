@@ -26,6 +26,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.tecent.student_assessment.adapters.MyRecyclerPostsCommentsAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_comments_post_home.*
 import kotlinx.android.synthetic.main.toolbar_main.*
@@ -36,6 +38,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.util.HashMap
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class CommentsPostHome : AppCompatActivity() {
     lateinit var requestQueue: RequestQueue
     lateinit var sharedPreferences: SharedPreferences
@@ -59,7 +62,8 @@ class CommentsPostHome : AppCompatActivity() {
             finish()
         })
         requestQueue = Volley.newRequestQueue(this)
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         userid = sharedPreferences.getString("userid", "")
         swipeRefreshLayout=findViewById(R.id.swipeRefreshLayout)
         recyclerView=findViewById<RecyclerView>(R.id.recyclerView)
@@ -70,7 +74,9 @@ class CommentsPostHome : AppCompatActivity() {
         val intentPost = intent
         postid = intentPost.getStringExtra("postid")
         tv_btn_post_comment = findViewById<TextView>(R.id.tv_btn_post_comment)
-        requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, imageView_user_image))
+        requestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, imageView_user_image))
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.BLUE).text("Uploading....")
@@ -90,7 +96,7 @@ class CommentsPostHome : AppCompatActivity() {
 
         tv_btn_post_comment.setOnClickListener {
             commentText = editText.text.toString().replace("'", "\\'")
-            if (path!!.startsWith("/storage/primary/"))
+            if (path.startsWith("/storage/primary/"))
                 path = path!!.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
             val file = File(path)
                 if (commentText.trim().length < 1) {
@@ -106,7 +112,7 @@ class CommentsPostHome : AppCompatActivity() {
         volleyCommentDataRequest(postid)
 
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(this))
+            if (ExtraFunctions.isNetworkStatusAvailable(this))
                 volleyCommentDataRequest(postid)
             else {
                 swipeRefreshLayout.isRefreshing = false
@@ -118,7 +124,7 @@ class CommentsPostHome : AppCompatActivity() {
     }
 
     //image picker
-    fun openImagePicker(view: View) {
+    fun openImagePicker() {
         CropImage.activity().setAspectRatio(1, 1)
                 .start(this)
     }
@@ -265,10 +271,11 @@ class CommentsPostHome : AppCompatActivity() {
                                 object : TypeToken<List<CommentObject>>() {
                                 }.type
                         )
-                        val adapter = MyRecyclerPostsCommentsAdapter(
-                                dialog, requestQueue,  postid, userid, this
-                                ,commentObjectArrayList
-                        )
+                        val adapter =
+                            MyRecyclerPostsCommentsAdapter(
+                                dialog, requestQueue, postid, userid, this
+                                , commentObjectArrayList
+                            )
                         adapter.setHasStableIds(true)
                         recyclerView.adapter = adapter
                         swipeRefreshLayout.isRefreshing=false

@@ -6,20 +6,17 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
 import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Switch
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_settings.*
 import java.io.File
 import java.util.HashMap
@@ -40,8 +37,10 @@ class Settings : AppCompatActivity() {
         val switchnotification = findViewById<Switch>(R.id.switchnotification)
         val switchsound = findViewById<Switch>(R.id.switchsound)
         val btnchangepassword = findViewById<LinearLayout>(R.id.btnchangepassword)
-        val sharedPreferences: SharedPreferences = getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
-        val sharedPreferencesLike: SharedPreferences = getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
+        val sharedPreferences: SharedPreferences = getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        val sharedPreferencesLike: SharedPreferences = getSharedPreferences(
+            ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
         val userid:String=sharedPreferences.getString("userid","")
         val requestQueue = Volley.newRequestQueue(this)
         val btnlogout = findViewById<LinearLayout>(R.id.btnlogout)
@@ -70,7 +69,8 @@ class Settings : AppCompatActivity() {
                         //volley part end
 
                         ExtraFunctions.logOut(this)
-                        val file = File(ExtraFunctions.rootdir + "userdp/" + sharedPreferences.getString("userdp", ""))
+                        val file = File(
+                            ExtraFunctions.rootdir + "userdp/" + sharedPreferences.getString("userdp", ""))
                         if (file.exists()) {
                             file.delete()
                         }

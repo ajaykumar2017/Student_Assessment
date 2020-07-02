@@ -6,9 +6,8 @@ import android.os.Bundle
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_dash_board_menu_web_view.*
-import kotlinx.android.synthetic.main.activity_image_pdf_web_view.*
-import kotlinx.android.synthetic.main.activity_image_pdf_web_view.progress_bar
 import kotlinx.android.synthetic.main.toolbar_main.*
 
 class DashBoardMenuWebView : AppCompatActivity() {
@@ -35,12 +34,17 @@ class DashBoardMenuWebView : AppCompatActivity() {
             }
         }
         when (title) {
-            "Prepare" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepare.php")
-            "Preparation Materials" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardPrepareMaterials.php")
-            "Quizes" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/dashboardQuizes.php")
+            "Prepare" -> dashboard_webview.loadUrl(
+                ExtraFunctions.serverurl + "dashboard/dashboardPrepare.php")
+            "Preparation Materials" -> dashboard_webview.loadUrl(
+                ExtraFunctions.serverurl + "dashboard/dashboardPrepareMaterials.php")
+            "Quizes" -> dashboard_webview.loadUrl(
+                ExtraFunctions.serverurl + "dashboard/dashboardQuizes.php")
             "Tutorials" -> dashboard_webview.loadUrl("https://www.tutorials.a3creators.co.in")
-            "Useful Links" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/usefulLinksDashboard.php")
-            "Practice" -> dashboard_webview.loadUrl(ExtraFunctions.serverurl + "dashboard/Practice.php")
+            "Useful Links" -> dashboard_webview.loadUrl(
+                ExtraFunctions.serverurl + "dashboard/usefulLinksDashboard.php")
+            "Practice" -> dashboard_webview.loadUrl(
+                ExtraFunctions.serverurl + "dashboard/Practice.php")
         }
 
     }

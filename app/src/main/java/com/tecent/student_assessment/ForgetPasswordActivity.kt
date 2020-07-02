@@ -20,6 +20,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_forget_password.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import org.json.JSONObject
@@ -47,7 +48,8 @@ class ForgetPasswordActivity : AppCompatActivity() {
             finish()
         }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT  //Prevent landscape mode
-        sharedPreferences = getSharedPreferences(ExtraFunctions.sharedPreferencesId,
+        sharedPreferences = getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId,
                 Context.MODE_PRIVATE)
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)

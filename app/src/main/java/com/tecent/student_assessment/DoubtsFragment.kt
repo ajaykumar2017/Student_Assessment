@@ -21,14 +21,9 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 
-import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
 
-import org.json.JSONArray
 import org.json.JSONObject
 
 import java.util.ArrayList
@@ -36,6 +31,8 @@ import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.tecent.student_assessment.adapters.MyRecyclerPostDoubtsAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 
 class DoubtsFragment : Fragment() {
     lateinit var mainActivity: MainActivity
@@ -92,7 +89,8 @@ class DoubtsFragment : Fragment() {
         postimagelist = ArrayList()
         noofanswerslist = ArrayList()
 
-        sharedPreferences = mainActivity.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = mainActivity.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val name = sharedPreferences.getString("name", "")
         userid = sharedPreferences.getString("userid", "")
         post_name_with_text.text = "Hi $name Do you want to ask a doubt?"
@@ -102,15 +100,17 @@ class DoubtsFragment : Fragment() {
         }
 
         val userdp = sharedPreferences.getString("userdp", "")
-        mainActivity.requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, profile_image))
+        mainActivity.requestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, profile_image))
         loadDoubtsPostsFromSpf()
-        if (ExtraFunctions.isNetworkStatusAvialable(mainActivity)) {
+        if (ExtraFunctions.isNetworkStatusAvailable(mainActivity)) {
             volleyPostDataRequest()
         } else {
             Toast.makeText(mainActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
         }
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(mainActivity))
+            if (ExtraFunctions.isNetworkStatusAvailable(mainActivity))
                 volleyPostDataRequest()
             else {
                 swipeRefreshLayout.isRefreshing = false
@@ -168,8 +168,13 @@ class DoubtsFragment : Fragment() {
                     noofanswerslist.add(postNoofAnswersarray.get(i).toString())
                 }
             }
-            val postDoubtsAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, mainActivity.requestQueue, mainActivity, userid!!, useridlist, userdplist, usernamelist,
-                    userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist)
+            val postDoubtsAdapter =
+              MyRecyclerPostDoubtsAdapter(
+                  sharedPreferences, dialog, mainActivity.requestQueue, mainActivity, userid!!,
+                  useridlist, userdplist, usernamelist,
+                  userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist,
+                  noofanswerslist
+              )
             mRecyclerViewPost!!.adapter = postDoubtsAdapter
         } catch (e: Exception) {
 
@@ -224,8 +229,13 @@ class DoubtsFragment : Fragment() {
                                 noofanswerslist.add(postNoofAnswersarray.get(i).toString())
                             }
                         }
-                        val postDoubtsAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, mainActivity.requestQueue, mainActivity, userid!!, useridlist, userdplist, usernamelist,
-                                userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist, noofanswerslist)
+                        val postDoubtsAdapter =
+                          MyRecyclerPostDoubtsAdapter(
+                              sharedPreferences, dialog, mainActivity.requestQueue, mainActivity,
+                              userid!!, useridlist, userdplist, usernamelist,
+                              userbranchlist, posttimelist, postimagelist, postdoubtidlist,
+                              posttextlist, noofanswerslist
+                          )
                         postDoubtsAdapter.setHasStableIds(true)
                         mRecyclerViewPost!!.adapter = postDoubtsAdapter
                     }

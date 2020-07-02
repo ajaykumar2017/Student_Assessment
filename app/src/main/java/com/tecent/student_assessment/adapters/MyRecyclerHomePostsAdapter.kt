@@ -1,4 +1,4 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.app.Activity
 import android.app.Dialog
@@ -8,11 +8,9 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
-import android.provider.Settings.Global.getString
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -29,7 +27,6 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.downloader.Error
 import com.downloader.OnDownloadListener
@@ -42,7 +39,17 @@ import java.util.ArrayList
 import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressFlower
-import kotlinx.android.synthetic.main.activity_single_posts.*
+import com.tecent.student_assessment.CommentsPostHome
+import com.tecent.student_assessment.ImagePdfWebView
+import com.tecent.student_assessment.ImageViewerActivity
+import com.tecent.student_assessment.Profile
+import com.tecent.student_assessment.R.color
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.R.string
+import com.tecent.student_assessment.SinglePostsActivity
+import com.tecent.student_assessment.adapters.MyRecyclerHomePostsAdapter.HomePostsHolder
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import java.io.ByteArrayOutputStream
 
 class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mSharedPreferencesLike: SharedPreferences,
@@ -52,10 +59,11 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                  private val muserbranchlist: ArrayList<String>, private val mposttimelist: ArrayList<String>,
                                  private val mpostfilelist: ArrayList<String>, private val mpostidlist: ArrayList<String>,
                                  private val mposttextlist: ArrayList<String>, private val msubjectlist: ArrayList<String>,
-                                 private val mlikelist: ArrayList<String>, private val mcommentlist: ArrayList<String>) : RecyclerView.Adapter<MyRecyclerHomePostsAdapter.HomePostsHolder>() {
+                                 private val mlikelist: ArrayList<String>, private val mcommentlist: ArrayList<String>) : RecyclerView.Adapter<HomePostsHolder>() {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): HomePostsHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_posts, viewGroup, false)
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_posts, viewGroup, false)
         return HomePostsHolder(view)
     }
 
@@ -74,8 +82,12 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         var viewLink = ""
         var type = ""
 
-        mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + mUserdp, homePostsHolder.iv_profile_image))
-        mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + mSharedPreferences.getString("userdp", ""), homePostsHolder.my_profile_image))
+        mRequestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + mUserdp, homePostsHolder.iv_profile_image))
+        mRequestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + mSharedPreferences.getString("userdp", ""), homePostsHolder.my_profile_image))
         homePostsHolder.iv_username.text = mUserName
         homePostsHolder.ivdate_and_branch_subject.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase() + "  " + "\u2022" + " " + mSubject
         homePostsHolder.iv_post_text.text = mPostText
@@ -90,21 +102,29 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
 
         if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
             //            homePostsHolder.ivlike.setBackgroundResource(R.drawable.ic_thumb_up_blue);
-            DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.colorPrimary))
+            DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext,
+                color.colorPrimary
+            ))
         } else {
-            DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.vectordrawablelike))
+            DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext,
+                color.vectordrawablelike
+            ))
         }
         if (mPostFile != "") {
             if (mPostFile.substring(mPostFile.lastIndexOf('.') + 1) == "pdf" || mPostFile.substring(mPostFile.lastIndexOf('.') + 1) == "PDF") {
                 type = "pdf"
                 //                viewLink = "https://docs.google.com/viewer?url=" + ExtraFunctions.serverurl + "posts/" + mPostFile;
                 viewLink = ExtraFunctions.serverurl + "pdfViewer/web/viewer.html?file=" + "/project/posts/" + mPostFile
-                mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl +
+                mRequestQueue.add<Bitmap>(
+                    ExtraFunctions.createImageRequestFromUrl(
+                        ExtraFunctions.serverurl +
                         "posts/pdfthumbnail/" + mPostFile.replace(mPostFile.substring(mPostFile.lastIndexOf('.') + 1), "") + "jpg", homePostsHolder.iv_post_image))
             } else {
                 type = "image"
                 viewLink = ExtraFunctions.serverurl + "posts/" + mPostFile
-                mRequestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "posts/" + mPostFile, homePostsHolder.iv_post_image))
+                mRequestQueue.add<Bitmap>(
+                    ExtraFunctions.createImageRequestFromUrl(
+                        ExtraFunctions.serverurl + "posts/" + mPostFile, homePostsHolder.iv_post_image))
             }
 
         } else {
@@ -178,15 +198,29 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         homePostsHolder.iv_menu_btn.setOnClickListener {
             val dialogMenu = Dialog(mContext)
             // Include dialog.xml file
-            dialogMenu.setContentView(R.layout.custom_dialog_menu_posts_home)
+            dialogMenu.setContentView(
+                layout.custom_dialog_menu_posts_home
+            )
             // Set dialog title
             dialogMenu.setTitle("Custom Dialog")
-            val tv_delete_post = dialogMenu.findViewById<View>(R.id.tv_delete_post) as TextView
-            val tv_share_post = dialogMenu.findViewById<View>(R.id.tv_share_post) as TextView
-            val save_to_notes = dialogMenu.findViewById<View>(R.id.save_to_notes) as TextView
-            val tv_turn_on_post_notif = dialogMenu.findViewById<View>(R.id.tv_turn_on_post_notif) as TextView
-            val tv_share_link = dialogMenu.findViewById<View>(R.id.tv_share_link) as TextView
-            val tv_report_post = dialogMenu.findViewById<View>(R.id.tv_report_post) as TextView
+            val tv_delete_post = dialogMenu.findViewById<View>(
+                id.tv_delete_post
+            ) as TextView
+            val tv_share_post = dialogMenu.findViewById<View>(
+                id.tv_share_post
+            ) as TextView
+            val save_to_notes = dialogMenu.findViewById<View>(
+                id.save_to_notes
+            ) as TextView
+            val tv_turn_on_post_notif = dialogMenu.findViewById<View>(
+                id.tv_turn_on_post_notif
+            ) as TextView
+            val tv_share_link = dialogMenu.findViewById<View>(
+                id.tv_share_link
+            ) as TextView
+            val tv_report_post = dialogMenu.findViewById<View>(
+                id.tv_report_post
+            ) as TextView
             dialogMenu.show()
             if (mUserId != mMyuserid)
                 tv_delete_post.visibility = View.GONE
@@ -197,7 +231,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
 
             }
             tv_delete_post.setOnClickListener {
-                if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                     val url = ExtraFunctions.serverurl + "deleteHomePosts.php"
                     val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                         try {
@@ -233,7 +267,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
             }
 
             tv_share_post.setOnClickListener {
-                if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                     mDialog.show()
                     val extrastring = "\n\nThis Post is posted by " + mUserName + " in \'Student Assessment\' app." +
                             "\nTo get such updates regularly download \'Student Assessment\' app now." +
@@ -252,7 +286,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
             }
 
             tv_share_link.setOnClickListener {
-                if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                     mDialog.show()
                     val shareString = "https://sas.a3creators.co.in/StudentAssessment/post?id=$mPostId"
                     mDialog.dismiss()
@@ -271,18 +305,38 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
             tv_report_post.setOnClickListener {
                 val dialogReport = Dialog(mContext)
                 // Include dialog.xml file
-                dialogReport.setContentView(R.layout.report_post_home)
+                dialogReport.setContentView(
+                    layout.report_post_home
+                )
                 // Set dialog title
                 dialogReport.setTitle("Custom Dialog")
-                val radioGroup = dialogReport.findViewById<RadioGroup>(R.id.radiogroup)
-                val spamnpromotion = dialogReport.findViewById<RadioButton>(R.id.spamnpromotion)
-                val violencenharassment = dialogReport.findViewById<RadioButton>(R.id.violencenharassment)
-                val wrong = dialogReport.findViewById<RadioButton>(R.id.wrong)
-                val copyrightviolation = dialogReport.findViewById<RadioButton>(R.id.copyrightviolation)
-                val shouldnotbe = dialogReport.findViewById<RadioButton>(R.id.shouldnotbe)
-                val et_explain = dialogReport.findViewById<EditText>(R.id.et_explain)
-                val tv_btn_cancel = dialogReport.findViewById<TextView>(R.id.tv_btn_cancel)
-                val tv_btn_report = dialogReport.findViewById<TextView>(R.id.tv_btn_report)
+                val radioGroup = dialogReport.findViewById<RadioGroup>(
+                    id.radiogroup
+                )
+                val spamnpromotion = dialogReport.findViewById<RadioButton>(
+                    id.spamnpromotion
+                )
+                val violencenharassment = dialogReport.findViewById<RadioButton>(
+                    id.violencenharassment
+                )
+                val wrong = dialogReport.findViewById<RadioButton>(
+                    id.wrong
+                )
+                val copyrightviolation = dialogReport.findViewById<RadioButton>(
+                    id.copyrightviolation
+                )
+                val shouldnotbe = dialogReport.findViewById<RadioButton>(
+                    id.shouldnotbe
+                )
+                val et_explain = dialogReport.findViewById<EditText>(
+                    id.et_explain
+                )
+                val tv_btn_cancel = dialogReport.findViewById<TextView>(
+                    id.tv_btn_cancel
+                )
+                val tv_btn_report = dialogReport.findViewById<TextView>(
+                    id.tv_btn_report
+                )
                 val selectedIdRadio = radioGroup.checkedRadioButtonId
                 // find the radiobutton by returned id
                 tv_btn_cancel.setOnClickListener { dialogReport.dismiss() }
@@ -391,7 +445,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         }
         //like part start
         homePostsHolder.ivlike.setOnClickListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+            if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                 if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
                     val url = ExtraFunctions.serverurl + "unLikePosts.php"
                     val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
@@ -402,7 +456,9 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                 val speLike = mSharedPreferencesLike.edit()
                                 speLike.putString(mPostId, "")
                                 speLike.apply()
-                                DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.vectordrawablelike))
+                                DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext,
+                                    color.vectordrawablelike
+                                ))
                                 homePostsHolder.ivlike.setPadding(1, 0, 1, 0)
                                 homePostsHolder.likes_count.text = "$mLikes Likes"
                                 Toast.makeText(mContext, "Post Unliked", Toast.LENGTH_SHORT).show()
@@ -438,7 +494,9 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                 val speLike = mSharedPreferencesLike.edit()
                                 speLike.putString(mPostId, "liked")
                                 speLike.apply()
-                                DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext, R.color.colorPrimary))
+                                DrawableCompat.setTint(homePostsHolder.ivlike.drawable, ContextCompat.getColor(mContext,
+                                    color.colorPrimary
+                                ))
                                 homePostsHolder.ivlike.setPadding(1, 0, 1, 0)
                                 homePostsHolder.likes_count.text = "Liked by you and $mLikes others"
                                 Toast.makeText(mContext, "Post Liked successfully", Toast.LENGTH_SHORT).show()
@@ -478,7 +536,7 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         //comment part end
 
         homePostsHolder.ivshare.setOnClickListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+            if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                 mDialog.show()
                 val extrastring = "\n\nThis Post is posted by " + mUserName + " in \'Student Assessment\' app." +
                         "\nTo get such updates regularly download \'Student Assessment\' app now." +
@@ -494,16 +552,19 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                 } else {
                     val f: File
                     if (mPostFile.substring(mPostFile.lastIndexOf('.') + 1) == "pdf" || mPostFile.substring(mPostFile.lastIndexOf('.') + 1) == "PDF") {
-                        f = File(ExtraFunctions.serverurl +
+                        f = File(
+                            ExtraFunctions.serverurl +
                                 "posts/pdfthumbnail/" + mPostFile.replace(mPostFile.substring(mPostFile.lastIndexOf('.') + 1), "") + "jpg")
                     } else {
-                        f = File(ExtraFunctions.serverurl + "posts/" + mPostFile)
+                        f = File(
+                            ExtraFunctions.serverurl + "posts/" + mPostFile)
                     }
                     if (f.exists()) {
                         mDialog.dismiss()
                         val intentShareFile = Intent(Intent.ACTION_SEND)
                         intentShareFile.type = "image/*"
-                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "posts/" + mPostFile))
+                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+                            ExtraFunctions.rootdir + "posts/" + mPostFile))
                         intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                 "New post from \'Hints\' app.")
                         intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
@@ -528,7 +589,8 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                                         mDialog.dismiss()
                                         val intentShareFile = Intent(Intent.ACTION_SEND)
                                         intentShareFile.type = "image/*"
-                                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(ExtraFunctions.rootdir + "posts/" + fDnld))
+                                        intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse(
+                                            ExtraFunctions.rootdir + "posts/" + fDnld))
                                         intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                                 "Sharing File...")
                                         intentShareFile.putExtra(Intent.EXTRA_TEXT, mPostText + extrastring)
@@ -570,20 +632,48 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         var ll_view_comments: LinearLayout
 
         init {
-            iv_profile_image = itemView.findViewById(R.id.iv_profile_image)
-            iv_post_image = itemView.findViewById(R.id.iv_post_image)
-            iv_username = itemView.findViewById(R.id.ivusername)
-            ivdate_and_branch_subject = itemView.findViewById(R.id.iv_datetime_branch_subject)
-            iv_post_text = itemView.findViewById(R.id.iv_post_text)
-            iv_post_text_more=itemView.findViewById(R.id.iv_post_text_more)
-            iv_menu_btn = itemView.findViewById(R.id.iv_menu)
-            ivlike = itemView.findViewById(R.id.ivlike)
-            ivreply = itemView.findViewById(R.id.ivreply)
-            ivshare = itemView.findViewById(R.id.ivshare)
-            my_profile_image = itemView.findViewById(R.id.my_profile_image)
-            likes_count = itemView.findViewById(R.id.count_likes)
-            comments_count = itemView.findViewById(R.id.count_comments)
-            ll_view_comments = itemView.findViewById(R.id.view_comments)
+            iv_profile_image = itemView.findViewById(
+                id.iv_profile_image
+            )
+            iv_post_image = itemView.findViewById(
+                id.iv_post_image
+            )
+            iv_username = itemView.findViewById(
+                id.ivusername
+            )
+            ivdate_and_branch_subject = itemView.findViewById(
+                id.iv_datetime_branch_subject
+            )
+            iv_post_text = itemView.findViewById(
+                id.iv_post_text
+            )
+            iv_post_text_more=itemView.findViewById(
+                id.iv_post_text_more
+            )
+            iv_menu_btn = itemView.findViewById(
+                id.iv_menu
+            )
+            ivlike = itemView.findViewById(
+                id.ivlike
+            )
+            ivreply = itemView.findViewById(
+                id.ivreply
+            )
+            ivshare = itemView.findViewById(
+                id.ivshare
+            )
+            my_profile_image = itemView.findViewById(
+                id.my_profile_image
+            )
+            likes_count = itemView.findViewById(
+                id.count_likes
+            )
+            comments_count = itemView.findViewById(
+                id.count_comments
+            )
+            ll_view_comments = itemView.findViewById(
+                id.view_comments
+            )
         }
     }
     fun animateIntent(view: ImageView) {
@@ -593,7 +683,9 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
                 "imageByteArray",
                 getFileDataFromDrawable(mContext, view.drawable)
         )
-        val transitionName = mContext.getString(R.string.transition_string)
+        val transitionName = mContext.getString(
+            string.transition_string
+        )
         val options=ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
         ActivityCompat.startActivity(mContext, intent, options.toBundle())
     }

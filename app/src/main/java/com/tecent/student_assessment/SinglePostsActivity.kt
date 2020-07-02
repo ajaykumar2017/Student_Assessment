@@ -22,7 +22,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_profile.*
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_profile.iv_profile_image
 import kotlinx.android.synthetic.main.activity_single_posts.*
 import kotlinx.android.synthetic.main.toolbar_main.*
@@ -47,7 +47,8 @@ class SinglePostsActivity : AppCompatActivity() {
         toolbar_main.setNavigationOnClickListener(View.OnClickListener {
             finish()
         })
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val intent = intent
         val postid:String=intent.getStringExtra("postid")
         requestQueue = Volley.newRequestQueue(this)
@@ -83,16 +84,22 @@ class SinglePostsActivity : AppCompatActivity() {
                 val userPostSubject: String = emp.getString("subject")
                 val userPostText: String = emp.getString("posttext")
                 val userfilename: String = emp.getString("filename")
-                requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+                requestQueue.add<Bitmap>(
+                    ExtraFunctions.createImageRequestFromUrl(
+                        ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
                 ivusername.setText(username)
                 iv_datetime_branch_subject.setText(userPostTime + "  " + "\u2022" + " " + userbranch.toUpperCase() + "  " + "\u2022" + " " + userPostSubject)
                 iv_post_text.setText(userPostText)
                 if (userfilename != "") {
                     if (userfilename.substring(userfilename.lastIndexOf('.') + 1) == "pdf" || userfilename.substring(userfilename.lastIndexOf('.') + 1) == "PDF") {
-                        requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl +
+                        requestQueue.add(
+                            ExtraFunctions.createImageRequestFromUrl(
+                                ExtraFunctions.serverurl +
                                 "posts/pdfthumbnail/" + userfilename.replace(userfilename.substring(userfilename.lastIndexOf('.') + 1), "") + "jpg", iv_post_image))
                     } else {
-                        requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "posts/" + userfilename, iv_post_image))
+                        requestQueue.add(
+                            ExtraFunctions.createImageRequestFromUrl(
+                                ExtraFunctions.serverurl + "posts/" + userfilename, iv_post_image))
                     }
                 } else {
                     iv_post_image.setVisibility(View.GONE)

@@ -10,33 +10,26 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TableRow
-import android.widget.TextView
 import android.widget.Toast
 
-import com.android.volley.Request
-import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
-import com.downloader.Progress
 
-import org.json.JSONArray
 import org.json.JSONObject
 
 import java.util.ArrayList
 import java.util.HashMap
-import java.util.Objects
 
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.tecent.student_assessment.adapters.MyRecyclerHomePostsAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 
 class HomeFragment : Fragment() {
     lateinit var mainActivity: MainActivity
@@ -81,8 +74,10 @@ class HomeFragment : Fragment() {
         likeslist = ArrayList()
         commentslist = ArrayList()
 
-        sharedPreferences = mainActivity.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
-        sharedPreferencesLike = mainActivity.getSharedPreferences(ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
+        sharedPreferences = mainActivity.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferencesLike = mainActivity.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
         userid = sharedPreferences.getString("userid", "")
         swipeRefreshLayout = view.findViewById<View>(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         progressBar = view.findViewById(R.id.progress_bar)
@@ -112,13 +107,13 @@ class HomeFragment : Fragment() {
 
         loadPostsFromSpf()
         try {
-            if (ExtraFunctions.isNetworkStatusAvialable(mainActivity)) {
+            if (ExtraFunctions.isNetworkStatusAvailable(mainActivity)) {
                 volleyPostDataRequest()
             } else {
                 Toast.makeText(mainActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
             }
             swipeRefreshLayout.setOnRefreshListener {
-                if (ExtraFunctions.isNetworkStatusAvialable(mainActivity))
+                if (ExtraFunctions.isNetworkStatusAvailable(mainActivity))
                     volleyPostDataRequest()
                 else {
                     swipeRefreshLayout.isRefreshing = false
@@ -185,8 +180,13 @@ class HomeFragment : Fragment() {
                     commentslist.add(postcommentsarray.get(i).toString())
                 }
             }
-            val homePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, mainActivity.requestQueue, mainActivity, userid!!, useridlist, userdplist, usernamelist,
-                    userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
+            val homePostsAdapter =
+              MyRecyclerHomePostsAdapter(
+                  sharedPreferences, sharedPreferencesLike, dialog, mainActivity.requestQueue,
+                  mainActivity, userid!!, useridlist, userdplist, usernamelist,
+                  userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist,
+                  likeslist, commentslist
+              )
             mRecyclerViewPostHome.adapter = homePostsAdapter
         } catch (e: Exception) {
 
@@ -248,8 +248,14 @@ class HomeFragment : Fragment() {
                                 commentslist.add(postcommentsarray.get(i).toString())
                             }
                         }
-                        val homePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, mainActivity.requestQueue, mainActivity, userid!!, useridlist, userdplist, usernamelist,
-                                userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
+                        val homePostsAdapter =
+                          MyRecyclerHomePostsAdapter(
+                              sharedPreferences, sharedPreferencesLike, dialog,
+                              mainActivity.requestQueue, mainActivity, userid!!, useridlist,
+                              userdplist, usernamelist,
+                              userbranchlist, posttimelist, postfilelist, postidlist, posttextlist,
+                              subjectlist, likeslist, commentslist
+                          )
                         homePostsAdapter.setHasStableIds(true)
                         mRecyclerViewPostHome.adapter = homePostsAdapter
                     }

@@ -15,9 +15,11 @@ import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.adapters.MyRecyclerHomePostsAdapter
+import com.tecent.student_assessment.adapters.MyRecyclerPostDoubtsAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_search.*
 import org.json.JSONObject
 import java.util.ArrayList
@@ -162,8 +164,13 @@ class SearchActivity : AppCompatActivity() {
                         if (useridlist.size>0){
                             tvEmpty.visibility=View.GONE
                             recyclerView.visibility=View.VISIBLE
-                            val homePostsAdapter = MyRecyclerHomePostsAdapter(sharedPreferences, sharedPreferencesLike, dialog, requestQueue, this, userid, useridlist, userdplist, usernamelist,
-                                    userbranchlist, posttimelist, postfilelist, postidlist, posttextlist, subjectlist, likeslist, commentslist)
+                            val homePostsAdapter =
+                              MyRecyclerHomePostsAdapter(
+                                  sharedPreferences, sharedPreferencesLike, dialog, requestQueue,
+                                  this, userid, useridlist, userdplist, usernamelist,
+                                  userbranchlist, posttimelist, postfilelist, postidlist,
+                                  posttextlist, subjectlist, likeslist, commentslist
+                              )
                             homePostsAdapter.setHasStableIds(true)
                             recyclerView.adapter = homePostsAdapter
                         }else{
@@ -234,8 +241,14 @@ class SearchActivity : AppCompatActivity() {
                     if (useridpostdoubtslist.size>0){
                         tvEmpty.visibility=View.GONE
                         recyclerViewDoubtsPosts.visibility=View.VISIBLE
-                        val postDoubtsAdapter = MyRecyclerPostDoubtsAdapter(sharedPreferences, dialog, requestQueue, this, userid, useridpostdoubtslist, userdppostdoubtslist, usernamepostdoubtslist,
-                                userbranchpostdoubtslist, posttimepostdoubtslist, postimagepostdoubtslist, postdoubtidpostdoubtslist, posttextpostdoubtslist, noofanswerspostdoubtslist)
+                        val postDoubtsAdapter =
+                            MyRecyclerPostDoubtsAdapter(
+                                sharedPreferences, dialog, requestQueue, this, userid,
+                                useridpostdoubtslist, userdppostdoubtslist, usernamepostdoubtslist,
+                                userbranchpostdoubtslist, posttimepostdoubtslist,
+                                postimagepostdoubtslist, postdoubtidpostdoubtslist,
+                                posttextpostdoubtslist, noofanswerspostdoubtslist
+                            )
                         postDoubtsAdapter.setHasStableIds(true)
                         recyclerViewDoubtsPosts.setAdapter(postDoubtsAdapter)
                     }else{

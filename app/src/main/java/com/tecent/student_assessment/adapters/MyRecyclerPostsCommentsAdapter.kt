@@ -1,4 +1,4 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.app.Activity
 import android.app.Dialog
@@ -9,21 +9,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
-import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -32,72 +27,83 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_comments_post_home.*
+import com.tecent.student_assessment.CommentObject
+import com.tecent.student_assessment.CommentsPostHome
+import com.tecent.student_assessment.ImageViewerActivity
+import com.tecent.student_assessment.R.color
+import com.tecent.student_assessment.R.drawable
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.R.menu
+import com.tecent.student_assessment.R.string
+import com.tecent.student_assessment.adapters.MyRecyclerPostsCommentsAdapter.PostsCommentsHolder
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, doubtPostId:String, userid: String, context: AnswersDoubtsPostsDoubts, answerObjectArrayList: ArrayList<AnswerObject>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersAdapter.DoubtsPostsAnswersHolder>() {
+class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, postid:String, userid: String, context: CommentsPostHome, commentObjectArrayList: ArrayList<CommentObject>) : RecyclerView.Adapter<PostsCommentsHolder>() {
     var mDialog: ACProgressFlower
     var mRequestQueue: RequestQueue
-    var doubtPostId: String
-    var mContext: AnswersDoubtsPostsDoubts
+    var mPostid: String
+    var mContext: CommentsPostHome
     var mMyuserid: String
-    var mAnswerObjectArrayList: ArrayList<AnswerObject>
+    var mCommentObjectArrayList: ArrayList<CommentObject>
 
     init {
         this.mDialog = dialog
         this.mRequestQueue = requestQueue
-        this.doubtPostId=doubtPostId
+        this.mPostid=postid
         this.mMyuserid = userid
         this.mContext = context
-        this.mAnswerObjectArrayList = answerObjectArrayList
+        this.mCommentObjectArrayList = commentObjectArrayList
     }
 
 
     override fun getItemCount(): Int {
-        return mAnswerObjectArrayList.size
+        return mCommentObjectArrayList.size
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): DoubtsPostsAnswersHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_post_comment, p0, false)
-        return DoubtsPostsAnswersHolder(view)
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): PostsCommentsHolder {
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_post_comment, p0, false)
+        return PostsCommentsHolder(view)
     }
 
-    override fun onBindViewHolder(postCommentsHolder: DoubtsPostsAnswersHolder, position: Int) {
-        val answerObject = mAnswerObjectArrayList[position]
-        mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
-                ExtraFunctions.serverurl + "userdp/" + answerObject.userDp
+    override fun onBindViewHolder(postCommentsHolder: PostsCommentsHolder, position: Int) {
+        val commentObject = mCommentObjectArrayList[position]
+        mRequestQueue.add(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + commentObject.userDp
                 , postCommentsHolder.iv_profile_image))
-        postCommentsHolder.username.text = answerObject.userName + " " + "\u2022" + " "
-        postCommentsHolder.commentTime.text = answerObject.answerTime
-        if (mMyuserid != answerObject.userId) {
+        postCommentsHolder.username.text = commentObject.userName + " " + "\u2022" + " "
+        postCommentsHolder.commentTime.text = commentObject.commentTime
+        if (mMyuserid != commentObject.userId) {
             postCommentsHolder.iv_delete_post.visibility = View.GONE
         }
         postCommentsHolder.iv_delete_post.setOnClickListener {
             val popup = PopupMenu(mContext, postCommentsHolder.iv_delete_post)
             //inflating menu from xml resource
-            popup.inflate(R.menu.menu_comments_answers_and_replies)
+            popup.inflate(
+                menu.menu_comments_answers_and_replies
+            )
             val popupMenu = popup.menu
-            popupMenu.findItem(R.id.delete_comment).isVisible = false
-            popupMenu.findItem(R.id.delete_reply).isVisible = false
+            popupMenu.findItem(id.delete_answer).isVisible = false
+            popupMenu.findItem(id.delete_reply).isVisible = false
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.delete_answer ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
-                        val url = ExtraFunctions.serverurl + "deleteAnswersOfPostsDoubts.php"
+                    id.delete_comment ->if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
+                        val url = ExtraFunctions.serverurl + "deleteCommentsOfPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
                                 val emp = JSONObject(response)
                                 val result = emp.getString("result")
                                 if (result == "successful") {
-                                    Toast.makeText(mContext, "Answer Deleted successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyAnswerDataRequest(doubtPostId)
+                                    Toast.makeText(mContext, "Comment Deleted successfully", Toast.LENGTH_SHORT).show()
+                                    mContext.volleyCommentDataRequest(mPostid)
                                 }
                                 if (result == "error") {
                                     Toast.makeText(mContext, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
@@ -111,7 +117,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                         }) {
                             override fun getParams(): Map<String, String> {
                                 val MyData = HashMap<String, String>()
-                                MyData["answerid"] = answerObject.answerId
+                                MyData["commentid"] = commentObject.commentId
                                 return MyData
                             }
                         }
@@ -121,10 +127,13 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                     }
                 }
                 false
-            }
+                }
             popup.show()
+            }
+        postCommentsHolder.comment_image.setOnClickListener {
+            animateIntent(postCommentsHolder.comment_image)
         }
-        postCommentsHolder.comment_text.text = answerObject.answerText
+        postCommentsHolder.comment_text.text = commentObject.commentText
         //long press click copy text
         postCommentsHolder.comment_text.setOnLongClickListener {
             var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -133,45 +142,50 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
-        postCommentsHolder.comment_image.setOnClickListener {
-            animateIntent(postCommentsHolder.comment_image)
-        }
-        if (answerObject.repliesCount == "0") {
+
+        if (commentObject.repliesCount == "0") {
             postCommentsHolder.view_all_replies.text = "No Replies"
-        } else if (answerObject.repliesCount == "1") {
-            postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
-            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
+        } else if (commentObject.repliesCount == "1") {
+            postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Reply"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_002_drop_up_arrow,0,0,0)
             postCommentsHolder.view_all_replies.setOnClickListener {
                 if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
                     postCommentsHolder.comments_recyclerview.visibility = View.GONE
-                    postCommentsHolder.view_all_replies.text = "Show " + answerObject.repliesCount + " Reply"
-                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_001_drop_down_arrow,0,0,0)
+                    postCommentsHolder.view_all_replies.text = " Show " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                        drawable.ic_001_drop_down_arrow,0,0,0)
                 } else {
                     postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-                    postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
-                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
+                    postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Reply"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                        drawable.ic_002_drop_up_arrow,0,0,0)
 
                 }
             }
         } else {
-            postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Replies"
-            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
+            postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Replies"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_002_drop_up_arrow,0,0,0)
             postCommentsHolder.view_all_replies.setOnClickListener {
                 if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
                     postCommentsHolder.comments_recyclerview.visibility = View.GONE
-                    postCommentsHolder.view_all_replies.text = "Show " + answerObject.repliesCount + " Replies"
-                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_001_drop_down_arrow,0,0,0)
+                    postCommentsHolder.view_all_replies.text = " Show " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                        drawable.ic_001_drop_down_arrow,0,0,0)
                 } else {
                     postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-                    postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Replies"
-                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_002_drop_up_arrow,0,0,0)
+                    postCommentsHolder.view_all_replies.text = " Hide " + commentObject.repliesCount + " Replies"
+                    postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                        drawable.ic_002_drop_up_arrow,0,0,0)
 
                 }
             }
         }
-        if (!(answerObject.answerImage == "")) {
-            mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
-                    ExtraFunctions.serverurl + "postdoubts/postsDoubts_answers/" + answerObject.answerImage
+        if (!(commentObject.commentImage == "")) {
+            mRequestQueue.add(
+                ExtraFunctions.createImageRequestFromUrl(
+                    ExtraFunctions.serverurl + "posts/posts_comments/" + commentObject.commentImage
                     , postCommentsHolder.comment_image))
 
         } else {
@@ -179,33 +193,42 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
-        val adapter = MyRecyclerDoubtsPostsAnswersRepliesAdapter(mRequestQueue, mContext, doubtPostId, mMyuserid, answerObject.replyObjectArrayList)
+        val adapter =
+            MyRecyclerPostsCommentsRepliesAdapter(
+                mRequestQueue, mContext, mPostid, mMyuserid, commentObject.replyObjectArrayList
+            )
         postCommentsHolder.comments_recyclerview.adapter = adapter
 
         postCommentsHolder.tv_reply_btn.setOnClickListener {
             val dialogReply = Dialog(mContext)
             // Include dialog.xml file
-            dialogReply.setContentView(R.layout.custom_dialog_comments_reply)
+            dialogReply.setContentView(
+                layout.custom_dialog_comments_reply
+            )
             dialogReply.show()
             dialogReply.editText_reply.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
                 override fun onTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {
                     if (dialogReply.editText_reply.text.length >= 1) {
-                        dialogReply.btn_reply.setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimary))
+                        dialogReply.btn_reply.setBackgroundColor(mContext.getResources().getColor(
+                            color.colorPrimary
+                        ))
                     } else if (dialogReply.editText_reply.text.length < 1) {
-                        dialogReply.btn_reply.setBackgroundColor(mContext.getResources().getColor(R.color.smalldarkgrey))
+                        dialogReply.btn_reply.setBackgroundColor(mContext.getResources().getColor(
+                            color.smalldarkgrey
+                        ))
                     }
                 }
 
                 override fun afterTextChanged(editable: Editable) {}
             })
             dialogReply.btn_reply.setOnClickListener {
-                if (dialogReply.editText_reply.text.length<1){
+                if (dialogReply.editText_reply.text.length < 1) {
                     Toast.makeText(mContext, "Please write something..", Toast.LENGTH_SHORT).show()
-                }else{
+                } else {
                     mDialog.show()
                     try {
-                        val url = ExtraFunctions.serverurl + "DoubtsPostsAnswersReplyData.php"
+                        val url = ExtraFunctions.serverurl + "PostsCommentsReplyData.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             //                progressBar.setVisibility(View.GONE)
                             try {
@@ -213,7 +236,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                                 val result = emp.getString("result")
                                 if (result == "successful") {
                                     Toast.makeText(mContext, "Replied successfully", Toast.LENGTH_SHORT).show()
-                                    mContext.volleyAnswerDataRequest(doubtPostId)
+                                    mContext.volleyCommentDataRequest(mPostid)
                                     dialogReply.dismiss()
                                     mDialog.dismiss()
                                 }
@@ -225,7 +248,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                         }) {
                             override fun getParams(): Map<String, String> {
                                 val MyData = HashMap<String, String>()
-                                MyData["answerid"] = answerObject.answerId
+                                MyData["commentid"] = commentObject.commentId
                                 MyData["userid"] = mMyuserid
                                 MyData["replytext"] = dialogReply.editText_reply.text.toString().trim().replace("'", "\\'")
                                 return MyData
@@ -243,7 +266,7 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
     }
 
 
-    inner class DoubtsPostsAnswersHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class PostsCommentsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var iv_profile_image: ImageView
         var comment_image: ImageView
         var iv_delete_post: ImageView
@@ -255,15 +278,33 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
         var comments_recyclerview: RecyclerView
 
         init {
-            iv_profile_image = itemView.findViewById(R.id.iv_profile_image)
-            comment_image = itemView.findViewById(R.id.comment_image)
-            username = itemView.findViewById(R.id.username)
-            commentTime = itemView.findViewById(R.id.commentTime)
-            comment_text = itemView.findViewById(R.id.comment_text)
-            view_all_replies = itemView.findViewById(R.id.view_all_replies)
-            tv_reply_btn = itemView.findViewById(R.id.tv_reply_btn)
-            comments_recyclerview = itemView.findViewById(R.id.comments_recyclerview)
-            iv_delete_post = itemView.findViewById(R.id.iv_delete_post)
+            iv_profile_image = itemView.findViewById(
+                id.iv_profile_image
+            )
+            comment_image = itemView.findViewById(
+                id.comment_image
+            )
+            username = itemView.findViewById(
+                id.username
+            )
+            commentTime = itemView.findViewById(
+                id.commentTime
+            )
+            comment_text = itemView.findViewById(
+                id.comment_text
+            )
+            view_all_replies = itemView.findViewById(
+                id.view_all_replies
+            )
+            tv_reply_btn = itemView.findViewById(
+                id.tv_reply_btn
+            )
+            comments_recyclerview = itemView.findViewById(
+                id.comments_recyclerview
+            )
+            iv_delete_post = itemView.findViewById(
+                id.iv_delete_post
+            )
         }
     }
 
@@ -275,7 +316,9 @@ class MyRecyclerDoubtsPostsAnswersAdapter(dialog: ACProgressFlower, requestQueue
                 "imageByteArray",
                 getFileDataFromDrawable(mContext, view.drawable)
         )
-        val transitionName = mContext.getString(R.string.transition_string)
+        val transitionName = mContext.getString(
+            string.transition_string
+        )
         val options= ActivityOptionsCompat.makeSceneTransitionAnimation(mContext as Activity,view as View,transitionName)
         ActivityCompat.startActivity(mContext, intent, options.toBundle())
     }

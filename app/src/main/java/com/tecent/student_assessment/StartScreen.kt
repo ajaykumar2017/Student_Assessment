@@ -16,14 +16,8 @@ import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import org.json.JSONObject
-import java.util.HashMap
-
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 
 class StartScreen : AppCompatActivity() {
 

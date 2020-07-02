@@ -19,17 +19,16 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.design.chip.Chip
 import android.support.design.widget.Snackbar
-import android.text.Html
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_create_post_home.*
 import kotlinx.android.synthetic.main.toolbar_main.*
 import org.json.JSONObject
@@ -315,7 +314,8 @@ class CreatePostHome : AppCompatActivity() {
     }
     fun uploadFileStatus(){
         uploadHelper= @SuppressLint("StaticFieldLeak")
-        object :UploadHelper(ExtraFunctions.serverurl + "uploadFileHome.php")
+        object :UploadHelper(
+            ExtraFunctions.serverurl + "uploadFileHome.php")
         {
             override fun onPostExecute(response: String?) {
                 val emp = JSONObject(response)
@@ -339,7 +339,8 @@ class CreatePostHome : AppCompatActivity() {
             }
         }
         if (filefullpath.startsWith("/storage/primary/"))
-            filefullpath=filefullpath.replace("/storage/primary/",ExtraFunctions.ROOTMAIN)
+            filefullpath=filefullpath.replace("/storage/primary/",
+                ExtraFunctions.ROOTMAIN)
         Log.d("filepath",filefullpath)
 //        toast(filefullpath)
         uploadHelper.execute(filefullpath)

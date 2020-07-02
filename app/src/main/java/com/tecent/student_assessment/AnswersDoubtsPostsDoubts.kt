@@ -16,7 +16,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
@@ -26,9 +25,9 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
+import com.tecent.student_assessment.adapters.MyRecyclerDoubtsPostsAnswersAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import com.theartofdev.edmodo.cropper.CropImage
-import kotlinx.android.synthetic.main.activity_answers_doubts_posts_doubts.*
-import kotlinx.android.synthetic.main.activity_comments_post_home.*
 import kotlinx.android.synthetic.main.activity_comments_post_home.editText
 import kotlinx.android.synthetic.main.activity_comments_post_home.imageView3
 import kotlinx.android.synthetic.main.activity_comments_post_home.imageView_user_image
@@ -75,7 +74,9 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
         val intentDoubt = intent
         postDoubtid = intentDoubt.getStringExtra("postdoubtid")
         tv_btn_post_comment = findViewById<TextView>(R.id.tv_btn_post_comment)
-        requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, imageView_user_image))
+        requestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, imageView_user_image))
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.BLUE).text("Uploading....")
@@ -113,7 +114,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
         volleyAnswerDataRequest(postDoubtid)
 
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvialable(this))
+            if (ExtraFunctions.isNetworkStatusAvailable(this))
                 volleyAnswerDataRequest(postDoubtid)
             else {
                 swipeRefreshLayout.isRefreshing = false
@@ -125,7 +126,7 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
     }
 
     //image picker
-    fun openImagePicker(view: View) {
+    fun openImagePicker() {
         CropImage.activity().setAspectRatio(1, 1)
                 .start(this)
     }
@@ -275,10 +276,11 @@ class AnswersDoubtsPostsDoubts : AppCompatActivity() {
                                 object : TypeToken<List<AnswerObject>>() {
                                 }.type
                         )
-                        val adapter = MyRecyclerDoubtsPostsAnswersAdapter(
+                        val adapter =
+                            MyRecyclerDoubtsPostsAnswersAdapter(
                                 dialog, requestQueue, postDoubtId, userid, this
                                 , answerObjectArrayList
-                        )
+                            )
                         adapter.setHasStableIds(true)
                         recyclerView.adapter = adapter
                         swipeRefreshLayout.isRefreshing = false

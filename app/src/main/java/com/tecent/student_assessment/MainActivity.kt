@@ -13,7 +13,6 @@ import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -26,10 +25,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import android.support.v7.widget.Toolbar
 
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import java.io.ByteArrayOutputStream
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -75,7 +74,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setContentView(R.layout.activity_main)
         requestQueue = Volley.newRequestQueue(this)
         fab = findViewById(R.id.fab_post)
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE)
         val name = sharedPreferences.getString("name", "")
         val email = sharedPreferences.getString("email", "")
@@ -85,7 +85,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         menuBtn = findViewById(R.id.menuBtn)
         etSearch=findViewById(R.id.etSearch)
         menuBtn.setOnClickListener { drawerLayout!!.openDrawer(Gravity.LEFT) }
-        requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, userProfileImage))
+        requestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, userProfileImage))
 
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
         bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
@@ -104,7 +106,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_header_textView_email = headerView.findViewById(R.id.nav_header_textView_email)
         nav_header_textView_name.text = name!!.toUpperCase()
         nav_header_textView_email.text = email
-        requestQueue.add<Bitmap>(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, nav_header_imageView))
+        requestQueue.add<Bitmap>(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, nav_header_imageView))
         //Floating Action Button Listener
         fab.setOnClickListener {
             val fIntent = Intent(this@MainActivity, CreatePostHome::class.java)

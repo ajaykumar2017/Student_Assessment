@@ -9,21 +9,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Build
-import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -32,11 +27,9 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
-import kotlinx.android.synthetic.main.activity_comments_post_home.*
+import com.tecent.student_assessment.adapters.MyRecyclerPostsCommentsRepliesForSinglePostsAdapter
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.util.HashMap
@@ -74,7 +67,8 @@ class MyRecyclerHomePostsCommentsForSingleActivity(dialog: ACProgressFlower, req
 
     override fun onBindViewHolder(postCommentsHolder: PostsCommentsHolder, position: Int) {
         val commentObject = mCommentObjectArrayList[position]
-        mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
+        mRequestQueue.add(
+            ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl + "userdp/" + commentObject.userDp
                 , postCommentsHolder.iv_profile_image))
         postCommentsHolder.username.text = commentObject.userName + " " + "\u2022" + " "
@@ -91,7 +85,7 @@ class MyRecyclerHomePostsCommentsForSingleActivity(dialog: ACProgressFlower, req
             popupMenu.findItem(R.id.delete_reply).isVisible = false
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.delete_comment ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    R.id.delete_comment ->if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                         val url = ExtraFunctions.serverurl + "deleteCommentsOfPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
@@ -171,7 +165,8 @@ class MyRecyclerHomePostsCommentsForSingleActivity(dialog: ACProgressFlower, req
             }
         }
         if (!(commentObject.commentImage == "")) {
-            mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
+            mRequestQueue.add(
+                ExtraFunctions.createImageRequestFromUrl(
                     ExtraFunctions.serverurl + "posts/posts_comments/" + commentObject.commentImage
                     , postCommentsHolder.comment_image))
 
@@ -180,7 +175,10 @@ class MyRecyclerHomePostsCommentsForSingleActivity(dialog: ACProgressFlower, req
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
-        val adapter = MyRecyclerPostsCommentsRepliesAdapterForSinglePosts(mRequestQueue, mContext,  mPostid, mMyuserid,commentObject.replyObjectArrayList)
+        val adapter =
+          MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(
+              mRequestQueue, mContext, mPostid, mMyuserid, commentObject.replyObjectArrayList
+          )
         postCommentsHolder.comments_recyclerview.adapter = adapter
 
         postCommentsHolder.tv_reply_btn.setOnClickListener {

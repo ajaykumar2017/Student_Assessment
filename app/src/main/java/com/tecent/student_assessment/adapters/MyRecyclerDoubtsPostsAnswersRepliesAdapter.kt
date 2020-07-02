@@ -1,32 +1,36 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.support.v7.widget.PopupMenu
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import org.json.JSONArray
+import com.tecent.student_assessment.AnswersDoubtsPostsDoubts
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.R.menu
+import com.tecent.student_assessment.ReplyObjectDoubtsPostsAnswers
+import com.tecent.student_assessment.adapters.MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import org.json.JSONObject
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, context:AnswersDoubtsPostsDoubts, doubtPostid:String, userid:String, replyObjectArrayList: ArrayList<ReplyObjectDoubtsPostsAnswers>) : RecyclerView.Adapter<MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder>() {
+class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, context: AnswersDoubtsPostsDoubts, doubtPostid:String, userid:String, replyObjectArrayList: ArrayList<ReplyObjectDoubtsPostsAnswers>) : RecyclerView.Adapter<DoubtsPostsAnswersRepliesHolder>() {
     var mRepliesObjectArrayList:ArrayList<ReplyObjectDoubtsPostsAnswers>
     var mRequestQueue:RequestQueue
-    var mContext:AnswersDoubtsPostsDoubts
+    var mContext: AnswersDoubtsPostsDoubts
     var mDoubtPostId:String
     var mMyuserid:String
     init {
@@ -38,7 +42,8 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
     }
     override fun onBindViewHolder(doubtsPostsAnswersRepliesHolder: DoubtsPostsAnswersRepliesHolder, position: Int) {
         val replyObject= mRepliesObjectArrayList[position]
-        mRequestQueue.add(ExtraFunctions.createImageRequestFromUrl(
+        mRequestQueue.add(
+            ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl+"userdp/"+replyObject.userDp
                 ,doubtsPostsAnswersRepliesHolder.iv_profile_image))
         doubtsPostsAnswersRepliesHolder.username.text=replyObject.userName+" "+"\u2022"+" "
@@ -59,13 +64,15 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
         doubtsPostsAnswersRepliesHolder.iv_delete_post_reply.setOnClickListener {
             val popup = PopupMenu(mContext, doubtsPostsAnswersRepliesHolder.iv_delete_post_reply)
             //inflating menu from xml resource
-            popup.inflate(R.menu.menu_comments_answers_and_replies)
+            popup.inflate(
+                menu.menu_comments_answers_and_replies
+            )
             val popupMenu = popup.menu
-            popupMenu.findItem(R.id.delete_answer).isVisible = false
-            popupMenu.findItem(R.id.delete_comment).isVisible = false
+            popupMenu.findItem(id.delete_answer).isVisible = false
+            popupMenu.findItem(id.delete_comment).isVisible = false
             popup.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.delete_reply ->if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    id.delete_reply ->if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
                         val url = ExtraFunctions.serverurl + "deleteAnswersRepliesOfDoubtsPosts.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
@@ -106,8 +113,9 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
         return mRepliesObjectArrayList.size
     }
 
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyRecyclerDoubtsPostsAnswersRepliesAdapter.DoubtsPostsAnswersRepliesHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_post_comment_replies, p0, false)
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): DoubtsPostsAnswersRepliesHolder {
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_post_comment_replies, p0, false)
         return DoubtsPostsAnswersRepliesHolder(view)
     }
 
@@ -122,11 +130,21 @@ class MyRecyclerDoubtsPostsAnswersRepliesAdapter(requestQueue: RequestQueue, con
         var timeAgo: TextView
 
         init {
-            iv_profile_image = itemView.findViewById(R.id.iv_profile_image)
-            iv_delete_post_reply=itemView.findViewById(R.id.iv_delete_post_reply)
-            username = itemView.findViewById(R.id.username)
-            replyText = itemView.findViewById(R.id.replyText)
-            timeAgo = itemView.findViewById(R.id.timeAgo)
+            iv_profile_image = itemView.findViewById(
+                id.iv_profile_image
+            )
+            iv_delete_post_reply=itemView.findViewById(
+                id.iv_delete_post_reply
+            )
+            username = itemView.findViewById(
+                id.username
+            )
+            replyText = itemView.findViewById(
+                id.replyText
+            )
+            timeAgo = itemView.findViewById(
+                id.timeAgo
+            )
         }
     }
     override fun getItemViewType(position: Int): Int {

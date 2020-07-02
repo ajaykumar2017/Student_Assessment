@@ -15,15 +15,14 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_change_password.*
 import kotlinx.android.synthetic.main.activity_change_password.btn_submit
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.custom_dialog_edit_profile.*
 import org.json.JSONObject
 import java.util.HashMap
 
-@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS", "DEPRECATION")
 class ChangePassword : AppCompatActivity() {
     lateinit internal var sharedPreferences: SharedPreferences
     lateinit var dialog: ACProgressFlower
@@ -35,7 +34,7 @@ class ChangePassword : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_001_back)
         supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
-        supportActionBar!!.setTitle(Html.fromHtml("<font color='#000'>Change Password</font>"))
+        supportActionBar!!.title = Html.fromHtml("<font color='#000'>Change Password</font>")
         toolbar_main.setNavigationOnClickListener(View.OnClickListener {
             finish()
         })
@@ -44,7 +43,8 @@ class ChangePassword : AppCompatActivity() {
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.WHITE)
                 .fadeColor(Color.BLACK).build()
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val passw:String=sharedPreferences.getString("passw","")
         val userid:String=sharedPreferences.getString("userid","")
         btn_submit.setOnClickListener {
@@ -61,7 +61,7 @@ class ChangePassword : AppCompatActivity() {
             }else if (et_new_password.text.toString().trim()!=et_confirm_new_password.text.toString().trim()){
                 Toast.makeText(this, "New Passwords Mismatch!", Toast.LENGTH_SHORT).show()
             }else{
-                if (ExtraFunctions.isNetworkStatusAvialable(this)){
+                if (ExtraFunctions.isNetworkStatusAvailable(this)){
                     dialog.show()
                     try {
                         val url = ExtraFunctions.serverurl + "EditProfile.php"

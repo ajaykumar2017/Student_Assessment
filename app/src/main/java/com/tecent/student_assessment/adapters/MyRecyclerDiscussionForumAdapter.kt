@@ -1,19 +1,13 @@
-package com.tecent.student_assessment
+package com.tecent.student_assessment.adapters
 
 import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.os.Build
-import android.support.v4.content.ContextCompat.getSystemService
 import android.support.v7.widget.RecyclerView
-import android.transition.Slide
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.PopupWindow
 import android.widget.TextView
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressFlower
@@ -21,12 +15,18 @@ import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
+import com.tecent.student_assessment.DiscussionForum
+import com.tecent.student_assessment.DiscussionForumObject
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
+import com.tecent.student_assessment.R.id
+import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.adapters.MyRecyclerDiscussionForumAdapter.DiscussionForumHolder
 import org.json.JSONObject
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, userid: String, context: DiscussionForum, discussionForumObjectArrayList: ArrayList<DiscussionForumObject>) : RecyclerView.Adapter<MyRecyclerDiscussionForumAdapter.DiscussionForumHolder>() {
+class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, userid: String, context: DiscussionForum, discussionForumObjectArrayList: ArrayList<DiscussionForumObject>) : RecyclerView.Adapter<DiscussionForumHolder>() {
     var mDialog: ACProgressFlower
     var mRequestQueue: RequestQueue
     var mContext: DiscussionForum
@@ -47,7 +47,8 @@ class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: R
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): DiscussionForumHolder {
-        val view = LayoutInflater.from(mContext).inflate(R.layout.indiview_discussion_forum, p0, false)
+        val view = LayoutInflater.from(mContext).inflate(
+            layout.indiview_discussion_forum, p0, false)
         return DiscussionForumHolder(view)
     }
 
@@ -61,15 +62,24 @@ class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: R
             if (discussionForumObject.userId.equals(mMyuserid)){
                 val dialogMenu = Dialog(mContext)
                 // Include dialog.xml file
-                dialogMenu.setContentView(R.layout.custom_dialog_discussion_forum)
+                dialogMenu.setContentView(
+                    layout.custom_dialog_discussion_forum
+                )
                 // Set dialog title
                 dialogMenu.setTitle("Custom Dialog")
-                val tv_delete_chat = dialogMenu.findViewById<View>(R.id.tv_delete_chat) as TextView
-                val tv_copy_chat = dialogMenu.findViewById<View>(R.id.tv_copy_chat) as TextView
+                val tv_delete_chat = dialogMenu.findViewById<View>(
+                    id.tv_delete_chat
+                ) as TextView
+                val tv_copy_chat = dialogMenu.findViewById<View>(
+                    id.tv_copy_chat
+                ) as TextView
                 dialogMenu.show()
 
                 tv_delete_chat.setOnClickListener {
-                    if (ExtraFunctions.isNetworkStatusAvialable(mContext)) {
+                    if (ExtraFunctions.isNetworkStatusAvailable(
+                            mContext
+                        )
+                    ) {
                         val url = ExtraFunctions.serverurl + "deleteDiscussionForumChats.php"
                         val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                             try {
@@ -127,9 +137,15 @@ class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: R
         var discussionText: TextView
 
         init {
-            username = itemView.findViewById(R.id.username)
-            discussionTime = itemView.findViewById(R.id.discussionTime)
-            discussionText = itemView.findViewById(R.id.discussionText)
+            username = itemView.findViewById(
+                id.username
+            )
+            discussionTime = itemView.findViewById(
+                id.discussionTime
+            )
+            discussionText = itemView.findViewById(
+                id.discussionText
+            )
         }
     }
     override fun getItemViewType(position: Int): Int {

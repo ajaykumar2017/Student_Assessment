@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -19,7 +18,6 @@ import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.text.Editable
-import android.text.Html
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
@@ -29,8 +27,8 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_contact_us.*
-import kotlinx.android.synthetic.main.activity_settings.*
 import org.json.JSONObject
 import java.io.File
 import java.util.HashMap
@@ -58,7 +56,8 @@ class ContactUs : AppCompatActivity() {
         dialog.setCancelable(false)
         requestQueue = Volley.newRequestQueue(this)
         fileName = ""
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         //on text change
         et_post_text.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -79,14 +78,14 @@ class ContactUs : AppCompatActivity() {
             if (et_post_text.text.toString().trim().length < 5) {
                 toast("please write at least 5 characters")
             } else if (!path_image.text.equals("")) {
-                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
                     uploadFileStatus()
                 } else {
                     dialog.dismiss()
                     toast("No internet connection!")
                 }
             } else {
-                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
                     dialog.show()
                     sendDataHomeToServer(
                             sharedPreferences.getString("userid", ""),
@@ -313,7 +312,8 @@ class ContactUs : AppCompatActivity() {
 
     fun uploadFileStatus() {
         uploadHelper = @SuppressLint("StaticFieldLeak")
-        object : UploadHelper(ExtraFunctions.serverurl + "ContactUsFile.php") {
+        object : UploadHelper(
+            ExtraFunctions.serverurl + "ContactUsFile.php") {
             override fun onPostExecute(response: String?) {
                 val emp = JSONObject(response)
                 val result = emp.getString("result")

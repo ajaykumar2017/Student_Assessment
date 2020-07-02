@@ -16,7 +16,6 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 
@@ -26,6 +25,7 @@ import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 import kotlinx.android.synthetic.main.activity_student_login.*
 
 class StudentLoginActivity : AppCompatActivity() {
@@ -78,7 +78,7 @@ class StudentLoginActivity : AppCompatActivity() {
         val email = emailId.text.toString().trim { it <= ' ' }
         val passw = password.text.toString().trim { it <= ' ' }
         if (!(email == "" || passw == "")) {
-            if (ExtraFunctions.isNetworkStatusAvialable(this@StudentLoginActivity)) {
+            if (ExtraFunctions.isNetworkStatusAvailable(this@StudentLoginActivity)) {
                 try {
                     dialog.show()
                     volleyLoginData(email, passw)

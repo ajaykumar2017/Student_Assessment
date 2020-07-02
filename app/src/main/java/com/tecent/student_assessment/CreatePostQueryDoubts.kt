@@ -8,8 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.database.Cursor
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -21,34 +19,25 @@ import android.provider.MediaStore
 import android.support.design.widget.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 
-import com.android.volley.NetworkResponse
-import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.theartofdev.edmodo.cropper.CropImage
 
-import org.json.JSONException
 import org.json.JSONObject
 
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileInputStream
 import java.util.HashMap
 
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
-import com.tecent.student_assessment.VolleyMultipartRequest.DataPart
-import kotlinx.android.synthetic.main.activity_create_post_home.*
+import com.tecent.student_assessment.extraFunctions.ExtraFunctions
 
 class CreatePostQueryDoubts : AppCompatActivity() {
     lateinit var iv_cancel_post: ImageView
@@ -79,9 +68,12 @@ class CreatePostQueryDoubts : AppCompatActivity() {
         path_image = findViewById(R.id.path_image)
         iv_set_image = findViewById(R.id.iv_set_image)
         requestQueue = Volley.newRequestQueue(this)
-        sharedPreferences = this.getSharedPreferences(ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+        sharedPreferences = this.getSharedPreferences(
+            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val userdp = sharedPreferences.getString("userdp", "")
-        requestQueue.add(ExtraFunctions.createImageRequestFromUrl(ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+        requestQueue.add(
+            ExtraFunctions.createImageRequestFromUrl(
+                ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
         val name = sharedPreferences.getString("name", "")
         val userid = sharedPreferences.getString("userid", "")
         postText = ""
@@ -101,14 +93,14 @@ class CreatePostQueryDoubts : AppCompatActivity() {
             if (postText.trim().length < 5) {
                 toast("please write at least 5 characters")
             } else if (!path_image.text.equals("")) {
-                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
                     uploadFileStatus()
                 } else {
                     dialog.dismiss()
                     Toast.makeText(this@CreatePostQueryDoubts, "No internet connection!", Toast.LENGTH_SHORT).show()
                 }
             } else {
-                if (ExtraFunctions.isNetworkStatusAvialable(this)) {
+                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
                     dialog.show()
                     sendDataHomeToServer(
                             sharedPreferences.getString("userid", ""),
@@ -351,7 +343,8 @@ class CreatePostQueryDoubts : AppCompatActivity() {
 
     fun uploadFileStatus() {
         uploadHelper = @SuppressLint("StaticFieldLeak")
-        object : UploadHelper(ExtraFunctions.serverurl + "uploadFileDoubts.php") {
+        object : UploadHelper(
+            ExtraFunctions.serverurl + "uploadFileDoubts.php") {
             override fun onPostExecute(response: String?) {
                 val emp = JSONObject(response)
                 val result = emp.getString("result")
