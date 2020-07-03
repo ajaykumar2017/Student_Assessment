@@ -76,17 +76,23 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.9"
                 android:background="@null"
-                android:hint="Type a message"
+                android:hint="@string/type_a_message"
                 android:paddingStart="10dp"
-                android:paddingEnd="10dp" />
+                android:paddingEnd="10dp"
+                android:autofillHints="@string/type_a_message"
+                android:inputType="text"
+                />
 
             <ImageView
                 android:id="@+id/send_message"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.1"
-                android:paddingRight="5dp"
-                android:src="@drawable/ic_send_button" />
+                android:paddingStart="0dp"
+                android:paddingEnd="5dp"
+                android:src="@drawable/ic_send_button"
+                android:contentDescription="@string/icon_send"
+                />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
     </androidx.cardview.widget.CardView>

@@ -109,7 +109,6 @@
                 app:layout_anchor="@id/fragment_container"
                 app:layout_anchorGravity="bottom|right|end"
                 android:id="@+id/fab_post"
-                style="@style/Widget.MaterialComponents.FloatingActionButton"
                 android:layout_marginEnd="20dp"
                 android:backgroundTint="@color/colorPrimary"
                 app:borderWidth="0dp"

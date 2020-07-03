@@ -29,15 +29,17 @@
                 android:layout_marginRight="20dp"
                 android:background="@layout/rounded_border_edittext"
                 android:gravity="top"
-                android:hint="Start writing your tips and tricks with users.."
+                android:hint="@string/start_writing_your_tips_and_tricks_with_users"
                 android:inputType="textMultiLine"
                 android:maxLines="8"
                 android:minLines="6"
-                android:paddingLeft="15dp"
+                android:paddingStart="15dp"
                 android:paddingTop="10dp"
-                android:paddingRight="10dp"
+                android:paddingEnd="10dp"
                 android:paddingBottom="10dp"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:autofillHints="@string/start_writing_your_tips_and_tricks_with_users"
+                />
 
             <TextView
                 android:layout_width="match_parent"
@@ -45,8 +47,8 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
-                android:gravity="left"
-                android:text="Select Subject:"
+                android:gravity="start"
+                android:text="@string/select_subject"
                 android:textColor="@android:color/black" />
 
             <com.google.android.material.chip.ChipGroup
@@ -65,7 +67,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Algorithm"
+                    android:text="@string/algorithm"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -76,7 +78,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="DS"
+                    android:text="@string/ds"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -87,7 +89,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Compiler"
+                    android:text="@string/compiler"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -98,7 +100,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="TOC"
+                    android:text="@string/toc"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -109,7 +111,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="DBMS"
+                    android:text="@string/dbms"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -120,7 +122,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="OS"
+                    android:text="@string/os"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -131,7 +133,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Digital"
+                    android:text="@string/digital"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -142,7 +144,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="COA"
+                    android:text="@string/coa"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -153,7 +155,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="CN"
+                    android:text="@string/cn"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -164,7 +166,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Discrete Math"
+                    android:text="@string/discrete_math"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -175,7 +177,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="C"
+                    android:text="@string/c"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -186,7 +188,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="C++"
+                    android:text="@string/cpp"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -197,7 +199,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Java"
+                    android:text="@string/java"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -208,7 +210,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Python"
+                    android:text="@string/python"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -219,7 +221,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Android"
+                    android:text="@string/android"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
 
@@ -230,7 +232,7 @@
                     android:checkable="true"
                     android:clickable="true"
                     android:focusable="true"
-                    android:text="Others"
+                    android:text="@string/others"
                     android:textColor="@color/bg_chip_text_state_list"
                     app:chipBackgroundColor="@color/bg_chip_state_list" />
             </com.google.android.material.chip.ChipGroup>
@@ -244,13 +246,12 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="20dp"
                 android:textColor="@android:color/black"
-                android:textSize="10sp" />
+                android:textSize="12sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_open_image"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_alignParentBottom="true"
                 android:onClick="addAttachment"
                 app:cardElevation="0dp">
 
@@ -268,7 +269,10 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="0.15"
-                        android:paddingLeft="10dp" />
+                        android:paddingStart="10dp"
+                        android:paddingEnd="0dp"
+                        android:contentDescription="@string/image_attachment"
+                        />
 
                     <ImageView
                         android:layout_width="0dp"
@@ -276,6 +280,7 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
                         android:layout_weight="0.15"
+                        android:contentDescription="@string/camera_image"
                         android:src="@drawable/ic_photo_camera_black_24dp" />
 
                     <TextView
@@ -303,7 +308,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginRight="20dp"
                 android:background="@color/colorPrimary"
-                android:text="POST"
+                android:text="@string/post"
                 android:textColor="#fff"
                 android:textSize="20sp" />
         </LinearLayout>

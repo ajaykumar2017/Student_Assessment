@@ -1,5 +1,6 @@
 package com.tecent.student_assessment.ui.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,30 +10,30 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.fragment.app.Fragment
-import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
-import com.tecent.student_assessment.ui.fragments.DashboardFragment
-import com.tecent.student_assessment.ui.fragments.DoubtsFragment
-import com.tecent.student_assessment.ui.fragments.HomeFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.string
+import com.tecent.student_assessment.ui.fragments.DashboardFragment
+import com.tecent.student_assessment.ui.fragments.DoubtsFragment
+import com.tecent.student_assessment.ui.fragments.HomeFragment
 import com.tecent.student_assessment.ui.fragments.TestSeriesFragment
 import com.tecent.student_assessment.utils.ExtraFunctions
 import java.io.ByteArrayOutputStream
@@ -40,17 +41,17 @@ import java.util.Locale
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
   private var drawerLayout: DrawerLayout? = null
-  lateinit internal var nav_header_imageView: ImageView
-  lateinit internal var userProfileImage: ImageView
-  lateinit internal var menuBtn: ImageView
-  lateinit internal var etSearch: TextView
-  lateinit internal var nav_header_textView_name: TextView
-  lateinit internal var nav_header_textView_email: TextView
-  lateinit internal var sharedPreferences: SharedPreferences
-  lateinit internal var sharedPreferencesLike: SharedPreferences
-  lateinit internal var requestQueue: RequestQueue
-  lateinit internal var fab: FloatingActionButton
-  var doubleBackToExitPressedOnce = false
+  private lateinit var navHeaderImageView: ImageView
+  private lateinit var userProfileImage: ImageView
+  private lateinit var menuBtn: ImageView
+  private lateinit var etSearch: TextView
+  private lateinit var navHeaderTextViewName: TextView
+  private lateinit var navHeaderTextViewEmail: TextView
+  private lateinit var sharedPreferences: SharedPreferences
+  private lateinit var sharedPreferencesLike: SharedPreferences
+  lateinit var requestQueue: RequestQueue
+  private lateinit var fab: FloatingActionButton
+  private var doubleBackToExitPressedOnce = false
 
   private val navigationItemSelectedListener =
     BottomNavigationView.OnNavigationItemSelectedListener { menuItem ->
@@ -83,6 +84,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       true
     }
 
+  @SuppressLint("RtlHardcoded")
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_home)
@@ -99,7 +101,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     userProfileImage = findViewById(id.userDp)
     menuBtn = findViewById(id.menuBtn)
     etSearch = findViewById(id.etSearch)
-    menuBtn.setOnClickListener { drawerLayout!!.openDrawer(Gravity.START) }
+    menuBtn.setOnClickListener { drawerLayout!!.openDrawer(Gravity.LEFT) }
     requestQueue.add(
         ExtraFunctions.createImageRequestFromUrl(
             ExtraFunctions.serverurl + "userdp/" + userdp, userProfileImage
@@ -109,7 +111,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     val bottomNavigationView = findViewById<BottomNavigationView>(id.bottom_navigation_view)
     bottomNavigationView.setOnNavigationItemSelectedListener(navigationItemSelectedListener)
     supportFragmentManager.beginTransaction()
-        .replace(id.fragment_container,
+        .replace(
+            id.fragment_container,
             HomeFragment()
         )
         .commit()
@@ -124,14 +127,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     drawerLayout!!.addDrawerListener(actionBarDrawerToggle)
     actionBarDrawerToggle.syncState()
     val headerView = navigationView.getHeaderView(0)
-    nav_header_imageView = headerView.findViewById(id.nav_header_imageView)
-    nav_header_textView_name = headerView.findViewById(id.nav_header_textView_name)
-    nav_header_textView_email = headerView.findViewById(id.nav_header_textView_email)
-    nav_header_textView_name.text = name!!.toUpperCase(Locale.ROOT)
-    nav_header_textView_email.text = email
+    navHeaderImageView = headerView.findViewById(id.nav_header_imageView)
+    navHeaderTextViewName = headerView.findViewById(id.nav_header_textView_name)
+    navHeaderTextViewEmail = headerView.findViewById(id.nav_header_textView_email)
+    navHeaderTextViewName.text = name!!.toUpperCase(Locale.ROOT)
+    navHeaderTextViewEmail.text = email
     requestQueue.add(
         ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + userdp, nav_header_imageView
+            ExtraFunctions.serverurl + "userdp/" + userdp, navHeaderImageView
         )
     )
     //Floating Action Button Listener
@@ -139,14 +142,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       val fIntent = Intent(this@HomeActivity, CreatePostHomeActivity::class.java)
       startActivity(fIntent)
     }
-    nav_header_imageView.setOnClickListener {
-      animateIntent(nav_header_imageView)
+    navHeaderImageView.setOnClickListener {
+      animateIntent(navHeaderImageView)
     }
     userProfileImage.setOnClickListener {
       animateIntent(userProfileImage)
     }
     Handler().postDelayed({
-      etSearch.text = resources.getString(string.android)
+      etSearch.text = resources.getString(string.search_android)
     }, 10000)
 
   }

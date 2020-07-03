@@ -87,7 +87,8 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView_user_image"
-                android:autofillHints="fa"
+                android:autofillHints="@string/add_a_comment"
+                android:inputType="text"
                 />
             <ImageView
                 android:id="@+id/ivAddAttachment"
@@ -99,7 +100,9 @@
                 android:foregroundGravity="center"
                 android:layout_marginEnd="5dp"
                 android:paddingStart="5dp"
-                android:paddingEnd="5dp"/>
+                android:paddingEnd="5dp"
+                android:contentDescription="@string/image_attachment"
+                />
             <TextView
                 android:id="@+id/tv_btn_post_comment"
                 android:layout_width="0dp"
@@ -111,7 +114,7 @@
                 android:paddingEnd="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:paddingStart="5dp"
-                android:text="Post"
+                android:text="@string/post"
                 android:textColor="@color/lightenblue"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"

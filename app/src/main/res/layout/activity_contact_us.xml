@@ -34,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.45"
-                android:gravity="center_vertical|left"
+                android:gravity="center_vertical|start"
                 android:text="@string/contact_us"
                 android:textSize="20sp"
                 android:textColor="@android:color/black"
@@ -81,7 +81,9 @@
         <ImageView
             android:layout_width="40dp"
             android:layout_height="match_parent"
-            android:id="@+id/iv_set_image"/>
+            android:id="@+id/iv_set_image"
+            android:contentDescription="@string/image_attachment"
+            />
 
         <TextView
             android:layout_width="0dp"
@@ -119,7 +121,9 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:src="@drawable/ic_photo_camera_black_24dp"/>
+                android:src="@drawable/ic_photo_camera_black_24dp"
+                android:contentDescription="@string/camera_image"
+                />
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.3"

@@ -50,7 +50,6 @@
             android:id="@+id/view2"
             android:layout_width="match_parent"
             android:layout_height="0.8dp"
-            android:layout_below="@+id/textView2"
             android:layout_marginBottom="7dp"
             android:background="@color/smalldarkgrey"
             tools:layout_editor_absoluteX="0dp" />
@@ -84,10 +83,13 @@
                 android:layout_marginStart="12dp"
                 android:layout_gravity="center"
                 android:background="@null"
-                android:hint="Add a Comment..."
+                android:hint="@string/add_a_comment"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView_user_image" />
+                app:layout_constraintStart_toEndOf="@+id/imageView_user_image"
+                android:autofillHints="@string/add_a_comment"
+                android:inputType="text"
+                />
             <ImageView
                 android:id="@+id/ivAddAttachment"
                 android:layout_width="0dp"
@@ -98,7 +100,9 @@
                 android:foregroundGravity="center"
                 android:layout_marginEnd="5dp"
                 android:paddingStart="5dp"
-                android:paddingEnd="5dp"/>
+                android:paddingEnd="5dp"
+                android:contentDescription="@string/image_attachment"
+                />
             <TextView
                 android:id="@+id/tv_btn_post_comment"
                 android:layout_width="0dp"
@@ -110,7 +114,7 @@
                 android:paddingEnd="8dp"
                 android:background="?attr/selectableItemBackground"
                 android:paddingStart="5dp"
-                android:text="Post"
+                android:text="@string/post"
                 android:textColor="@color/lightenblue"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
