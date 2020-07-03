@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AnswersDoubtsPostsDoubts">
+    tools:context=".ui.activity.AnswersDoubtsPostsDoubtsActivity">
 
     <include
         android:id="@+id/include2"
@@ -89,7 +89,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageView_user_image" />
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/ivAddAttachment"
                 android:layout_width="0dp"
                 android:layout_weight="0.1"
                 android:layout_height="match_parent"
@@ -98,8 +98,7 @@
                 android:foregroundGravity="center"
                 android:layout_marginEnd="5dp"
                 android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:onClick="openImagePicker"/>
+                android:paddingEnd="5dp"/>
             <TextView
                 android:id="@+id/tv_btn_post_comment"
                 android:layout_width="0dp"

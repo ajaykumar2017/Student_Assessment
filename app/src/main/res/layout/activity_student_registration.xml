@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:background="@color/lightgrey"
         android:orientation="vertical"
-        tools:context=".StudentRegistration">
+        tools:context=".ui.activity.StudentRegistrationActivity">
 
         <ImageView
             android:layout_width="100dp"

@@ -17,52 +17,52 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".DiscussionForum"
+            android:name=".ui.activity.DiscussionForumActivity"
             android:theme="@style/AppThemeDiscussionForum"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
-        <activity android:name=".ForgetPasswordActivity" />
+        <activity android:name="com.tecent.student_assessment.ui.activity.ForgetPasswordActivity" />
         <activity
-            android:name=".ContactUs"
+            android:name="com.tecent.student_assessment.ui.activity.ContactUsActivity"
             android:theme="@style/AppThemeContactUs"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
-            android:name=".ChangePassword"
+            android:name="com.tecent.student_assessment.ui.activity.ChangePasswordActivity"
             android:theme="@style/AppThemeChangePassword" />
-        <activity android:name=".ImageViewerActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity android:name=".ui.activity.ImageViewerActivity" />
+        <activity android:name="com.tecent.student_assessment.ui.activity.SearchActivity" />
         <activity
-            android:name=".DashBoardMenuWebView"
+            android:name=".ui.activity.DashBoardMenuWebViewActivity"
             android:theme="@style/AppThemeDashboardWebview" />
         <activity
-            android:name=".SinglePostsActivity"
+            android:name="com.tecent.student_assessment.ui.activity.SinglePostsActivity"
             android:theme="@style/AppThemeProfile" />
         <activity
-            android:name=".AnswersDoubtsPostsDoubts"
+            android:name="com.tecent.student_assessment.ui.activity.AnswersDoubtsPostsDoubtsActivity"
             android:theme="@style/AppThemeAnswersDoubtPost" />
         <activity
-            android:name=".Profile"
+            android:name="com.tecent.student_assessment.ui.activity.ProfileActivity"
             android:theme="@style/AppThemeProfile" />
         <activity
-            android:name=".CommentsPostHome"
+            android:name=".ui.activity.CommentsPostHomeActivity"
             android:theme="@style/AppThemeCommentPost" />
         <activity
-            android:name=".ShowResultFromDashboard"
+            android:name=".ui.activity.ShowResultFromDashboardActivity"
             android:theme="@style/AppThemeShowResult" />
-        <activity android:name=".TestSubjectWebView" />
-        <activity android:name=".TestSeriesSubject" />
-        <activity android:name=".ImagePdfWebView" />
+        <activity android:name=".ui.activity.TestSubjectWebViewActivity" />
+        <activity android:name=".ui.activity.TestSeriesSubjectActivity" />
+        <activity android:name=".ui.activity.ImagePdfWebViewActivity" />
         <activity
-            android:name=".CreatePostHome"
+            android:name="com.tecent.student_assessment.ui.activity.CreatePostHomeActivity"
             android:theme="@style/AppThemeWithChip" />
-        <activity android:name=".Settings" />
+        <activity android:name=".ui.activity.SettingsActivity" />
         <activity
-            android:name=".CreatePostQueryDoubts"
+            android:name="com.tecent.student_assessment.ui.activity.CreatePostQueryDoubtsActivity"
             android:theme="@style/AppThemeCreatePostQueryDoubts"
             android:windowSoftInputMode="stateVisible|adjustResize" />
-        <activity android:name=".SetUpActivity" />
-        <activity android:name=".StudentRegistration" />
-        <activity android:name=".StudentLoginActivity" />
-        <activity android:name=".StartScreen">
+        <activity android:name=".ui.activity.SetUpActivity" />
+        <activity android:name=".ui.activity.StudentRegistrationActivity" />
+        <activity android:name=".ui.activity.StudentLoginActivity" />
+        <activity android:name=".ui.activity.StartScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -93,7 +93,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="com.tecent.student_assessment.ui.activity.HomeActivity"
             android:theme="@style/AppThemeNoActionBarHome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -27,7 +27,7 @@
                 android:elevation="0dp"
                 android:orientation="vertical"
                 app:cardElevation="0dp"
-                tools:context=".SinglePostsActivity">
+                tools:context=".ui.activity.SinglePostsActivity">
 
                 <LinearLayout
                     android:layout_width="match_parent"
