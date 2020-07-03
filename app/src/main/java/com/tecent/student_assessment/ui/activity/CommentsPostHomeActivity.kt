@@ -34,7 +34,7 @@ import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.objects.CommentObject
-import com.tecent.student_assessment.ui.adapters.MyRecyclerPostsCommentsAdapter
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsAdapter
 import com.tecent.student_assessment.utils.AppHelper
 import com.tecent.student_assessment.utils.ExtraFunctions
 import com.tecent.student_assessment.utils.VolleyMultipartRequest
@@ -372,7 +372,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
                   }.type
               )
               val adapter =
-                MyRecyclerPostsCommentsAdapter(
+                MyRecyclerHomePostsCommentsAdapter(
                     dialog, requestQueue, postid, userid, this
                     , commentObjectArrayList
                 )

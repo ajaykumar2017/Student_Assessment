@@ -36,7 +36,7 @@ import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.menu
 import com.tecent.student_assessment.R.string
-import com.tecent.student_assessment.ui.adapters.MyRecyclerPostsCommentsAdapter.PostsCommentsHolder
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsAdapter.PostsCommentsHolder
 import com.tecent.student_assessment.utils.ExtraFunctions
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.*
 import org.json.JSONObject
@@ -45,7 +45,7 @@ import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, postid:String, userid: String, context: CommentsPostHomeActivity, commentObjectArrayList: ArrayList<CommentObject>) : RecyclerView.Adapter<PostsCommentsHolder>() {
+class MyRecyclerHomePostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: RequestQueue, postid:String, userid: String, context: CommentsPostHomeActivity, commentObjectArrayList: ArrayList<CommentObject>) : RecyclerView.Adapter<PostsCommentsHolder>() {
     var mDialog: ACProgressFlower
     var mRequestQueue: RequestQueue
     var mPostid: String
@@ -194,7 +194,7 @@ class MyRecyclerPostsCommentsAdapter(dialog: ACProgressFlower, requestQueue: Req
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
         postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
         val adapter =
-            MyRecyclerPostsCommentsRepliesAdapter(
+            MyRecyclerHomePostsCommentsRepliesAdapter(
                 mRequestQueue, mContext, mPostid, mMyuserid, commentObject.replyObjectArrayList
             )
         postCommentsHolder.comments_recyclerview.adapter = adapter

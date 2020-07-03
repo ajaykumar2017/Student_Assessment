@@ -20,14 +20,14 @@ import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.menu
 import com.tecent.student_assessment.objects.ReplyObject
-import com.tecent.student_assessment.ui.adapters.MyRecyclerPostsCommentsRepliesAdapter.PostsCommentsRepliesHolder
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsRepliesAdapter.PostsCommentsRepliesHolder
 import com.tecent.student_assessment.utils.ExtraFunctions
 import org.json.JSONObject
 import java.util.HashMap
 import kotlin.collections.ArrayList
 
 @Suppress("UNREACHABLE_CODE")
-class MyRecyclerPostsCommentsRepliesAdapter(requestQueue: RequestQueue, context: CommentsPostHomeActivity, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<PostsCommentsRepliesHolder>() {
+class MyRecyclerHomePostsCommentsRepliesAdapter(requestQueue: RequestQueue, context: CommentsPostHomeActivity, postid:String,userid:String,replyObjectArrayList: ArrayList<ReplyObject>) : RecyclerView.Adapter<PostsCommentsRepliesHolder>() {
     var mRepliesObjectArrayList:ArrayList<ReplyObject>
     var mRequestQueue:RequestQueue
     var mContext: CommentsPostHomeActivity

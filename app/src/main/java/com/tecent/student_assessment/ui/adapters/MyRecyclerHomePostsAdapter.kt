@@ -51,6 +51,7 @@ import com.tecent.student_assessment.ui.activity.SinglePostsActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter.HomePostsHolder
 import com.tecent.student_assessment.utils.ExtraFunctions
 import java.io.ByteArrayOutputStream
+import java.util.Locale
 
 class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferences, internal var mSharedPreferencesLike: SharedPreferences,
                                  internal var mDialog: ACProgressFlower, internal var mRequestQueue: RequestQueue, private val mContext: Context,
@@ -82,19 +83,19 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         var viewLink = ""
         var type = ""
 
-        mRequestQueue.add<Bitmap>(
+        mRequestQueue.add(
             ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl + "userdp/" + mUserdp, homePostsHolder.iv_profile_image))
-        mRequestQueue.add<Bitmap>(
+        mRequestQueue.add(
             ExtraFunctions.createImageRequestFromUrl(
                 ExtraFunctions.serverurl + "userdp/" + mSharedPreferences.getString("userdp", ""), homePostsHolder.my_profile_image))
         homePostsHolder.iv_username.text = mUserName
-        homePostsHolder.ivdate_and_branch_subject.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase() + "  " + "\u2022" + " " + mSubject
+        homePostsHolder.ivdate_and_branch_subject.text = mPostDateTime + "  " + "\u2022" + " " + mBranch.toUpperCase(Locale.getDefault()) + "  " + "\u2022" + " " + mSubject
         homePostsHolder.iv_post_text.text = mPostText
         //long press click copy text
         homePostsHolder.iv_post_text.setOnLongClickListener {
-            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip: ClipData = ClipData.newPlainText(homePostsHolder.iv_post_text.text.toString(),homePostsHolder.iv_post_text.text)
+            val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip: ClipData = ClipData.newPlainText(homePostsHolder.iv_post_text.text.toString(),homePostsHolder.iv_post_text.text)
             cm.primaryClip=clip
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
