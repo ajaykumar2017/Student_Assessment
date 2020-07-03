@@ -1,74 +1,79 @@
 <resources>
-    <string name="app_name">Assessment</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="checkbox">By clicking Register you are agreeing to the Terms and Conditions.</string>
-    <string name="queryposttext">Post your questions here &amp; get them answered by others</string>
-    <string name="next">NEXT</string>
-    <string name="post">POST</string>
-    <string name="post_query_edittext">Type out your question &amp; your fellow students will soon help you out</string>
-    <string name="add_image">ADD IMAGE</string>
-    <string name="add_image_or_pdf">ADD IMAGE / PDF</string>
-    <string name="subjecttest">COMPUTER ORGANISATION AND ARCHITECTURE 2019 Test Series 1</string>
-    <string name="subjecttestpractice">COMPUTER ORGANISATION AND ARCHITECTURE Practice Set 1</string>
-    <string name="transition_string">myTransition</string>
-    <string name="android">Search \"Android\"</string>
-    <string name="contact_us">Contact Us</string>
-    <string name="finish_activity_contact_us">Finish Activity Contact us</string>
-    <string name="submit">SUBMIT</string>
-    <string name="contact_and_report_text">contact and report text</string>
-    <string name="write_something">write something...</string>
+  <string name="app_name">Assessment</string>
+  <string name="navigation_drawer_open">Open navigation drawer</string>
+  <string name="navigation_drawer_close">Close navigation drawer</string>
+  <string name="checkbox">By clicking Register you are agreeing to the Terms and Conditions.</string>
+  <string name="queryposttext">Post your questions here &amp; get them answered by others</string>
+  <string name="next">NEXT</string>
+  <string name="post">POST</string>
+  <string name="post_query_edittext">Type out your question &amp; your fellow students will soon help you out</string>
+  <string name="add_image">ADD IMAGE</string>
+  <string name="add_image_or_pdf">ADD IMAGE / PDF</string>
+  <string name="subjecttest">COMPUTER ORGANISATION AND ARCHITECTURE 2019 Test Series 1</string>
+  <string name="subjecttestpractice">COMPUTER ORGANISATION AND ARCHITECTURE Practice Set 1</string>
+  <string name="transition_string">myTransition</string>
+  <string name="android">Search \"Android\"</string>
+  <string name="contact_us">Contact Us</string>
+  <string name="finish_activity_contact_us">Finish Activity Contact us</string>
+  <string name="submit">SUBMIT</string>
+  <string name="contact_and_report_text">contact and report text</string>
+  <string name="write_something">write something...</string>
+  <string name="no_such_posts_found">No such Posts found.</string>
+  <string name="search_quot_algorithm_quot">Search \"Algorithm\"</string>
+  <string name="home_menu_button">Home Menu Button</string>
+  <string name="user_image">User Image</string>
+  <string name="add_a_comment">Add a Comment...</string>
 
-    <string-array name="branches">
-        <item>Select Branch</item>
-        <item>Computer Science and Engineering</item>
-        <item>Electronics and Communication Engineering</item>
-        <item>Mechanical Engineering</item>
-        <item>Electrical Engineering</item>
-        <item>Civil Engineering</item>
-        <item>Others</item>
-    </string-array>
+  <string-array name="branches">
+    <item>Select Branch</item>
+    <item>Computer Science and Engineering</item>
+    <item>Electronics and Communication Engineering</item>
+    <item>Mechanical Engineering</item>
+    <item>Electrical Engineering</item>
+    <item>Civil Engineering</item>
+    <item>Others</item>
+  </string-array>
 
-    <string-array name="semester">
-        <item>Select Semester</item>
-        <item>1st Semester</item>
-        <item>2nd Semester</item>
-        <item>3rd Semester</item>
-        <item>4th Semester</item>
-        <item>5th Semester</item>
-        <item>6th Semester</item>
-        <item>7th Semester</item>
-        <item>8th Semester</item>
-    </string-array>
+  <string-array name="semester">
+    <item>Select Semester</item>
+    <item>1st Semester</item>
+    <item>2nd Semester</item>
+    <item>3rd Semester</item>
+    <item>4th Semester</item>
+    <item>5th Semester</item>
+    <item>6th Semester</item>
+    <item>7th Semester</item>
+    <item>8th Semester</item>
+  </string-array>
 
-    <string-array name="collegelist">
-        <item>Select College</item>
-        <item>BIT Sindri</item>
-        <item>University College of Engineering &amp; Technology</item>
-        <item>Chaibasa Engineering College</item>
-        <item>Ramgarh Engineering College</item>
-        <item>Dumka Engineering College</item>
-        <item>DAV Institute of Engineering &amp; Technology</item>
-        <item>Nilai Educational Trust\'s Group of Institutions</item>
-        <item>Ramchandra Chandravanshi Institute of Technology</item>
-        <item>Ramgovind Institute of Technology</item>
-        <item>Gurugovind Singh Educational Society Technical Campus</item>
-        <item>RTC Institute of Technology</item>
-        <item>B.A. College of Engineering &amp; Technology</item>
-        <item>Maryland Institute of Technology &amp; Management</item>
-        <item>K.K. College of Engineering &amp; Management</item>
-        <item>RVS College of Engineering &amp; Technology</item>
-        <item>C.I.T Tatisilwai</item>
-        <item>Others</item>
-    </string-array>
+  <string-array name="collegelist">
+    <item>Select College</item>
+    <item>BIT Sindri</item>
+    <item>University College of Engineering &amp; Technology</item>
+    <item>Chaibasa Engineering College</item>
+    <item>Ramgarh Engineering College</item>
+    <item>Dumka Engineering College</item>
+    <item>DAV Institute of Engineering &amp; Technology</item>
+    <item>Nilai Educational Trust\'s Group of Institutions</item>
+    <item>Ramchandra Chandravanshi Institute of Technology</item>
+    <item>Ramgovind Institute of Technology</item>
+    <item>Gurugovind Singh Educational Society Technical Campus</item>
+    <item>RTC Institute of Technology</item>
+    <item>B.A. College of Engineering &amp; Technology</item>
+    <item>Maryland Institute of Technology &amp; Management</item>
+    <item>K.K. College of Engineering &amp; Management</item>
+    <item>RVS College of Engineering &amp; Technology</item>
+    <item>C.I.T Tatisilwai</item>
+    <item>Others</item>
+  </string-array>
 
-    <string-array name="university">
-        <item>Select University</item>
-        <item>Jharkhand University of Technology</item>
-        <item>Kolhan University</item>
-        <item>Others</item>
+  <string-array name="university">
+    <item>Select University</item>
+    <item>Jharkhand University of Technology</item>
+    <item>Kolhan University</item>
+    <item>Others</item>
 
-    </string-array>
+  </string-array>
 
 
 </resources>

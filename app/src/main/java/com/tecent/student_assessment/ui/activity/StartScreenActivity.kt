@@ -9,8 +9,8 @@ import android.app.Activity
 import android.os.Build
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.support.v4.app.ActivityCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant

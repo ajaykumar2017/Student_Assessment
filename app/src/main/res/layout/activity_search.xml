@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"
         android:transitionName="@string/transition_string" />
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scrollbars="vertical">
@@ -25,24 +25,24 @@
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:drawableTop="@drawable/ic_mood_bad_black_24dp"
-            android:text="No such Posts found."
+            android:text="@string/no_such_posts_found"
             android:textAlignment="center"
             android:textSize="18sp"
             android:visibility="gone" />
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:background="@color/smalldarkgrey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewDoubtsPosts"
             android:background="@color/smalldarkgrey"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp" />
     </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>

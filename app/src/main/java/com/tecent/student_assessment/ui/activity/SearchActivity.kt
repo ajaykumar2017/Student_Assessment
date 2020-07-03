@@ -3,11 +3,11 @@ package com.tecent.student_assessment.ui.activity
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SearchView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.widget.SearchView
 import android.view.View
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
@@ -88,10 +88,14 @@ class SearchActivity : AppCompatActivity() {
         posttextpostdoubtslist = ArrayList()
         postimagepostdoubtslist = ArrayList<String>()
         noofanswerspostdoubtslist = ArrayList<String>()
-        val linearLayoutManager = LinearLayoutManager(
-                this, RecyclerView.VERTICAL, false)
-        val linearLayoutManagerDoubtsPosts = LinearLayoutManager(
-                this, RecyclerView.VERTICAL, false)
+        val linearLayoutManager =
+            LinearLayoutManager(
+                this, RecyclerView.VERTICAL, false
+            )
+        val linearLayoutManagerDoubtsPosts =
+            LinearLayoutManager(
+                this, RecyclerView.VERTICAL, false
+            )
 
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)

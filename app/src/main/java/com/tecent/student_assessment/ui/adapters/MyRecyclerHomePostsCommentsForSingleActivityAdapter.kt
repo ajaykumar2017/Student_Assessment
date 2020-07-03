@@ -9,11 +9,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.PopupMenu
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -191,7 +191,9 @@ class MyRecyclerHomePostsCommentsForSingleActivityAdapter(dialog: ACProgressFlow
             postCommentsHolder.comment_image.visibility = View.GONE
         }
         postCommentsHolder.comments_recyclerview.setHasFixedSize(true)
-        postCommentsHolder.comments_recyclerview.setLayoutManager(LinearLayoutManager(mContext))
+        postCommentsHolder.comments_recyclerview.setLayoutManager(
+            LinearLayoutManager(mContext)
+        )
         val adapter =
           MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(
               mRequestQueue, mContext, mPostid, mMyuserid, commentObject.replyObjectArrayList

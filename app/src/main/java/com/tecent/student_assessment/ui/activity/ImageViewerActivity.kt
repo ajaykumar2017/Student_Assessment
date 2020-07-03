@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
 import com.tecent.student_assessment.R.layout
 import kotlinx.android.synthetic.main.activity_image_viewer.imageView

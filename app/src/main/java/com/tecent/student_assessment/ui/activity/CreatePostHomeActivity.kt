@@ -12,13 +12,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.design.chip.Chip
-import android.support.design.widget.Snackbar
+import com.google.android.material.chip.Chip
+import com.google.android.material.snackbar.Snackbar
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -84,7 +84,7 @@ class CreatePostHomeActivity : AppCompatActivity() {
                 .fadeColor(Color.BLACK).build()
         chipGroup.setOnCheckedChangeListener{group,checkedId:Int ->
             // Get the checked chip instance from chip group
-            val chip:Chip? = findViewById(checkedId)
+            val chip: Chip? = findViewById(checkedId)
 
             chip?.let {
                 selectedSubject="${it.text}"

@@ -13,11 +13,11 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -147,10 +147,12 @@ class ProfileActivity : AppCompatActivity() {
     val profile: String = intent.getStringExtra("profile")
     recyclerViewProfile = findViewById(id.recyclerView_profile)
     recyclerViewProfile.setHasFixedSize(true)
-    recyclerViewProfile.layoutManager = LinearLayoutManager(this)
+    recyclerViewProfile.layoutManager =
+      LinearLayoutManager(this)
     recyclerViewProfilePostsDoubts = findViewById(id.recyclerView_profile_doubts)
     recyclerViewProfilePostsDoubts.setHasFixedSize(true)
-    recyclerViewProfilePostsDoubts.layoutManager = LinearLayoutManager(this)
+    recyclerViewProfilePostsDoubts.layoutManager =
+      LinearLayoutManager(this)
     sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
     sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE)
     userid = this.sharedPreferences.getString("userid", "")

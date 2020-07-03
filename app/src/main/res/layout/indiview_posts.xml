@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ivcardview"
     android:layout_width="match_parent"
@@ -142,7 +142,7 @@
             android:layout_height="30dp"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/ivcvlike"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -158,9 +158,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:padding="5dp"
                     android:src="@drawable/ic_001_thumb_up" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/ivcvreply"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -175,9 +175,9 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:padding="5dp"
                     android:src="@drawable/ic_002_chat_comment_oval_speech_bubble_with_text_lines" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/ivcvshare"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -192,7 +192,7 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:padding="5dp"
                     android:src="@drawable/ic_003_share" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <View
@@ -248,4 +248,4 @@
     </LinearLayout>
 
 
-</android.support.v7.widget.CardView>
+</androidx.cardview.widget.CardView>

@@ -9,11 +9,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
-import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.content.ContextCompat
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -94,7 +94,9 @@ class CommentsPostHomeActivity : AppCompatActivity() {
         id.recyclerView
     )
     recyclerView.setHasFixedSize(true)
-    recyclerView.setLayoutManager(LinearLayoutManager(this))
+    recyclerView.setLayoutManager(
+        LinearLayoutManager(this)
+    )
     val userdp = sharedPreferences.getString("userdp", "")
     commentText = ""
     val intentPost = intent

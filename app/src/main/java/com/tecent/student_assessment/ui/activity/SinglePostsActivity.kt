@@ -7,10 +7,10 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
 import cc.cloudist.acplibrary.ACProgressConstant
@@ -40,7 +40,7 @@ class SinglePostsActivity : AppCompatActivity() {
     lateinit var requestQueue: RequestQueue
     lateinit var dialog: ACProgressFlower
     lateinit var sharedPreferences: SharedPreferences
-    lateinit var recyclerViewSinglePost:RecyclerView
+    lateinit var recyclerViewSinglePost: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(
@@ -67,7 +67,9 @@ class SinglePostsActivity : AppCompatActivity() {
             id.recyclerViewSinglePost
         )
         recyclerViewSinglePost.setHasFixedSize(true)
-        recyclerViewSinglePost.setLayoutManager(LinearLayoutManager(this))
+        recyclerViewSinglePost.setLayoutManager(
+            LinearLayoutManager(this)
+        )
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.BLUE).text("Uploading....")

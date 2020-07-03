@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".ui.activity.ContactUsActivity">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/cv_nav_head"
@@ -52,7 +52,7 @@
                 android:textSize="18sp" />
 
         </LinearLayout>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <EditText
         android:id="@+id/et_post_text"
@@ -94,7 +94,7 @@
     </LinearLayout>
 
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:onClick="addAttachment"
         android:id="@+id/cv_open_image"
@@ -135,7 +135,7 @@
                 android:gravity="center_vertical"/>
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>
