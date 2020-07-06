@@ -193,8 +193,8 @@ class ProfileActivity : AppCompatActivity() {
         ExtraFunctions(this).animateIntent(iv_profile_image)
       }
       if (DataUtils.isNetworkStatusAvailable(this)) {
-        volleyPostDataRequest(userid)
-        volleyDoubtsPostsDataRequest(userid)
+        volleyPostDataRequest(userid, userid)
+        volleyDoubtsPostsDataRequest(userid, userid)
       } else {
         Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT)
             .show()
@@ -665,8 +665,8 @@ class ProfileActivity : AppCompatActivity() {
       edit_university.visibility = View.GONE
       iv_change_dp.visibility = View.GONE
       if (DataUtils.isNetworkStatusAvailable(this)) {
-        volleyPostDataRequest(postByUserId)
-        volleyDoubtsPostsDataRequest(postByUserId)
+        volleyPostDataRequest(postByUserId, userid)
+        volleyDoubtsPostsDataRequest(postByUserId, userid)
         val url = DataUtils.serverurl + "otherUsersProfileData.php"
         val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
           try {
@@ -743,7 +743,10 @@ class ProfileActivity : AppCompatActivity() {
     postnoofanswerslist = ArrayList<String>()
   }
 
-  private fun volleyPostDataRequest(userid: String) {
+  private fun volleyPostDataRequest(
+    postByUserId: String,
+    currentUserId: String
+  ) {
     try {
       val url = DataUtils.serverurl + "postsProfileDataAdapter.php"
       val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
@@ -828,7 +831,7 @@ class ProfileActivity : AppCompatActivity() {
             val profilePostsAdapter =
               MyRecyclerHomePostsAdapter(
                   sharedPreferences, sharedPreferencesLike, dialog, requestQueue,
-                  this, userid, useridlist, userdplist, usernamelist,
+                  this, currentUserId, useridlist, userdplist, usernamelist,
                   userbranchlist, posttimelist, postfilelist, postidlist,
                   posttextlist, subjectlist, likeslist, commentslist
               )
@@ -845,7 +848,7 @@ class ProfileActivity : AppCompatActivity() {
       }) {
         override fun getParams(): Map<String, String> {
           val myData = HashMap<String, String>()
-          myData["userid"] = userid
+          myData["userid"] = postByUserId
           return myData
         }
       }
@@ -857,7 +860,10 @@ class ProfileActivity : AppCompatActivity() {
 
   }
 
-  private fun volleyDoubtsPostsDataRequest(userid: String) {
+  private fun volleyDoubtsPostsDataRequest(
+    postByUserId: String,
+    currentUserId: String
+  ) {
     val url = DataUtils.serverurl + "doubtPostsProfileDataAdapter.php"
     val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
       try {
@@ -927,7 +933,7 @@ class ProfileActivity : AppCompatActivity() {
           }
           val postDoubtsProfileAdapter =
             MyRecyclerDoubtsPostsAdapter(
-                sharedPreferences, dialog, requestQueue, this, userid, useridpostlist,
+                sharedPreferences, dialog, requestQueue, this, currentUserId, useridpostlist,
                 userdppostlist, usernamepostlist,
                 userbranchpostlist, posttimepostlist, postimagepostlist,
                 postdoubtidpostlist, posttextpostlist, postnoofanswerslist
@@ -944,7 +950,7 @@ class ProfileActivity : AppCompatActivity() {
     }) {
       override fun getParams(): Map<String, String> {
         val myData = HashMap<String, String>()
-        myData["userid"] = userid
+        myData["userid"] = postByUserId
         return myData
       }
     }

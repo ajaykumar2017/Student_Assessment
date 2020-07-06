@@ -26,7 +26,7 @@ import java.util.HashMap
 class MyRecyclerDiscussionForumAdapter(
   dialog: ACProgressFlower,
   requestQueue: RequestQueue,
-  userid: String,
+  userId: String,
   context: DiscussionForumActivity,
   discussionForumObjectArrayList: ArrayList<DiscussionForumObject>
 ) : RecyclerView.Adapter<DiscussionForumHolder>() {
@@ -39,7 +39,7 @@ class MyRecyclerDiscussionForumAdapter(
   init {
     this.mDialog = dialog
     this.mRequestQueue = requestQueue
-    this.mMyuserid = userid
+    this.mMyuserid = userId
     this.mContext = context
     this.mDiscussionForumObjectArrayList = discussionForumObjectArrayList
   }
