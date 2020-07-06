@@ -360,18 +360,17 @@ class CreatePostHomeActivity : AppCompatActivity() {
     }
   }
 
-  fun uploadFileStatus() {
+  private fun uploadFileStatus() {
     uploadHelper = @SuppressLint("StaticFieldLeak")
     object : UploadHelper(
         ExtraFunctions.serverurl + "uploadFileHome.php"
     ) {
       override fun onPostExecute(response: String) {
-        try {
-          val emp = JSONObject(response)
-          val result = emp.getString("result")
-          if (result == "successful") {
-            dialog.dismiss()
-            fileName = emp.getString("filename")
+        val emp = JSONObject(response)
+        val result = emp.getString("result")
+        if (result == "successful") {
+          dialog.dismiss()
+          fileName = emp.getString("filename")
             sendDataHomeToServer(
                 sharedPreferences.getString("userid", "")!!,
                 postText, selectedSubject, fileName
@@ -382,9 +381,6 @@ class CreatePostHomeActivity : AppCompatActivity() {
           }
 
           super.onPostExecute(response)
-        } catch (e: Exception) {
-          e.printStackTrace()
-        }
       }
 
       override fun onPreExecute() {

@@ -5,11 +5,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.utils.MyPhotoViewAttacher
 import kotlinx.android.synthetic.main.activity_image_viewer.imageView
-import uk.co.senab.photoview.PhotoViewAttacher
 
 class ImageViewerActivity : AppCompatActivity() {
 
@@ -29,8 +29,8 @@ class ImageViewerActivity : AppCompatActivity() {
       }
     }
 
-    val pAttacher = PhotoViewAttacher(imageView)
-    pAttacher.update()
+    val photoViewAttacher = MyPhotoViewAttacher(imageView)
+    photoViewAttacher.update()
   }
 
   private fun changeStatusBarColor() {
