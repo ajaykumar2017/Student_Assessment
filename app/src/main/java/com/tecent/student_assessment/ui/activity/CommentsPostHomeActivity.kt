@@ -78,7 +78,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
         drawable.ic_001_back
     )
     supportActionBar!!.setBackgroundDrawable(ColorDrawable(-0x1))
-    supportActionBar!!.setTitle("Comments")
+    supportActionBar!!.title = "Comments"
     toolbar_main.setNavigationOnClickListener(View.OnClickListener {
       finish()
     })
@@ -86,7 +86,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
     sharedPreferences = this.getSharedPreferences(
         ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE
     )
-    userid = sharedPreferences.getString("userid", "")
+    userid = sharedPreferences.getString("userid", "")!!
     swipeRefreshLayout = findViewById(
         id.swipeRefreshLayout
     )
@@ -199,11 +199,12 @@ class CommentsPostHomeActivity : AppCompatActivity() {
     resultCode: Int,
     data: Intent?
   ) {
+    super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
       val result = CropImage.getActivityResult(data)
       if (resultCode == Activity.RESULT_OK) {
         val resultUri = result.uri
-        path = resultUri.path
+        path = resultUri.path!!
         //now we have path of file we should compress image
         ivAddAttachment.setImageBitmap(compressImage(path))
         val paths = path!!.split("/".toRegex())

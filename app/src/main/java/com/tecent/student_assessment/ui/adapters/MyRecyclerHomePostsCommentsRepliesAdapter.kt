@@ -50,9 +50,9 @@ class MyRecyclerHomePostsCommentsRepliesAdapter(requestQueue: RequestQueue, cont
         postsCommentsRepliesHolder.replyText.text=replyObject.replyText
         //long press click copy text
         postsCommentsRepliesHolder.replyText.setOnLongClickListener {
-            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip: ClipData = ClipData.newPlainText(postsCommentsRepliesHolder.replyText.text.toString(),postsCommentsRepliesHolder.replyText.text)
-            cm.primaryClip=clip
+            val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip: ClipData = ClipData.newPlainText(postsCommentsRepliesHolder.replyText.text.toString(),postsCommentsRepliesHolder.replyText.text)
+            cm.setPrimaryClip(clip)
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }

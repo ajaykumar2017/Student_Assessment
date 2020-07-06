@@ -92,7 +92,7 @@ class StartScreenActivity : AppCompatActivity() {
                     try{
                         when(extras.getString("clickAction")){
                             "viewNotice"->{
-                                val url:String = extras.getString("linkUrl")
+                                val url = extras.getString("linkUrl")!!
                                 if (url.contains("sas.a3creators.co.in/StudentAssessment/post")) {
                                     val indexOfId = url.indexOf("id=")
                                     val postId = url.substring(indexOfId + 3)
@@ -104,7 +104,7 @@ class StartScreenActivity : AppCompatActivity() {
                                 }
                             }
                             "viewNewNotice"->{
-                                val url:String = extras.getString("linkUrl")
+                                val url:String = extras.getString("linkUrl")!!
                                 if (url.contains("sas.a3creators.co.in/StudentAssessment/post")) {
                                     val indexOfId = url.indexOf("id=")
                                     val postId = url.substring(indexOfId + 3)

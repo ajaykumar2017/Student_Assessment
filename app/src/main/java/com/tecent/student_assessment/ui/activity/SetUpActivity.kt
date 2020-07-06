@@ -33,8 +33,8 @@ class SetUpActivity : AppCompatActivity() {
     progressDialog!!.show()
     sharedPreferences =
       getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
-    val email = sharedPreferences.getString("email", "")
-    val password = sharedPreferences.getString("passw", "")
+    val email = sharedPreferences.getString("email", "")!!
+    val password = sharedPreferences.getString("passw", "")!!
     //volley part start
     val url = ExtraFunctions.serverurl + "studentLoginData.php"
     val stringRequest: StringRequest = object : StringRequest(

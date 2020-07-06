@@ -35,7 +35,7 @@ import com.tecent.student_assessment.R
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.ui.activity.CreatePostQueryDoubtsActivity
 import com.tecent.student_assessment.ui.activity.HomeActivity
-import com.tecent.student_assessment.ui.adapters.MyRecyclerPostDoubtsAdapter
+import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAdapter
 import com.tecent.student_assessment.utils.ExtraFunctions
 
 class DoubtsFragment : Fragment() {
@@ -187,7 +187,7 @@ class DoubtsFragment : Fragment() {
                 }
             }
             val postDoubtsAdapter =
-              MyRecyclerPostDoubtsAdapter(
+              MyRecyclerDoubtsPostsAdapter(
                   sharedPreferences, dialog, homeActivity.requestQueue, homeActivity, userid!!,
                   useridlist, userdplist, usernamelist,
                   userbranchlist, posttimelist, postimagelist, postdoubtidlist, posttextlist,
@@ -248,7 +248,7 @@ class DoubtsFragment : Fragment() {
                             }
                         }
                         val postDoubtsAdapter =
-                          MyRecyclerPostDoubtsAdapter(
+                          MyRecyclerDoubtsPostsAdapter(
                               sharedPreferences, dialog, homeActivity.requestQueue, homeActivity,
                               userid!!, useridlist, userdplist, usernamelist,
                               userbranchlist, posttimelist, postimagelist, postdoubtidlist,

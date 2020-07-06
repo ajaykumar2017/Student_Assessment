@@ -9,16 +9,16 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
@@ -86,7 +86,7 @@ class AnswersDoubtsPostsDoubtsActivity : AppCompatActivity() {
     }
     requestQueue = Volley.newRequestQueue(this)
     sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
-    userid = this.sharedPreferences.getString("userid", "")
+    userid = this.sharedPreferences.getString("userid", "")!!
     swipeRefreshLayout = findViewById(
         id.swipeRefreshLayout
     )
@@ -204,11 +204,12 @@ class AnswersDoubtsPostsDoubtsActivity : AppCompatActivity() {
     resultCode: Int,
     data: Intent?
   ) {
+    super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
       val result = CropImage.getActivityResult(data)
       if (resultCode == Activity.RESULT_OK) {
         val resultUri = result.uri
-        path = resultUri.path
+        path = resultUri.path!!
         //now we have path of file we should compress image
         ivAddAttachment.setImageBitmap(compressImage(path))
         path.split("/".toRegex())

@@ -78,9 +78,9 @@ class SinglePostsActivity : AppCompatActivity() {
         volleyCommentDataRequest(postid)
         //long press click copy text
         iv_post_text.setOnLongClickListener {
-            var cm:ClipboardManager= getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip:ClipData=ClipData.newPlainText(iv_post_text.text.toString(),iv_post_text.text)
-            cm.primaryClip=clip
+            val cm:ClipboardManager= getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip:ClipData=ClipData.newPlainText(iv_post_text.text.toString(),iv_post_text.text)
+            cm.setPrimaryClip(clip)
         Toast.makeText(this, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
@@ -154,7 +154,7 @@ class SinglePostsActivity : AppCompatActivity() {
                         val adapter =
                             MyRecyclerHomePostsCommentsForSingleActivityAdapter(
                                 dialog, requestQueue, postid,
-                                sharedPreferences.getString("userid", ""), this
+                                sharedPreferences.getString("userid", "")!!, this
                                 , commentObjectArrayList
                             )
                         adapter.setHasStableIds(true)

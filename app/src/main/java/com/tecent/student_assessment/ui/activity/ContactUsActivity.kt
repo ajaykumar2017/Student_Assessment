@@ -97,7 +97,7 @@ class ContactUsActivity : AppCompatActivity() {
                 if (ExtraFunctions.isNetworkStatusAvailable(this)) {
                     dialog.show()
                     sendDataHomeToServer(
-                            sharedPreferences.getString("userid", ""),
+                            sharedPreferences.getString("userid", "")!!,
                             et_post_text.text.toString().replace("'", "\\'"), fileName)
                 } else {
                     toast("No internet connection!")
@@ -136,6 +136,7 @@ class ContactUsActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int,
                                          resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
 
         // The ACTION_OPEN_DOCUMENT intent was sent with the request code
         // READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
@@ -330,7 +331,7 @@ class ContactUsActivity : AppCompatActivity() {
                     dialog.dismiss()
                     fileName = emp.getString("filename")
                     sendDataHomeToServer(
-                            sharedPreferences.getString("userid", ""),
+                            sharedPreferences.getString("userid", "")!!,
                             et_post_text.text.toString().trim().replace("'", "\\'"), fileName)
                 } else {
                     dialog.dismiss()

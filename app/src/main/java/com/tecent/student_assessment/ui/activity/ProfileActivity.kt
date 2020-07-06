@@ -13,33 +13,31 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.tecent.student_assessment.utils.AppHelper
 import com.tecent.student_assessment.R.array
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.string
-import com.tecent.student_assessment.utils.VolleyMultipartRequest
-import com.tecent.student_assessment.utils.VolleySingleton
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
-import com.tecent.student_assessment.ui.adapters.MyRecyclerPostDoubtsAdapter
+import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAdapter
+import com.tecent.student_assessment.utils.AppHelper
 import com.tecent.student_assessment.utils.ExtraFunctions
 import com.tecent.student_assessment.utils.ExtraFunctions.getFullBranch
 import com.tecent.student_assessment.utils.ExtraFunctions.getFullSemester
@@ -47,6 +45,8 @@ import com.tecent.student_assessment.utils.ExtraFunctions.getFullUniversity
 import com.tecent.student_assessment.utils.ExtraFunctions.getSmallBranch
 import com.tecent.student_assessment.utils.ExtraFunctions.getSmallSemester
 import com.tecent.student_assessment.utils.ExtraFunctions.getSmallUniversity
+import com.tecent.student_assessment.utils.VolleyMultipartRequest
+import com.tecent.student_assessment.utils.VolleySingleton
 import com.theartofdev.edmodo.cropper.CropImage
 import kotlinx.android.synthetic.main.activity_profile.edit_branch
 import kotlinx.android.synthetic.main.activity_profile.edit_college
@@ -155,7 +155,7 @@ class ProfileActivity : AppCompatActivity() {
       LinearLayoutManager(this)
     sharedPreferences = this.getSharedPreferences("studentAssessment", Context.MODE_PRIVATE)
     sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE)
-    userid = this.sharedPreferences.getString("userid", "")
+    userid = this.sharedPreferences.getString("userid", "")!!
     requestQueue = Volley.newRequestQueue(this)
     dialog = ACProgressFlower.Builder(this)
         .direction(ACProgressConstant.DIRECT_CLOCKWISE)
@@ -165,18 +165,18 @@ class ProfileActivity : AppCompatActivity() {
     dialog.setCancelable(false)
     if (profile == "MyProfile") {
       supportActionBar!!.title = "My Profile"
-      val email: String = sharedPreferences.getString("email", "")
-      val name: String = sharedPreferences.getString("name", "")
-      val gender: String = sharedPreferences.getString("gender", "")
-      val branch: String = sharedPreferences.getString("branch", "")
-      val semester: String = sharedPreferences.getString("semester", "")
-      val college: String = sharedPreferences.getString("college", "")
-      val university: String = sharedPreferences.getString("university", "")
-      userdp = sharedPreferences.getString("userdp", "")
-      val joindate: String = sharedPreferences.getString("joindate", "")
-      val posts: String = sharedPreferences.getString("posts", "")
-      val doubts: String = sharedPreferences.getString("doubts", "")
-      val answers: String = sharedPreferences.getString("answers", "")
+      val email = sharedPreferences.getString("email", "")!!
+      val name = sharedPreferences.getString("name", "")!!
+      val gender = sharedPreferences.getString("gender", "")!!
+      val branch = sharedPreferences.getString("branch", "")!!
+      val semester = sharedPreferences.getString("semester", "")!!
+      val college = sharedPreferences.getString("college", "")!!
+      val university = sharedPreferences.getString("university", "")!!
+      userdp = sharedPreferences.getString("userdp", "")!!
+      val joindate = sharedPreferences.getString("joindate", "")!!
+      val posts = sharedPreferences.getString("posts", "")!!
+      val doubts = sharedPreferences.getString("doubts", "")!!
+      val answers = sharedPreferences.getString("answers", "")!!
       requestQueue.add(
           ExtraFunctions.createImageRequestFromUrl(
               ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image
@@ -640,9 +640,9 @@ class ProfileActivity : AppCompatActivity() {
 
     //imagepicker
     ivChangeDp.setOnClickListener {
-        CropImage.activity()
-            .setAspectRatio(1, 1)
-            .start(this)
+      CropImage.activity()
+          .setAspectRatio(1, 1)
+          .start(this)
     }
 
     if (profile == "OtherProfile") {
@@ -930,7 +930,7 @@ class ProfileActivity : AppCompatActivity() {
             }
           }
           val postDoubtsProfileAdapter =
-            MyRecyclerPostDoubtsAdapter(
+            MyRecyclerDoubtsPostsAdapter(
                 sharedPreferences, dialog, requestQueue, this, userid, useridpostlist,
                 userdppostlist, usernamepostlist,
                 userbranchpostlist, posttimepostlist, postimagepostlist,
@@ -961,11 +961,12 @@ class ProfileActivity : AppCompatActivity() {
     resultCode: Int,
     data: Intent?
   ) {
+    super.onActivityResult(requestCode, resultCode, data)
     if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && data != null) {
       val result = CropImage.getActivityResult(data)
       if (resultCode == Activity.RESULT_OK) {
         val resultUri = result.uri
-        val path: String = resultUri.path
+        val path = resultUri.path
         //now we have path of file we should compress image
         iv_profile_image.setImageBitmap(compressImage(path))
         volleyImageRequest()
@@ -1021,7 +1022,9 @@ class ProfileActivity : AppCompatActivity() {
           }
           if (status == "error") {
             dialog.dismiss()
-            Toast.makeText(this@ProfileActivity, "Error! Please try again later...", Toast.LENGTH_SHORT)
+            Toast.makeText(
+                this@ProfileActivity, "Error! Please try again later...", Toast.LENGTH_SHORT
+            )
                 .show()
           }
         } catch (e: JSONException) {

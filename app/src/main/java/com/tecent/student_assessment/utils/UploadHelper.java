@@ -87,9 +87,7 @@ public class UploadHelper extends AsyncTask<String, Void, String> {
             Log.d(TAG, "Successfully uploaded " + f.getName());
             serverResponse=sb.toString();
 
-        } catch (MalformedURLException e) {
-            Log.d("uperror",e.toString());
-        } catch (IOException e) {
+        } catch (Exception e) {
             Log.d("uperror",e.toString());
         } finally {
             try {
@@ -98,7 +96,7 @@ public class UploadHelper extends AsyncTask<String, Void, String> {
                     fis.close();
                 if (br != null)
                     br.close();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

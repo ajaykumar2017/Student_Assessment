@@ -70,7 +70,7 @@ class DiscussionForumActivity : AppCompatActivity() {
         )
         sharedPreferences = this.getSharedPreferences(
             ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
-        userid = sharedPreferences.getString("userid", "")
+        userid = sharedPreferences.getString("userid", "")!!
 
         recyclerViewDiscusForum=findViewById<RecyclerView>(
             id.recyclerViewDisForum

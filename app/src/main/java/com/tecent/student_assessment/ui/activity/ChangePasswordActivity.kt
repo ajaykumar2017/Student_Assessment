@@ -54,8 +54,8 @@ class ChangePasswordActivity : AppCompatActivity() {
                 .fadeColor(Color.BLACK).build()
         sharedPreferences = this.getSharedPreferences(
             ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
-        val passw:String=sharedPreferences.getString("passw","")
-        val userid:String=sharedPreferences.getString("userid","")
+        val passw:String=sharedPreferences.getString("passw","")!!
+        val userid:String=sharedPreferences.getString("userid","")!!
         btn_submit.setOnClickListener {
             if (et_old_password.text.toString().trim()==""||et_confirm_old_password.text.toString().trim()==""||
                     et_new_password.text.toString().trim()==""||et_confirm_new_password.text.toString().trim()==""){

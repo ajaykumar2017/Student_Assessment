@@ -9,11 +9,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.appcompat.widget.PopupMenu
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -22,20 +17,27 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.PopupMenu
+import androidx.core.app.ActivityCompat
+import androidx.core.app.ActivityOptionsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cc.cloudist.acplibrary.ACProgressFlower
+import coil.api.load
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
-import com.tecent.student_assessment.objects.AnswerObject
-import com.tecent.student_assessment.ui.activity.AnswersDoubtsPostsDoubtsActivity
-import com.tecent.student_assessment.ui.activity.ImageViewerActivity
+import com.tecent.student_assessment.R
 import com.tecent.student_assessment.R.color
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.menu
 import com.tecent.student_assessment.R.string
+import com.tecent.student_assessment.objects.AnswerObject
+import com.tecent.student_assessment.ui.activity.AnswersDoubtsPostsDoubtsActivity
+import com.tecent.student_assessment.ui.activity.ImageViewerActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAnswersAdapter.DoubtsPostsAnswersHolder
 import com.tecent.student_assessment.utils.ExtraFunctions.createImageRequestFromUrl
 import com.tecent.student_assessment.utils.ExtraFunctions.isNetworkStatusAvailable
@@ -159,12 +161,12 @@ class MyRecyclerDoubtsPostsAnswersAdapter(
     postCommentsHolder.comment_text.text = answerObject.answerText
     //long press click copy text
     postCommentsHolder.comment_text.setOnLongClickListener {
-      var cm: ClipboardManager =
+      val cm =
         mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      var clip: ClipData = ClipData.newPlainText(
+      val clip: ClipData = ClipData.newPlainText(
           postCommentsHolder.comment_text.text.toString(), postCommentsHolder.comment_text.text
       )
-      cm.primaryClip = clip
+      cm.setPrimaryClip(clip)
       Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
           .show()
       return@setOnLongClickListener true
@@ -172,60 +174,62 @@ class MyRecyclerDoubtsPostsAnswersAdapter(
     postCommentsHolder.comment_image.setOnClickListener {
       animateIntent(postCommentsHolder.comment_image)
     }
-    if (answerObject.repliesCount == "0") {
-      postCommentsHolder.view_all_replies.text = "No Replies"
-    } else if (answerObject.repliesCount == "1") {
-      postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
-      postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-          drawable.ic_002_drop_up_arrow, 0, 0, 0
-      )
-      postCommentsHolder.view_all_replies.setOnClickListener {
-        if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
-          postCommentsHolder.comments_recyclerview.visibility = View.GONE
-          postCommentsHolder.view_all_replies.text = "Show " + answerObject.repliesCount + " Reply"
-          postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-              drawable.ic_001_drop_down_arrow, 0, 0, 0
-          )
-        } else {
-          postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-          postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
-          postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-              drawable.ic_002_drop_up_arrow, 0, 0, 0
-          )
+    when (answerObject.repliesCount) {
+      "0" -> {
+        postCommentsHolder.view_all_replies.text = "No Replies"
+      }
+      "1" -> {
+        postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
+        postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+            drawable.ic_002_drop_up_arrow, 0, 0, 0
+        )
+        postCommentsHolder.view_all_replies.setOnClickListener {
+          if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
+            postCommentsHolder.comments_recyclerview.visibility = View.GONE
+            postCommentsHolder.view_all_replies.text = "Show " + answerObject.repliesCount + " Reply"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_001_drop_down_arrow, 0, 0, 0
+            )
+          } else {
+            postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
+            postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Reply"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_002_drop_up_arrow, 0, 0, 0
+            )
 
+          }
         }
       }
-    } else {
-      postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Replies"
-      postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-          drawable.ic_002_drop_up_arrow, 0, 0, 0
-      )
-      postCommentsHolder.view_all_replies.setOnClickListener {
-        if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
-          postCommentsHolder.comments_recyclerview.visibility = View.GONE
-          postCommentsHolder.view_all_replies.text =
-            "Show " + answerObject.repliesCount + " Replies"
-          postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-              drawable.ic_001_drop_down_arrow, 0, 0, 0
-          )
-        } else {
-          postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
-          postCommentsHolder.view_all_replies.text =
-            "Hide " + answerObject.repliesCount + " Replies"
-          postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
-              drawable.ic_002_drop_up_arrow, 0, 0, 0
-          )
+      else -> {
+        postCommentsHolder.view_all_replies.text = "Hide " + answerObject.repliesCount + " Replies"
+        postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+            drawable.ic_002_drop_up_arrow, 0, 0, 0
+        )
+        postCommentsHolder.view_all_replies.setOnClickListener {
+          if (postCommentsHolder.comments_recyclerview.visibility == View.VISIBLE) {
+            postCommentsHolder.comments_recyclerview.visibility = View.GONE
+            postCommentsHolder.view_all_replies.text =
+              "Show " + answerObject.repliesCount + " Replies"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_001_drop_down_arrow, 0, 0, 0
+            )
+          } else {
+            postCommentsHolder.comments_recyclerview.visibility = View.VISIBLE
+            postCommentsHolder.view_all_replies.text =
+              "Hide " + answerObject.repliesCount + " Replies"
+            postCommentsHolder.view_all_replies.setCompoundDrawablesWithIntrinsicBounds(
+                drawable.ic_002_drop_up_arrow, 0, 0, 0
+            )
 
+          }
         }
       }
     }
-    if (!(answerObject.answerImage == "")) {
-      mRequestQueue.add(
-          createImageRequestFromUrl(
-              serverurl + "postdoubts/postsDoubts_answers/" + answerObject.answerImage
-              , postCommentsHolder.comment_image
-          )
-      )
+    if (answerObject.answerImage != "") {
+      //Image loading using coil
+      postCommentsHolder.comment_image.load(serverurl + "postdoubts/postsDoubts_answers/" + answerObject.answerImage) {
+        placeholder(R.drawable.loading2)
+      }
 
     } else {
       postCommentsHolder.comment_image.visibility = View.GONE

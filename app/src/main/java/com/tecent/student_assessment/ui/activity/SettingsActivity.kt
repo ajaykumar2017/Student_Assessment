@@ -54,7 +54,7 @@ class SettingsActivity : AppCompatActivity() {
             ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
         val sharedPreferencesLike: SharedPreferences = getSharedPreferences(
             ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
-        val userid:String=sharedPreferences.getString("userid","")
+        val userid = sharedPreferences.getString("userid","")!!
         val requestQueue = Volley.newRequestQueue(this)
         val btnlogout = findViewById<LinearLayout>(
             id.btnlogout
