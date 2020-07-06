@@ -113,16 +113,16 @@ class MyRecyclerDiscussionForumAdapter(dialog: ACProgressFlower, requestQueue: R
                 }
                 tv_copy_chat.setOnClickListener {
                     val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    val clip: ClipData = ClipData.newPlainText(discussionForumHolder.discussionText.text.toString(),discussionForumHolder.discussionText.text)
-                    cm.primaryClip=clip
+                    val clip = ClipData.newPlainText(discussionForumHolder.discussionText.text.toString(),discussionForumHolder.discussionText.text)
+                    cm.setPrimaryClip(clip)
                     Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
                     dialogMenu.dismiss()
                 }
 
             }else{
-                val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip: ClipData = ClipData.newPlainText(discussionForumHolder.discussionText.text.toString(),discussionForumHolder.discussionText.text)
-                cm.primaryClip=clip
+                val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip :ClipData = ClipData.newPlainText(discussionForumHolder.discussionText.text.toString(),discussionForumHolder.discussionText.text)
+                cm.setPrimaryClip(clip)
                 Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             }
             return@setOnLongClickListener true

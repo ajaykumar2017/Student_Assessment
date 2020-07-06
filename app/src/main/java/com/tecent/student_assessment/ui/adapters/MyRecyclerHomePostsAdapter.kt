@@ -95,8 +95,8 @@ class MyRecyclerHomePostsAdapter(internal var mSharedPreferences: SharedPreferen
         //long press click copy text
         homePostsHolder.iv_post_text.setOnLongClickListener {
             val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            val clip: ClipData = ClipData.newPlainText(homePostsHolder.iv_post_text.text.toString(),homePostsHolder.iv_post_text.text)
-            cm.primaryClip=clip
+            val clip = ClipData.newPlainText(homePostsHolder.iv_post_text.text.toString(),homePostsHolder.iv_post_text.text)
+            cm.setPrimaryClip(clip)
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }

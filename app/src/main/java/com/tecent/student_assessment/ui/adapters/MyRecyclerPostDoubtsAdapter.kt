@@ -81,9 +81,9 @@ class MyRecyclerPostDoubtsAdapter(internal var mSharedPreferences: SharedPrefere
         postDoubtsHolder.iv_post_text.text = mPostText
         //long press click copy text
         postDoubtsHolder.iv_post_text.setOnLongClickListener {
-            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip: ClipData = ClipData.newPlainText(postDoubtsHolder.iv_post_text.text.toString(),postDoubtsHolder.iv_post_text.text)
-            cm.primaryClip=clip
+            val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip: ClipData = ClipData.newPlainText(postDoubtsHolder.iv_post_text.text.toString(),postDoubtsHolder.iv_post_text.text)
+            cm.setPrimaryClip(clip)
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }

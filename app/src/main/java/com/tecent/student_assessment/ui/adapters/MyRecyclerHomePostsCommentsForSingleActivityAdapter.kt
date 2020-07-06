@@ -136,9 +136,9 @@ class MyRecyclerHomePostsCommentsForSingleActivityAdapter(dialog: ACProgressFlow
         postCommentsHolder.comment_text.text = commentObject.commentText
         //long press click copy text
         postCommentsHolder.comment_text.setOnLongClickListener {
-            var cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-            var clip: ClipData = ClipData.newPlainText(postCommentsHolder.comment_text.text.toString(),postCommentsHolder.comment_text.text)
-            cm.primaryClip=clip
+            val cm: ClipboardManager = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip: ClipData = ClipData.newPlainText(postCommentsHolder.comment_text.text.toString(),postCommentsHolder.comment_text.text)
+            cm.setPrimaryClip(clip)
             Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT).show()
             return@setOnLongClickListener true
         }
