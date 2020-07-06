@@ -6,12 +6,12 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.Switch
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
@@ -19,8 +19,8 @@ import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_settings.*
+import com.tecent.student_assessment.utils.DataUtils
+import kotlinx.android.synthetic.main.activity_settings.toolbar_main
 import java.io.File
 import java.util.HashMap
 
@@ -51,9 +51,11 @@ class SettingsActivity : AppCompatActivity() {
             id.btnchangepassword
         )
         val sharedPreferences: SharedPreferences = getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         val sharedPreferencesLike: SharedPreferences = getSharedPreferences(
-            ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesLikeId, Context.MODE_PRIVATE
+        )
         val userid = sharedPreferences.getString("userid","")!!
         val requestQueue = Volley.newRequestQueue(this)
         val btnlogout = findViewById<LinearLayout>(
@@ -71,22 +73,27 @@ class SettingsActivity : AppCompatActivity() {
                 when (which) {
                     DialogInterface.BUTTON_POSITIVE -> {
                         //volley part start
-                        val url = ExtraFunctions.serverurl + "userLogout.php"
-                        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> }, Response.ErrorListener {
+                      val url = DataUtils.serverurl + "userLogout.php"
+                      val stringRequest = object : StringRequest(
+                          Request.Method.POST, url, Response.Listener { response -> },
+                          Response.ErrorListener {
 
-                        }) {
-                            override fun getParams(): Map<String, String> {
-                                val MyData = HashMap<String, String>()
-                                MyData["userid"] = userid
-                                return MyData
-                            }
+                          }) {
+                        override fun getParams(): Map<String, String> {
+                          val MyData = HashMap<String, String>()
+                          MyData["userid"] = userid
+                          return MyData
                         }
+                      }
                         requestQueue.add(stringRequest)
                         //volley part end
 
-                        ExtraFunctions.logOut(this)
+                      DataUtils.logOut(this)
                         val file = File(
-                            ExtraFunctions.rootdir + "userdp/" + sharedPreferences.getString("userdp", ""))
+                            DataUtils.rootdir + "userdp/" + sharedPreferences.getString(
+                                "userdp", ""
+                            )
+                        )
                         if (file.exists()) {
                             file.delete()
                         }

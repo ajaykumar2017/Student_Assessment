@@ -1,7 +1,5 @@
 package com.tecent.student_assessment.ui.adapters
 
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +18,7 @@ import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.menu
 import com.tecent.student_assessment.objects.ReplyObject
 import com.tecent.student_assessment.ui.adapters.MyRecyclerPostsCommentsRepliesForSinglePostsAdapter.PostsCommentsRepliesHolder
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.ExtraFunctions
 import org.json.JSONObject
 import java.util.HashMap
@@ -52,8 +51,8 @@ class MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(
   ) {
     val replyObject = mRepliesObjectArrayList[position]
     mRequestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + replyObject.userDp
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + replyObject.userDp
             , postsCommentsRepliesHolder.iv_profile_image
         )
     )
@@ -61,15 +60,10 @@ class MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(
     postsCommentsRepliesHolder.replyText.text = replyObject.replyText
     //long press click copy text
     postsCommentsRepliesHolder.replyText.setOnLongClickListener {
-      val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip: ClipData = ClipData.newPlainText(
+      ExtraFunctions(mContext).copyTextToClipboard(
           postsCommentsRepliesHolder.replyText.text.toString(),
           postsCommentsRepliesHolder.replyText.text
       )
-      cm.setPrimaryClip(clip)
-      Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
-          .show()
-      return@setOnLongClickListener true
     }
 
     postsCommentsRepliesHolder.timeAgo.text = replyObject.replyTime
@@ -87,8 +81,8 @@ class MyRecyclerPostsCommentsRepliesForSinglePostsAdapter(
       popupMenu.findItem(id.delete_comment).isVisible = false
       popup.setOnMenuItemClickListener { menuItem ->
         when (menuItem.itemId) {
-          id.delete_reply -> if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
-            val url = ExtraFunctions.serverurl + "deleteCommentsRepliesOfPosts.php"
+          id.delete_reply -> if (DataUtils.isNetworkStatusAvailable(mContext)) {
+            val url = DataUtils.serverurl + "deleteCommentsRepliesOfPosts.php"
             val stringRequest =
               object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                 try {

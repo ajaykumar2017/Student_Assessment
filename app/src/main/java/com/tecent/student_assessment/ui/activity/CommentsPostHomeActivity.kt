@@ -9,17 +9,17 @@ import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
@@ -36,7 +36,7 @@ import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.objects.CommentObject
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsAdapter
 import com.tecent.student_assessment.utils.AppHelper
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.VolleyMultipartRequest
 import com.tecent.student_assessment.utils.VolleySingleton
 import com.theartofdev.edmodo.cropper.CropImage
@@ -84,7 +84,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
     })
     requestQueue = Volley.newRequestQueue(this)
     sharedPreferences = this.getSharedPreferences(
-        ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE
+        DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
     )
     userid = sharedPreferences.getString("userid", "")!!
     swipeRefreshLayout = findViewById(
@@ -106,8 +106,8 @@ class CommentsPostHomeActivity : AppCompatActivity() {
     )
     ivAddAttachment = findViewById(id.ivAddAttachment)
     requestQueue.add<Bitmap>(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + userdp, imageView_user_image
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + userdp, imageView_user_image
         )
     )
     dialog = ACProgressFlower.Builder(this)
@@ -160,7 +160,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
       commentText = editText.text.toString()
           .replace("'", "\\'")
       if (path.startsWith("/storage/primary/"))
-        path = path!!.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+        path = path!!.replace("/storage/primary/", DataUtils.ROOTMAIN)
       val file = File(path)
       if (commentText.trim().length < 1) {
         Toast.makeText(this, "please write something....", Toast.LENGTH_SHORT)
@@ -176,7 +176,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
     volleyCommentDataRequest(postid)
 
     swipeRefreshLayout.setOnRefreshListener {
-      if (ExtraFunctions.isNetworkStatusAvailable(this))
+      if (DataUtils.isNetworkStatusAvailable(this))
         volleyCommentDataRequest(postid)
       else {
         swipeRefreshLayout.isRefreshing = false
@@ -241,7 +241,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
   }
 
   fun volleyImageRequest() {
-    val url = ExtraFunctions.serverurl + "postCommentsData.php"
+    val url = DataUtils.serverurl + "postCommentsData.php"
     val multipartRequest =
       object : VolleyMultipartRequest(Request.Method.POST, url, Response.Listener { response ->
         val resultResponse = String(response.data)
@@ -305,7 +305,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
 
   //Google volley
   fun volleyTestWithoutImage() {
-    val url = ExtraFunctions.serverurl + "postCommentsData.php"
+    val url = DataUtils.serverurl + "postCommentsData.php"
     val stringRequest = object : StringRequest(
         Request.Method.POST, url, Response.Listener { response -> jsonParser(response) },
         Response.ErrorListener { error ->
@@ -357,7 +357,7 @@ class CommentsPostHomeActivity : AppCompatActivity() {
   //Comments data request
   fun volleyCommentDataRequest(postid: String) {
     try {
-      val url = ExtraFunctions.serverurl + "commentsPostsDataAdapter.php"
+      val url = DataUtils.serverurl + "commentsPostsDataAdapter.php"
       val stringRequest =
         object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
           swipeRefreshLayout.isRefreshing = false

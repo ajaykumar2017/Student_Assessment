@@ -1,9 +1,6 @@
 package com.tecent.student_assessment.ui.adapters
 
 import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,6 +17,7 @@ import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.objects.DiscussionForumObject
 import com.tecent.student_assessment.ui.activity.DiscussionForumActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDiscussionForumAdapter.DiscussionForumHolder
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.ExtraFunctions
 import org.json.JSONObject
 import java.util.HashMap
@@ -79,20 +77,20 @@ class MyRecyclerDiscussionForumAdapter(
         )
         // Set dialog title
         dialogMenu.setTitle("Custom Dialog")
-        val tv_delete_chat = dialogMenu.findViewById<View>(
+        val tvDeleteChat = dialogMenu.findViewById<View>(
             id.tv_delete_chat
         ) as TextView
-        val tv_copy_chat = dialogMenu.findViewById<View>(
+        val tvCopyChat = dialogMenu.findViewById<View>(
             id.tv_copy_chat
         ) as TextView
         dialogMenu.show()
 
-        tv_delete_chat.setOnClickListener {
-          if (ExtraFunctions.isNetworkStatusAvailable(
+        tvDeleteChat.setOnClickListener {
+          if (DataUtils.isNetworkStatusAvailable(
                   mContext
               )
           ) {
-            val url = ExtraFunctions.serverurl + "deleteDiscussionForumChats.php"
+            val url = DataUtils.serverurl + "deleteDiscussionForumChats.php"
             val stringRequest =
               object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                 try {
@@ -128,28 +126,18 @@ class MyRecyclerDiscussionForumAdapter(
           }
           dialogMenu.dismiss()
         }
-        tv_copy_chat.setOnClickListener {
-          val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-          val clip: ClipData = ClipData.newPlainText(
+        tvCopyChat.setOnClickListener {
+          ExtraFunctions(mContext).copyTextToClipboard(
               discussionForumHolder.discussionText.text.toString(),
               discussionForumHolder.discussionText.text
           )
-          cm.setPrimaryClip(clip)
-          Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
-              .show()
-          dialogMenu.dismiss()
         }
 
       } else {
-        val cm: ClipboardManager =
-          mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip: ClipData = ClipData.newPlainText(
+        ExtraFunctions(mContext).copyTextToClipboard(
             discussionForumHolder.discussionText.text.toString(),
             discussionForumHolder.discussionText.text
         )
-        cm.setPrimaryClip(clip)
-        Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
-            .show()
       }
       return@setOnLongClickListener true
     }

@@ -4,15 +4,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
@@ -22,15 +22,16 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.tecent.student_assessment.objects.DiscussionForumObject
 import com.tecent.student_assessment.R.color
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.objects.DiscussionForumObject
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDiscussionForumAdapter
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_discussion_forum.*
-import kotlinx.android.synthetic.main.toolbar_main.*
+import com.tecent.student_assessment.utils.DataUtils
+import kotlinx.android.synthetic.main.activity_discussion_forum.et_discussionText
+import kotlinx.android.synthetic.main.activity_discussion_forum.send_message
+import kotlinx.android.synthetic.main.toolbar_main.toolbar_main
 import org.json.JSONObject
 import java.util.HashMap
 
@@ -69,7 +70,8 @@ class DiscussionForumActivity : AppCompatActivity() {
             id.swipeRefreshLayout
         )
         sharedPreferences = this.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         userid = sharedPreferences.getString("userid", "")!!
 
         recyclerViewDiscusForum=findViewById<RecyclerView>(
@@ -79,11 +81,12 @@ class DiscussionForumActivity : AppCompatActivity() {
         recyclerViewDiscusForum.setLayoutManager(
             LinearLayoutManager(this)
         )
-        if (ExtraFunctions.isNetworkStatusAvailable(this)){
-            volleyDiscussionForumDataRequest()
-        }else{
-            Toast.makeText(this,"No Internet connection!", Toast.LENGTH_SHORT).show()
-        }
+      if (DataUtils.isNetworkStatusAvailable(this)) {
+        volleyDiscussionForumDataRequest()
+      } else {
+        Toast.makeText(this, "No Internet connection!", Toast.LENGTH_SHORT)
+            .show()
+      }
         send_message.setOnClickListener {
             if (et_discussionText.text.trim().toString().length<1)
                 Toast.makeText(this@DiscussionForumActivity, "Please write something", Toast.LENGTH_SHORT).show()
@@ -94,13 +97,14 @@ class DiscussionForumActivity : AppCompatActivity() {
         }
         loadDiscussionForumDataRequestFromSpf()
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvailable(this))
-                volleyDiscussionForumDataRequest()
-            else {
-                swipeRefreshLayout.isRefreshing = false
+          if (DataUtils.isNetworkStatusAvailable(this))
+            volleyDiscussionForumDataRequest()
+          else {
+            swipeRefreshLayout.isRefreshing = false
 //                progressBar.setVisibility(View.GONE)
-                Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(this, "No Internet Connection!", Toast.LENGTH_SHORT)
+                .show()
+          }
         }
         et_discussionText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -123,17 +127,21 @@ class DiscussionForumActivity : AppCompatActivity() {
 
     //Google volley
     fun volleyTestDiscussionForum() {
-        val url = ExtraFunctions.serverurl + "discussionForumData.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener { error ->
+      val url = DataUtils.serverurl + "discussionForumData.php"
+      val stringRequest = object : StringRequest(
+          Request.Method.POST, url, Response.Listener { response -> jsonParser(response) },
+          Response.ErrorListener { error ->
             dialog.dismiss()
-            Toast.makeText(this@DiscussionForumActivity, error.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@DiscussionForumActivity, error.toString(), Toast.LENGTH_SHORT)
+                .show()
             //                Toast.makeText(CreatePostQueryDoubts.this, "Error! Please try again later...", Toast.LENGTH_SHORT).show();
-        }) {
-            override fun getParams(): Map<String, String> {
-                val MyData = HashMap<String, String>()
-                MyData["userid"] = userid
-                MyData["discussionText"] = et_discussionText.text.toString().replace("'", "\\'")
-                return MyData
+          }) {
+        override fun getParams(): Map<String, String> {
+          val MyData = HashMap<String, String>()
+          MyData["userid"] = userid
+          MyData["discussionText"] = et_discussionText.text.toString()
+              .replace("'", "\\'")
+          return MyData
             }
         }
         requestQueue.add(stringRequest)
@@ -190,17 +198,18 @@ class DiscussionForumActivity : AppCompatActivity() {
 
     fun volleyDiscussionForumDataRequest(){
         try {
-            val url = ExtraFunctions.serverurl + "discussionForumDataAdapter.php"
-            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
-                swipeRefreshLayout.isRefreshing = false
+          val url = DataUtils.serverurl + "discussionForumDataAdapter.php"
+          val stringRequest =
+            object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+              swipeRefreshLayout.isRefreshing = false
 //                progressBar.setVisibility(View.GONE)
-                try {
-                    val emp = JSONObject(response)
-                    val result = emp.getString("result")
-                    val spe = sharedPreferences.edit()
-                    spe.putString("discussionForumResponse", response)
-                    spe.apply()
-                    if (result == "successful") {
+              try {
+                val emp = JSONObject(response)
+                val result = emp.getString("result")
+                val spe = sharedPreferences.edit()
+                spe.putString("discussionForumResponse", response)
+                spe.apply()
+                if (result == "successful") {
                         val json = emp.getString("discussionForumList")
                         val builder = GsonBuilder()
                         val gson = builder.create()

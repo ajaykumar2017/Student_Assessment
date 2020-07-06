@@ -9,9 +9,7 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -20,8 +18,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cloudist.acplibrary.ACProgressConstant
@@ -34,17 +30,17 @@ import com.tecent.student_assessment.R.array
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.R.string
-import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAdapter
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
 import com.tecent.student_assessment.utils.AppHelper
+import com.tecent.student_assessment.utils.DataUtils
+import com.tecent.student_assessment.utils.DataUtils.getFullBranch
+import com.tecent.student_assessment.utils.DataUtils.getFullSemester
+import com.tecent.student_assessment.utils.DataUtils.getFullUniversity
+import com.tecent.student_assessment.utils.DataUtils.getSmallBranch
+import com.tecent.student_assessment.utils.DataUtils.getSmallSemester
+import com.tecent.student_assessment.utils.DataUtils.getSmallUniversity
 import com.tecent.student_assessment.utils.ExtraFunctions
-import com.tecent.student_assessment.utils.ExtraFunctions.getFullBranch
-import com.tecent.student_assessment.utils.ExtraFunctions.getFullSemester
-import com.tecent.student_assessment.utils.ExtraFunctions.getFullUniversity
-import com.tecent.student_assessment.utils.ExtraFunctions.getSmallBranch
-import com.tecent.student_assessment.utils.ExtraFunctions.getSmallSemester
-import com.tecent.student_assessment.utils.ExtraFunctions.getSmallUniversity
 import com.tecent.student_assessment.utils.VolleyMultipartRequest
 import com.tecent.student_assessment.utils.VolleySingleton
 import com.theartofdev.edmodo.cropper.CropImage
@@ -178,8 +174,8 @@ class ProfileActivity : AppCompatActivity() {
       val doubts = sharedPreferences.getString("doubts", "")!!
       val answers = sharedPreferences.getString("answers", "")!!
       requestQueue.add(
-          ExtraFunctions.createImageRequestFromUrl(
-              ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image
+          DataUtils.createImageRequestFromUrl(
+              DataUtils.serverurl + "userdp/" + userdp, iv_profile_image
           )
       )
       tv_name.text = name
@@ -194,9 +190,9 @@ class ProfileActivity : AppCompatActivity() {
       tv_doubts.text = doubts
       tv_answers.text = answers
       iv_profile_image.setOnClickListener {
-        animateIntent(iv_profile_image)
+        ExtraFunctions(this).animateIntent(iv_profile_image)
       }
-      if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+      if (DataUtils.isNetworkStatusAvailable(this)) {
         volleyPostDataRequest(userid)
         volleyDoubtsPostsDataRequest(userid)
       } else {
@@ -256,7 +252,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val stringRequest =
                 object : StringRequest(Method.POST, url, Response.Listener { response ->
                   //                progressBar.setVisibility(View.GONE)
@@ -323,7 +319,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val genderValue: String = when {
                 editProfileDialog.rad_male.isChecked -> {
                   "Male"
@@ -395,7 +391,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val stringRequest =
                 object : StringRequest(Method.POST, url, Response.Listener { response ->
                   //                progressBar.setVisibility(View.GONE)
@@ -459,7 +455,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val stringRequest =
                 object : StringRequest(Method.POST, url, Response.Listener { response ->
                   //                progressBar.setVisibility(View.GONE)
@@ -524,7 +520,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val stringRequest =
                 object : StringRequest(Method.POST, url, Response.Listener { response ->
                   //                progressBar.setVisibility(View.GONE)
@@ -588,7 +584,7 @@ class ProfileActivity : AppCompatActivity() {
           } else {
             dialog.show()
             try {
-              val url = ExtraFunctions.serverurl + "EditProfile.php"
+              val url = DataUtils.serverurl + "EditProfile.php"
               val stringRequest =
                 object : StringRequest(Method.POST, url, Response.Listener { response ->
                   //                progressBar.setVisibility(View.GONE)
@@ -652,12 +648,12 @@ class ProfileActivity : AppCompatActivity() {
       postByUserBranch = intent.getStringExtra("userbranch")
       supportActionBar!!.title = "$postByUserName's Profile"
       requestQueue.add(
-          ExtraFunctions.createImageRequestFromUrl(
-              ExtraFunctions.serverurl + "userdp/" + postByUserDp, iv_profile_image
+          DataUtils.createImageRequestFromUrl(
+              DataUtils.serverurl + "userdp/" + postByUserDp, iv_profile_image
           )
       )
       iv_profile_image.setOnClickListener {
-        animateIntent(iv_profile_image)
+        ExtraFunctions(this).animateIntent(iv_profile_image)
       }
       tv_name.text = postByUserName
       tv_branch.text = getFullBranch(postByUserBranch)
@@ -668,10 +664,10 @@ class ProfileActivity : AppCompatActivity() {
       edit_college.visibility = View.GONE
       edit_university.visibility = View.GONE
       iv_change_dp.visibility = View.GONE
-      if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+      if (DataUtils.isNetworkStatusAvailable(this)) {
         volleyPostDataRequest(postByUserId)
         volleyDoubtsPostsDataRequest(postByUserId)
-        val url = ExtraFunctions.serverurl + "otherUsersProfileData.php"
+        val url = DataUtils.serverurl + "otherUsersProfileData.php"
         val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
           try {
             val emp = JSONObject(response)
@@ -749,7 +745,7 @@ class ProfileActivity : AppCompatActivity() {
 
   private fun volleyPostDataRequest(userid: String) {
     try {
-      val url = ExtraFunctions.serverurl + "postsProfileDataAdapter.php"
+      val url = DataUtils.serverurl + "postsProfileDataAdapter.php"
       val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
         progress_bar_profile.visibility = View.GONE
         try {
@@ -862,7 +858,7 @@ class ProfileActivity : AppCompatActivity() {
   }
 
   private fun volleyDoubtsPostsDataRequest(userid: String) {
-    val url = ExtraFunctions.serverurl + "doubtPostsProfileDataAdapter.php"
+    val url = DataUtils.serverurl + "doubtPostsProfileDataAdapter.php"
     val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
       try {
         val emp = JSONObject(response)
@@ -1000,7 +996,7 @@ class ProfileActivity : AppCompatActivity() {
   }
 
   private fun volleyImageRequest() {
-    val url = ExtraFunctions.serverurl + "ChangeProfilePicture.php"
+    val url = DataUtils.serverurl + "ChangeProfilePicture.php"
     val multipartRequest =
       object : VolleyMultipartRequest(Method.POST, url, Response.Listener { response ->
         val resultResponse = String(response.data)
@@ -1012,8 +1008,8 @@ class ProfileActivity : AppCompatActivity() {
             Toast.makeText(this@ProfileActivity, "DP Changed", Toast.LENGTH_SHORT)
                 .show()
             requestQueue.add(
-                ExtraFunctions.createImageRequestFromUrl(
-                    ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image
+                DataUtils.createImageRequestFromUrl(
+                    DataUtils.serverurl + "userdp/" + userdp, iv_profile_image
                 )
             )
             val sharedPreferencesEdit = sharedPreferences.edit()
@@ -1060,35 +1056,6 @@ class ProfileActivity : AppCompatActivity() {
 
     VolleySingleton.getInstance(baseContext)
         .addToRequestQueue(multipartRequest)
-  }
-
-  fun animateIntent(view: ImageView) {
-    val intent = Intent(this, ImageViewerActivity::class.java)
-    intent.putExtra("intentType", "byteArray")
-    intent.putExtra(
-        "imageByteArray",
-        getFileDataFromDrawable(view.drawable)
-    )
-    val transitionName = getString(
-        string.transition_string
-    )
-
-    val options =
-      ActivityOptionsCompat.makeSceneTransitionAnimation(
-          this,
-          view, // Starting view
-          transitionName    // The String
-      )
-    ActivityCompat.startActivity(this, intent, options.toBundle())
-  }
-
-  fun getFileDataFromDrawable(
-    drawable: Drawable
-  ): ByteArray {
-    val bitmap = (drawable as BitmapDrawable).bitmap
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
-    return byteArrayOutputStream.toByteArray()
   }
 
 }

@@ -6,10 +6,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,23 +16,23 @@ import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
-
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-
-import org.json.JSONObject
-
-import java.util.ArrayList
-import java.util.HashMap
-
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.tecent.student_assessment.R
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.ui.activity.CreatePostQueryDoubtsActivity
 import com.tecent.student_assessment.ui.activity.HomeActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAdapter
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
+import org.json.JSONObject
+import java.util.ArrayList
+import java.util.HashMap
 
 class DoubtsFragment : Fragment() {
     lateinit var homeActivity: HomeActivity
@@ -108,7 +104,8 @@ class DoubtsFragment : Fragment() {
         noofanswerslist = ArrayList()
 
         sharedPreferences = homeActivity.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         val name = sharedPreferences.getString("name", "")
         userid = sharedPreferences.getString("userid", "")
         post_name_with_text.text = "Hi $name Do you want to ask a doubt?"
@@ -119,22 +116,26 @@ class DoubtsFragment : Fragment() {
 
         val userdp = sharedPreferences.getString("userdp", "")
         homeActivity.requestQueue.add<Bitmap>(
-            ExtraFunctions.createImageRequestFromUrl(
-                ExtraFunctions.serverurl + "userdp/" + userdp, profile_image))
+            DataUtils.createImageRequestFromUrl(
+                DataUtils.serverurl + "userdp/" + userdp, profile_image
+            )
+        )
         loadDoubtsPostsFromSpf()
-        if (ExtraFunctions.isNetworkStatusAvailable(homeActivity)) {
-            volleyPostDataRequest()
-        } else {
-            Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-        }
+      if (DataUtils.isNetworkStatusAvailable(homeActivity)) {
+        volleyPostDataRequest()
+      } else {
+        Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT)
+            .show()
+      }
         swipeRefreshLayout.setOnRefreshListener {
-            if (ExtraFunctions.isNetworkStatusAvailable(homeActivity))
-                volleyPostDataRequest()
-            else {
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-                Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-            }
+          if (DataUtils.isNetworkStatusAvailable(homeActivity))
+            volleyPostDataRequest()
+          else {
+            swipeRefreshLayout.isRefreshing = false
+            progressBar.visibility = View.GONE
+            Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT)
+                .show()
+          }
         }
 
         if (isAdded) {
@@ -202,17 +203,18 @@ class DoubtsFragment : Fragment() {
 
     fun volleyPostDataRequest() {
         try {
-            val url = ExtraFunctions.serverurl + "doubtPostsDataAdapter.php"
-            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-                try {
-                    val emp = JSONObject(response)
-                    val result = emp.getString("result")
-                    val spe = sharedPreferences.edit()
-                    spe.putString("doubtresponse", response)
-                    spe.apply()
-                    if (result == "successful") {
+          val url = DataUtils.serverurl + "doubtPostsDataAdapter.php"
+          val stringRequest =
+            object : StringRequest(Method.POST, url, Response.Listener { response ->
+              swipeRefreshLayout.isRefreshing = false
+              progressBar.visibility = View.GONE
+              try {
+                val emp = JSONObject(response)
+                val result = emp.getString("result")
+                val spe = sharedPreferences.edit()
+                spe.putString("doubtresponse", response)
+                spe.apply()
+                if (result == "successful") {
                         useridlist.clear()
                         usernamelist.clear()
                         userdplist.clear()

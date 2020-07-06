@@ -3,14 +3,14 @@ package com.tecent.student_assessment.ui.activity
 import android.annotation.SuppressLint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions.serverurl
+import com.tecent.student_assessment.utils.DataUtils.serverurl
 import kotlinx.android.synthetic.main.activity_dash_board_menu_web_view.dashboard_webview
 import kotlinx.android.synthetic.main.activity_dash_board_menu_web_view.progress_bar_dashboard
 import kotlinx.android.synthetic.main.toolbar_main.toolbar_main

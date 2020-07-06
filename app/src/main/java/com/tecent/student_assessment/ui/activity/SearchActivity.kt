@@ -18,9 +18,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAdapter
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
+import com.tecent.student_assessment.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_search.recyclerView
 import kotlinx.android.synthetic.main.activity_search.recyclerViewDoubtsPosts
 import kotlinx.android.synthetic.main.activity_search.searchView
@@ -63,11 +63,11 @@ class SearchActivity : AppCompatActivity() {
     super.onCreate(savedInstanceState)
     setContentView(layout.activity_search)
     sharedPreferences = getSharedPreferences(
-        ExtraFunctions.sharedPreferencesId,
+        DataUtils.sharedPreferencesId,
         Context.MODE_PRIVATE
     )
     sharedPreferencesLike = getSharedPreferences(
-        ExtraFunctions.sharedPreferencesLikeId,
+        DataUtils.sharedPreferencesLikeId,
         Context.MODE_PRIVATE
     )
     userid = sharedPreferences.getString("userid", "")!!
@@ -128,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
 
   fun getPostsFromServer(searchString: String) {
     try {
-      val url = ExtraFunctions.serverurl + "postsHomeDataAdapterBySearchActivity.php"
+      val url = DataUtils.serverurl + "postsHomeDataAdapterBySearchActivity.php"
       val stringRequest =
         object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
           try {
@@ -247,7 +247,7 @@ class SearchActivity : AppCompatActivity() {
   }
 
   fun getPostsOfDoubtsFromServer(searchString: String) {
-    val url = ExtraFunctions.serverurl + "doubtPostsDataAdapterBySearchActivity.php"
+    val url = DataUtils.serverurl + "doubtPostsDataAdapterBySearchActivity.php"
     val stringRequest =
       object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
         try {

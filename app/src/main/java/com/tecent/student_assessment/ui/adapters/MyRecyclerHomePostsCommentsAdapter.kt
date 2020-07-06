@@ -1,14 +1,6 @@
 package com.tecent.student_assessment.ui.adapters
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -18,8 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cc.cloudist.acplibrary.ACProgressFlower
@@ -34,17 +24,15 @@ import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.R.menu
-import com.tecent.student_assessment.R.string
 import com.tecent.student_assessment.objects.CommentObject
 import com.tecent.student_assessment.ui.activity.CommentsPostHomeActivity
-import com.tecent.student_assessment.ui.activity.ImageViewerActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsAdapter.PostsCommentsHolder
+import com.tecent.student_assessment.utils.DataUtils
+import com.tecent.student_assessment.utils.DataUtils.serverurl
 import com.tecent.student_assessment.utils.ExtraFunctions
-import com.tecent.student_assessment.utils.ExtraFunctions.serverurl
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.btn_reply
 import kotlinx.android.synthetic.main.custom_dialog_comments_reply.editText_reply
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.util.HashMap
 
 @Suppress("UNREACHABLE_CODE")
@@ -93,8 +81,8 @@ class MyRecyclerHomePostsCommentsAdapter(
   ) {
     val commentObject = mCommentObjectArrayList[position]
     mRequestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + commentObject.userDp
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + commentObject.userDp
             , postCommentsHolder.iv_profile_image
         )
     )
@@ -114,8 +102,8 @@ class MyRecyclerHomePostsCommentsAdapter(
       popupMenu.findItem(id.delete_reply).isVisible = false
       popup.setOnMenuItemClickListener { menuItem ->
         when (menuItem.itemId) {
-          id.delete_comment -> if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
-            val url = ExtraFunctions.serverurl + "deleteCommentsOfPosts.php"
+          id.delete_comment -> if (DataUtils.isNetworkStatusAvailable(mContext)) {
+            val url = DataUtils.serverurl + "deleteCommentsOfPosts.php"
             val stringRequest =
               object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                 try {
@@ -155,19 +143,14 @@ class MyRecyclerHomePostsCommentsAdapter(
       popup.show()
     }
     postCommentsHolder.comment_image.setOnClickListener {
-      animateIntent(postCommentsHolder.comment_image)
+      ExtraFunctions(mContext).animateIntent(postCommentsHolder.comment_image)
     }
     postCommentsHolder.comment_text.text = commentObject.commentText
     //long press click copy text
     postCommentsHolder.comment_text.setOnLongClickListener {
-      val cm = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip: ClipData = ClipData.newPlainText(
+      ExtraFunctions(mContext).copyTextToClipboard(
           postCommentsHolder.comment_text.text.toString(), postCommentsHolder.comment_text.text
       )
-      cm.setPrimaryClip(clip)
-      Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
-          .show()
-      return@setOnLongClickListener true
     }
 
     when (commentObject.repliesCount) {
@@ -293,7 +276,7 @@ class MyRecyclerHomePostsCommentsAdapter(
         } else {
           mDialog.show()
           try {
-            val url = ExtraFunctions.serverurl + "PostsCommentsReplyData.php"
+            val url = DataUtils.serverurl + "PostsCommentsReplyData.php"
             val stringRequest =
               object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
                 //                progressBar.setVisibility(View.GONE)
@@ -376,32 +359,6 @@ class MyRecyclerHomePostsCommentsAdapter(
           id.iv_delete_post
       )
     }
-  }
-
-  fun animateIntent(view: ImageView) {
-    val intent = Intent(mContext, ImageViewerActivity::class.java)
-    intent.putExtra("intentType", "byteArray")
-    intent.putExtra(
-        "imageByteArray",
-        getFileDataFromDrawable(mContext, view.drawable)
-    )
-    val transitionName = mContext.getString(
-        string.transition_string
-    )
-    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-        mContext as Activity, view as View, transitionName
-    )
-    ActivityCompat.startActivity(mContext, intent, options.toBundle())
-  }
-
-  fun getFileDataFromDrawable(
-    context: Context,
-    drawable: Drawable
-  ): ByteArray {
-    val bitmap = (drawable as BitmapDrawable).bitmap
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
-    return byteArrayOutputStream.toByteArray()
   }
 
   override fun getItemViewType(position: Int): Int {

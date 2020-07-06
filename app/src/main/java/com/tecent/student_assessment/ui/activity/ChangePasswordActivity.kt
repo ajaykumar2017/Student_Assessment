@@ -4,11 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
@@ -18,10 +18,13 @@ import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_change_password.*
+import com.tecent.student_assessment.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_change_password.btn_submit
-import kotlinx.android.synthetic.main.activity_settings.*
+import kotlinx.android.synthetic.main.activity_change_password.et_confirm_new_password
+import kotlinx.android.synthetic.main.activity_change_password.et_confirm_old_password
+import kotlinx.android.synthetic.main.activity_change_password.et_new_password
+import kotlinx.android.synthetic.main.activity_change_password.et_old_password
+import kotlinx.android.synthetic.main.activity_settings.toolbar_main
 import org.json.JSONObject
 import java.util.HashMap
 
@@ -53,7 +56,8 @@ class ChangePasswordActivity : AppCompatActivity() {
                 .themeColor(Color.WHITE)
                 .fadeColor(Color.BLACK).build()
         sharedPreferences = this.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         val passw:String=sharedPreferences.getString("passw","")!!
         val userid:String=sharedPreferences.getString("userid","")!!
         btn_submit.setOnClickListener {
@@ -70,20 +74,24 @@ class ChangePasswordActivity : AppCompatActivity() {
             }else if (et_new_password.text.toString().trim()!=et_confirm_new_password.text.toString().trim()){
                 Toast.makeText(this, "New Passwords Mismatch!", Toast.LENGTH_SHORT).show()
             }else{
-                if (ExtraFunctions.isNetworkStatusAvailable(this)){
-                    dialog.show()
-                    try {
-                        val url = ExtraFunctions.serverurl + "EditProfile.php"
-                        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
-                            //                progressBar.setVisibility(View.GONE)
-                            try {
-                                val emp = JSONObject(response)
-                                val result = emp.getString("result")
-                                if (result == "successful") {
-                                    Toast.makeText(this, "Password Changed", Toast.LENGTH_SHORT).show()
-                                    val sharedPreferencesEdit = sharedPreferences.edit()
-                                    sharedPreferencesEdit.putString("passw", et_new_password.text.toString().trim())
-                                    sharedPreferencesEdit.apply()
+              if (DataUtils.isNetworkStatusAvailable(this)) {
+                dialog.show()
+                try {
+                  val url = DataUtils.serverurl + "EditProfile.php"
+                  val stringRequest =
+                    object : StringRequest(Method.POST, url, Response.Listener { response ->
+                      //                progressBar.setVisibility(View.GONE)
+                      try {
+                        val emp = JSONObject(response)
+                        val result = emp.getString("result")
+                        if (result == "successful") {
+                          Toast.makeText(this, "Password Changed", Toast.LENGTH_SHORT)
+                              .show()
+                          val sharedPreferencesEdit = sharedPreferences.edit()
+                          sharedPreferencesEdit.putString("passw", et_new_password.text.toString()
+                              .trim()
+                          )
+                          sharedPreferencesEdit.apply()
                                     dialog.dismiss()
                                     finish()
                                 } else {

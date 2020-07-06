@@ -11,27 +11,30 @@ import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import com.google.android.material.snackbar.Snackbar
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.material.snackbar.Snackbar
 import com.tecent.student_assessment.R.color
 import com.tecent.student_assessment.R.layout
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.UploadHelper
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_contact_us.*
+import kotlinx.android.synthetic.main.activity_contact_us.et_post_text
+import kotlinx.android.synthetic.main.activity_contact_us.iv_cancel
+import kotlinx.android.synthetic.main.activity_contact_us.path_image
+import kotlinx.android.synthetic.main.activity_contact_us.tv_btn_post
 import org.json.JSONObject
 import java.io.File
 import java.util.HashMap
@@ -62,7 +65,8 @@ class ContactUsActivity : AppCompatActivity() {
         requestQueue = Volley.newRequestQueue(this)
         fileName = ""
         sharedPreferences = this.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         //on text change
         et_post_text.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(charSequence: CharSequence, i: Int, i1: Int, i2: Int) {}
@@ -87,18 +91,20 @@ class ContactUsActivity : AppCompatActivity() {
             if (et_post_text.text.toString().trim().length < 5) {
                 toast("please write at least 5 characters")
             } else if (!path_image.text.equals("")) {
-                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+                if (DataUtils.isNetworkStatusAvailable(this)) {
                     uploadFileStatus()
                 } else {
                     dialog.dismiss()
                     toast("No internet connection!")
                 }
             } else {
-                if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+                if (DataUtils.isNetworkStatusAvailable(this)) {
                     dialog.show()
                     sendDataHomeToServer(
-                            sharedPreferences.getString("userid", "")!!,
-                            et_post_text.text.toString().replace("'", "\\'"), fileName)
+                        sharedPreferences.getString("userid", "")!!,
+                        et_post_text.text.toString()
+                            .replace("'", "\\'"), fileName
+                    )
                 } else {
                     toast("No internet connection!")
 
@@ -323,7 +329,8 @@ class ContactUsActivity : AppCompatActivity() {
     fun uploadFileStatus() {
         uploadHelper = @SuppressLint("StaticFieldLeak")
         object : UploadHelper(
-            ExtraFunctions.serverurl + "ContactUsFile.php") {
+            DataUtils.serverurl + "ContactUsFile.php"
+        ) {
             override fun onPostExecute(response: String?) {
                 val emp = JSONObject(response)
                 val result = emp.getString("result")
@@ -331,8 +338,11 @@ class ContactUsActivity : AppCompatActivity() {
                     dialog.dismiss()
                     fileName = emp.getString("filename")
                     sendDataHomeToServer(
-                            sharedPreferences.getString("userid", "")!!,
-                            et_post_text.text.toString().trim().replace("'", "\\'"), fileName)
+                        sharedPreferences.getString("userid", "")!!,
+                        et_post_text.text.toString()
+                            .trim()
+                            .replace("'", "\\'"), fileName
+                    )
                 } else {
                     dialog.dismiss()
                     toast("An error has occurred. Please try again.")
@@ -347,17 +357,19 @@ class ContactUsActivity : AppCompatActivity() {
             }
         }
         if (filefullpath.startsWith("/storage/primary/"))
-            filefullpath = filefullpath.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+            filefullpath = filefullpath.replace("/storage/primary/", DataUtils.ROOTMAIN)
 //        toast(filefullpath)
         uploadHelper.execute(filefullpath)
     }
 
     fun sendDataHomeToServer(userid: String, postText: String, fileName: String) {
-        val url = ExtraFunctions.serverurl + "ContactUsData.php"
-        val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener {
-            dialog.dismiss()
-            toast("Error! Please try again later...")
-        }) {
+        val url = DataUtils.serverurl + "ContactUsData.php"
+        val stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response -> jsonParser(response) },
+            Response.ErrorListener {
+                dialog.dismiss()
+                toast("Error! Please try again later...")
+            }) {
             override fun getParams(): Map<String, String> {
                 val MyData = HashMap<String, String>()
                 MyData["userid"] = userid

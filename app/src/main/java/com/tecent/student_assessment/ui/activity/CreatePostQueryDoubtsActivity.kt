@@ -33,7 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.tecent.student_assessment.R.color
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.UploadHelper
 import org.json.JSONObject
 import java.io.File
@@ -83,12 +83,12 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
     )
     requestQueue = Volley.newRequestQueue(this)
     sharedPreferences = this.getSharedPreferences(
-        ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE
+        DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
     )
     val userdp = sharedPreferences.getString("userdp", "")
     requestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + userdp, iv_profile_image
         )
     )
     val name = sharedPreferences.getString("name", "")
@@ -113,7 +113,7 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
       if (postText.trim().length < 5) {
         toast("please write at least 5 characters")
       } else if (!path_image.text.equals("")) {
-        if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+        if (DataUtils.isNetworkStatusAvailable(this)) {
           uploadFileStatus()
         } else {
           dialog.dismiss()
@@ -123,7 +123,7 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
               .show()
         }
       } else {
-        if (ExtraFunctions.isNetworkStatusAvailable(this)) {
+        if (DataUtils.isNetworkStatusAvailable(this)) {
           dialog.show()
           sendDataHomeToServer(
               sharedPreferences.getString("userid", "")!!,
@@ -416,7 +416,7 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
   fun uploadFileStatus() {
     uploadHelper = @SuppressLint("StaticFieldLeak")
     object : UploadHelper(
-        ExtraFunctions.serverurl + "uploadFileDoubts.php"
+        DataUtils.serverurl + "uploadFileDoubts.php"
     ) {
       override fun onPostExecute(response: String) {
         val emp = JSONObject(response)
@@ -442,7 +442,7 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
       }
     }
     if (filefullpath.startsWith("/storage/primary/"))
-      filefullpath = filefullpath.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+      filefullpath = filefullpath.replace("/storage/primary/", DataUtils.ROOTMAIN)
     uploadHelper.execute(filefullpath)
   }
 
@@ -451,7 +451,7 @@ class CreatePostQueryDoubtsActivity : AppCompatActivity() {
     postText: String,
     fileName: String
   ) {
-    val url = ExtraFunctions.serverurl + "uploadFileDoubtsData.php"
+    val url = DataUtils.serverurl + "uploadFileDoubtsData.php"
     val stringRequest = object : StringRequest(
         Method.POST, url, Response.Listener { response -> jsonParser(response) },
         Response.ErrorListener {

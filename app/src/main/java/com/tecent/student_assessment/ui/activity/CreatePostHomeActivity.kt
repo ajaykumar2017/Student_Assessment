@@ -32,7 +32,7 @@ import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.ui.fragments.HomeFragment
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.UploadHelper
 import kotlinx.android.synthetic.main.activity_create_post_home.btn_post
 import kotlinx.android.synthetic.main.activity_create_post_home.chipGroup
@@ -363,7 +363,7 @@ class CreatePostHomeActivity : AppCompatActivity() {
   private fun uploadFileStatus() {
     uploadHelper = @SuppressLint("StaticFieldLeak")
     object : UploadHelper(
-        ExtraFunctions.serverurl + "uploadFileHome.php"
+        DataUtils.serverurl + "uploadFileHome.php"
     ) {
       override fun onPostExecute(response: String) {
         val emp = JSONObject(response)
@@ -391,7 +391,7 @@ class CreatePostHomeActivity : AppCompatActivity() {
     if (filefullpath.startsWith("/storage/primary/"))
       filefullpath = filefullpath.replace(
           "/storage/primary/",
-          ExtraFunctions.ROOTMAIN
+          DataUtils.ROOTMAIN
       )
     Log.d("filepath", filefullpath)
 //        toast(filefullpath)
@@ -404,7 +404,7 @@ class CreatePostHomeActivity : AppCompatActivity() {
     selectedSubject: String,
     fileName: String
   ) {
-    val url = ExtraFunctions.serverurl + "uploadFileHomeData.php"
+    val url = DataUtils.serverurl + "uploadFileHomeData.php"
     val stringRequest = object : StringRequest(
         Method.POST, url, Response.Listener { response -> jsonParser(response) },
         Response.ErrorListener {

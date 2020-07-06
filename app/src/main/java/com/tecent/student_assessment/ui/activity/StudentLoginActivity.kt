@@ -6,30 +6,26 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import android.text.method.PasswordTransformationMethod
 import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
+import cc.cloudist.acplibrary.ACProgressConstant
+import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-
-import org.json.JSONObject
-
-import java.util.HashMap
-
-import cc.cloudist.acplibrary.ACProgressConstant
-import cc.cloudist.acplibrary.ACProgressFlower
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_student_login.*
+import com.tecent.student_assessment.utils.DataUtils
+import kotlinx.android.synthetic.main.activity_student_login.et_password
+import org.json.JSONObject
+import java.util.HashMap
 
 class StudentLoginActivity : AppCompatActivity() {
 
@@ -83,17 +79,21 @@ class StudentLoginActivity : AppCompatActivity() {
         val email = emailId.text.toString().trim { it <= ' ' }
         val passw = password.text.toString().trim { it <= ' ' }
         if (!(email == "" || passw == "")) {
-            if (ExtraFunctions.isNetworkStatusAvailable(this@StudentLoginActivity)) {
-                try {
-                    dialog.show()
-                    volleyLoginData(email, passw)
-                } catch (e: Exception) {
-                    dialog.dismiss()
-                    Toast.makeText(this@StudentLoginActivity, "Error! Please try again later.", Toast.LENGTH_SHORT).show()
-                }
+          if (DataUtils.isNetworkStatusAvailable(this@StudentLoginActivity)) {
+            try {
+              dialog.show()
+              volleyLoginData(email, passw)
+            } catch (e: Exception) {
+              dialog.dismiss()
+              Toast.makeText(
+                  this@StudentLoginActivity, "Error! Please try again later.", Toast.LENGTH_SHORT
+              )
+                  .show()
+            }
 
-            } else {
-                Toast.makeText(this@StudentLoginActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
+          } else {
+            Toast.makeText(this@StudentLoginActivity, "No Internet Connection!", Toast.LENGTH_SHORT)
+                .show()
             }
         } else {
             Toast.makeText(this, "Invalid Credientials", Toast.LENGTH_SHORT).show()
@@ -103,17 +103,23 @@ class StudentLoginActivity : AppCompatActivity() {
 
     //google volley part start
     fun volleyLoginData(emailValue: String, passwordValue: String) {
-        val url = ExtraFunctions.serverurl + "studentLoginVerify.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> jsonParser(response, emailValue, passwordValue) }, Response.ErrorListener {
+      val url = DataUtils.serverurl + "studentLoginVerify.php"
+      val stringRequest = object : StringRequest(
+          Request.Method.POST, url,
+          Response.Listener { response -> jsonParser(response, emailValue, passwordValue) },
+          Response.ErrorListener {
             dialog.dismiss()
-            Toast.makeText(this@StudentLoginActivity, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
-        }) {
-            override fun getParams(): Map<String, String> {
-                val MyData = HashMap<String, String>()
-                MyData["email"] = emailValue
-                MyData["passw"] = passwordValue
-                return MyData
-            }
+            Toast.makeText(
+                this@StudentLoginActivity, "Error! Please try again later...", Toast.LENGTH_SHORT
+            )
+                .show()
+          }) {
+        override fun getParams(): Map<String, String> {
+          val MyData = HashMap<String, String>()
+          MyData["email"] = emailValue
+          MyData["passw"] = passwordValue
+          return MyData
+        }
         }
         requestQueue.add(stringRequest)
 

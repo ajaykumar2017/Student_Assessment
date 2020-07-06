@@ -4,11 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSmoothScroller
-import androidx.recyclerview.widget.RecyclerView
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
@@ -17,22 +12,23 @@ import android.widget.ProgressBar
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.widget.Toast
-
-import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
-
-import org.json.JSONObject
-
-import java.util.ArrayList
-import java.util.HashMap
-
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
 import com.tecent.student_assessment.R
 import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.ui.activity.HomeActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
+import org.json.JSONObject
+import java.util.ArrayList
+import java.util.HashMap
 
 class HomeFragment : Fragment() {
     lateinit var homeActivity: HomeActivity
@@ -79,9 +75,11 @@ class HomeFragment : Fragment() {
         commentslist = ArrayList()
 
         sharedPreferences = homeActivity.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         sharedPreferencesLike = homeActivity.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesLikeId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesLikeId, Context.MODE_PRIVATE
+        )
         userid = sharedPreferences.getString("userid", "")
         swipeRefreshLayout = view.findViewById<View>(
             R.id.swipeRefreshLayout
@@ -117,19 +115,21 @@ class HomeFragment : Fragment() {
 
         loadPostsFromSpf()
         try {
-            if (ExtraFunctions.isNetworkStatusAvailable(homeActivity)) {
-                volleyPostDataRequest()
-            } else {
-                Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-            }
+          if (DataUtils.isNetworkStatusAvailable(homeActivity)) {
+            volleyPostDataRequest()
+          } else {
+            Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT)
+                .show()
+          }
             swipeRefreshLayout.setOnRefreshListener {
-                if (ExtraFunctions.isNetworkStatusAvailable(homeActivity))
-                    volleyPostDataRequest()
-                else {
-                    swipeRefreshLayout.isRefreshing = false
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
-                }
+              if (DataUtils.isNetworkStatusAvailable(homeActivity))
+                volleyPostDataRequest()
+              else {
+                swipeRefreshLayout.isRefreshing = false
+                progressBar.visibility = View.GONE
+                Toast.makeText(homeActivity, "No Internet Connection!", Toast.LENGTH_SHORT)
+                    .show()
+              }
             }
         } catch (e: Exception) {
             Toast.makeText(homeActivity, e.toString(), Toast.LENGTH_SHORT).show()
@@ -207,17 +207,18 @@ class HomeFragment : Fragment() {
     fun volleyPostDataRequest() {
         swipeRefreshLayout.isRefreshing = true
         try {
-            val url = ExtraFunctions.serverurl + "postsHomeDataAdapter.php"
-            val stringRequest = object : StringRequest(Method.POST, url, Response.Listener { response ->
-                swipeRefreshLayout.isRefreshing = false
-                progressBar.visibility = View.GONE
-                try {
-                    val emp = JSONObject(response)
-                    val result = emp.getString("result")
-                    val spe = sharedPreferences.edit()
-                    spe.putString("homeresponse", response)
-                    spe.apply()
-                    if (result == "successful") {
+          val url = DataUtils.serverurl + "postsHomeDataAdapter.php"
+          val stringRequest =
+            object : StringRequest(Method.POST, url, Response.Listener { response ->
+              swipeRefreshLayout.isRefreshing = false
+              progressBar.visibility = View.GONE
+              try {
+                val emp = JSONObject(response)
+                val result = emp.getString("result")
+                val spe = sharedPreferences.edit()
+                spe.putString("homeresponse", response)
+                spe.apply()
+                if (result == "successful") {
                         useridlist.clear()
                         usernamelist.clear()
                         userdplist.clear()

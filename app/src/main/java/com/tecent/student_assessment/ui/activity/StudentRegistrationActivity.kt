@@ -5,9 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.os.Handler
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.method.PasswordTransformationMethod
 import android.view.MotionEvent
 import android.view.View
@@ -19,25 +18,22 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Spinner
 import android.widget.Toast
-
+import androidx.appcompat.app.AppCompatActivity
+import cc.cloudist.acplibrary.ACProgressConstant
+import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-
-import org.json.JSONObject
-
-import java.util.HashMap
-
-import cc.cloudist.acplibrary.ACProgressConstant
-import cc.cloudist.acplibrary.ACProgressFlower
 import com.tecent.student_assessment.R.array
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
-import com.tecent.student_assessment.utils.ExtraFunctions.getSmallBranch
+import com.tecent.student_assessment.utils.DataUtils
+import com.tecent.student_assessment.utils.DataUtils.getSmallBranch
+import org.json.JSONObject
+import java.util.HashMap
 
 class StudentRegistrationActivity : AppCompatActivity() {
 
@@ -191,48 +187,84 @@ class StudentRegistrationActivity : AppCompatActivity() {
             email = etEmail.text.toString()
             createPassword = etCreatePassword.text.toString()
             confirmPassword = etConfirmPassword.text.toString()
-            if (name == "" || email == "" || createPassword == "" || confirmPassword == "" ||
-                    rgGender.checkedRadioButtonId == -1 || spinnerBranch.selectedItem.toString().trim { it <= ' ' } == "Select Branch" ||
-                    spinnerSemester.selectedItem.toString().trim { it <= ' ' } == "Select Semester" || spinnerCollege.selectedItem.toString().trim { it <= ' ' } == "Select College" ||
-                    spinnerUniversity.selectedItem.toString().trim { it <= ' ' } == "Select University") {
-                Toast.makeText(this@StudentRegistrationActivity, "Please fill out all mandatary details!", Toast.LENGTH_SHORT).show()
-            } else if (!ExtraFunctions.isValidEmailId(email)) {
-                Toast.makeText(this@StudentRegistrationActivity, "Please enter valid email id!", Toast.LENGTH_SHORT).show()
-            } else if (createPassword.length < 8) {
-                Toast.makeText(this@StudentRegistrationActivity, "Password must be at least 8 characters long!", Toast.LENGTH_SHORT).show()
-            } else if (!ExtraFunctions.isValidEmailId(email.trim { it <= ' ' })) {
-                Toast.makeText(this@StudentRegistrationActivity, "Invalid email address!", Toast.LENGTH_SHORT).show()
-            } else if (createPassword != confirmPassword) {
-                Toast.makeText(this@StudentRegistrationActivity, "Passwords don't match!", Toast.LENGTH_SHORT).show()
-            } else if (!checkBox.isChecked) {
-                Toast.makeText(this@StudentRegistrationActivity, "Please check the box!", Toast.LENGTH_SHORT).show()
-            } else {
-                //                    Toast.makeText(StudentRegistration.this, "All are filled", Toast.LENGTH_SHORT).show();
+          if (name == "" || email == "" || createPassword == "" || confirmPassword == "" ||
+              rgGender.checkedRadioButtonId == -1 || spinnerBranch.selectedItem.toString()
+                  .trim { it <= ' ' } == "Select Branch" ||
+              spinnerSemester.selectedItem.toString()
+                  .trim { it <= ' ' } == "Select Semester" || spinnerCollege.selectedItem.toString()
+                  .trim { it <= ' ' } == "Select College" ||
+              spinnerUniversity.selectedItem.toString()
+                  .trim { it <= ' ' } == "Select University"
+          ) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Please fill out all mandatary details!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+          } else if (!DataUtils.isValidEmailId(email)) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Please enter valid email id!", Toast.LENGTH_SHORT
+            )
+                .show()
+          } else if (createPassword.length < 8) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Password must be at least 8 characters long!",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+          } else if (!DataUtils.isValidEmailId(email.trim { it <= ' ' })) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Invalid email address!", Toast.LENGTH_SHORT
+            )
+                .show()
+          } else if (createPassword != confirmPassword) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Passwords don't match!", Toast.LENGTH_SHORT
+            )
+                .show()
+          } else if (!checkBox.isChecked) {
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Please check the box!", Toast.LENGTH_SHORT
+            )
+                .show()
+          } else {
+            //                    Toast.makeText(StudentRegistration.this, "All are filled", Toast.LENGTH_SHORT).show();
 
-                val nameValue = name
-                val emailValue = email
+            val nameValue = name
+            val emailValue = email
                 val passwordValue = createPassword
                 val selectedIdRadio = rgGender.checkedRadioButtonId
                 // find the radiobutton by returned id
                 val radioButton = findViewById<View>(selectedIdRadio) as RadioButton
                 val genderValue = radioButton.text.toString()
-                val branchValue = getSmallBranch(spinnerBranch.selectedItem.toString())
-                val semesterValue = ExtraFunctions.getSmallSemester(spinnerSemester.selectedItem.toString())
-                val collegeValue = spinnerCollege.selectedItem.toString()
-                val universityValue = ExtraFunctions.getSmallUniversity(spinnerUniversity.selectedItem.toString())
+            val branchValue = getSmallBranch(spinnerBranch.selectedItem.toString())
+            val semesterValue = DataUtils.getSmallSemester(spinnerSemester.selectedItem.toString())
+            val collegeValue = spinnerCollege.selectedItem.toString()
+            val universityValue =
+              DataUtils.getSmallUniversity(spinnerUniversity.selectedItem.toString())
 
                 //Toast.makeText(StudentRegistration.this, nameValue+" "+emailValue+" "+passwordValue+" "+" "+gender+" "+branchValue+" "+semesterValue+" "+collegeValue+" "+" "+universityValue, Toast.LENGTH_SHORT).show();
-                if (ExtraFunctions.isNetworkStatusAvailable(this@StudentRegistrationActivity)) {
-                    try {
-                        dialog.show()
-                        volleytest(nameValue, emailValue, passwordValue, genderValue, branchValue, semesterValue, collegeValue, universityValue)
-                    } catch (e: Exception) {
-                        dialog.dismiss()
-                        Toast.makeText(this@StudentRegistrationActivity, "Error! Please try again later.", Toast.LENGTH_SHORT).show()
-                    }
+            if (DataUtils.isNetworkStatusAvailable(this@StudentRegistrationActivity)) {
+              try {
+                dialog.show()
+                volleytest(
+                    nameValue, emailValue, passwordValue, genderValue, branchValue, semesterValue,
+                    collegeValue, universityValue
+                )
+              } catch (e: Exception) {
+                dialog.dismiss()
+                Toast.makeText(
+                    this@StudentRegistrationActivity, "Error! Please try again later.",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+              }
 
-                } else {
-                    Toast.makeText(this@StudentRegistrationActivity, "No Internet Connection!", Toast.LENGTH_SHORT).show()
+            } else {
+              Toast.makeText(
+                  this@StudentRegistrationActivity, "No Internet Connection!", Toast.LENGTH_SHORT
+              )
+                  .show()
                 }
 
             }
@@ -242,17 +274,23 @@ class StudentRegistrationActivity : AppCompatActivity() {
     }
 
     fun volleytest(nameValue: String, emailValue: String, passwordValue: String, genderValue: String, branchValue: String, semesterValue: String, collegeValue: String, universityValue: String) {
-        val url = ExtraFunctions.serverurl + "studentRegistrationData.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response -> jsonParser(response) }, Response.ErrorListener {
+      val url = DataUtils.serverurl + "studentRegistrationData.php"
+      val stringRequest = object : StringRequest(
+          Request.Method.POST, url, Response.Listener { response -> jsonParser(response) },
+          Response.ErrorListener {
             dialog.dismiss()
-            Toast.makeText(this@StudentRegistrationActivity, "Error! Please try again later...", Toast.LENGTH_SHORT).show()
-        }) {
-            override fun getParams(): Map<String, String> {
-                val MyData = HashMap<String, String>()
-                MyData["name"] = nameValue
-                MyData["email"] = emailValue
-                MyData["passw"] = passwordValue
-                MyData["gender"] = genderValue
+            Toast.makeText(
+                this@StudentRegistrationActivity, "Error! Please try again later...",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+          }) {
+        override fun getParams(): Map<String, String> {
+          val MyData = HashMap<String, String>()
+          MyData["name"] = nameValue
+          MyData["email"] = emailValue
+          MyData["passw"] = passwordValue
+          MyData["gender"] = genderValue
                 MyData["branch"] = branchValue
                 MyData["semester"] = semesterValue
                 MyData["college"] = collegeValue

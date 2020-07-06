@@ -34,8 +34,8 @@ import com.tecent.student_assessment.R.layout
 import com.tecent.student_assessment.objects.AnswerObject
 import com.tecent.student_assessment.ui.adapters.MyRecyclerDoubtsPostsAnswersAdapter
 import com.tecent.student_assessment.utils.AppHelper
-import com.tecent.student_assessment.utils.ExtraFunctions
-import com.tecent.student_assessment.utils.ExtraFunctions.serverurl
+import com.tecent.student_assessment.utils.DataUtils
+import com.tecent.student_assessment.utils.DataUtils.serverurl
 import com.tecent.student_assessment.utils.VolleyMultipartRequest
 import com.tecent.student_assessment.utils.VolleySingleton
 import com.theartofdev.edmodo.cropper.CropImage
@@ -103,7 +103,7 @@ class AnswersDoubtsPostsDoubtsActivity : AppCompatActivity() {
         id.tv_btn_post_comment
     )
     requestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
+        DataUtils.createImageRequestFromUrl(
             serverurl + "userdp/" + userDp, imageView_user_image
         )
     )
@@ -159,7 +159,7 @@ class AnswersDoubtsPostsDoubtsActivity : AppCompatActivity() {
       commentText = editText.text.toString()
           .replace("'", "\\'")
       if (path.startsWith("/storage/primary/")) {
-        path = path.replace("/storage/primary/", ExtraFunctions.ROOTMAIN)
+        path = path.replace("/storage/primary/", DataUtils.ROOTMAIN)
       }
       val file = File(path)
       when {
@@ -181,7 +181,7 @@ class AnswersDoubtsPostsDoubtsActivity : AppCompatActivity() {
     volleyAnswerDataRequest(postDoubtId)
 
     swipeRefreshLayout.setOnRefreshListener {
-      if (ExtraFunctions.isNetworkStatusAvailable(this))
+      if (DataUtils.isNetworkStatusAvailable(this))
         volleyAnswerDataRequest(postDoubtId)
       else {
         swipeRefreshLayout.isRefreshing = false

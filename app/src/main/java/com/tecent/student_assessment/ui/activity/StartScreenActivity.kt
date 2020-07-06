@@ -1,24 +1,24 @@
 package com.tecent.student_assessment.ui.activity
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
-import android.os.Bundle
-import android.os.Handler
-import android.app.Activity
-import android.os.Build
 import android.content.pm.PackageManager
 import android.graphics.Color
-import androidx.core.app.ActivityCompat
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
+import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
 
 class StartScreenActivity : AppCompatActivity() {
 
@@ -96,9 +96,9 @@ class StartScreenActivity : AppCompatActivity() {
                                 if (url.contains("sas.a3creators.co.in/StudentAssessment/post")) {
                                     val indexOfId = url.indexOf("id=")
                                     val postId = url.substring(indexOfId + 3)
-                                    if (ExtraFunctions.isValidPostId(postId)) {
-                                        getPostFromServer(postId)
-                                    }
+                                  if (DataUtils.isValidPostId(postId)) {
+                                    getPostFromServer(postId)
+                                  }
                                 } else {
                                     moveForwardNormal()
                                 }
@@ -108,9 +108,9 @@ class StartScreenActivity : AppCompatActivity() {
                                 if (url.contains("sas.a3creators.co.in/StudentAssessment/post")) {
                                     val indexOfId = url.indexOf("id=")
                                     val postId = url.substring(indexOfId + 3)
-                                    if (ExtraFunctions.isValidPostId(postId)) {
-                                        getPostFromServer(postId)
-                                    }
+                                  if (DataUtils.isValidPostId(postId)) {
+                                    getPostFromServer(postId)
+                                  }
                                 } else {
                                     moveForwardNormal()
                                 }
@@ -128,9 +128,9 @@ class StartScreenActivity : AppCompatActivity() {
                         if (url.contains("sas.a3creators.co.in/StudentAssessment/post")) {
                             val indexOfId = url.indexOf("id=")
                             val postId = url.substring(indexOfId + 3)
-                            if (ExtraFunctions.isValidPostId(postId)) {
-                                getPostFromServer(postId)
-                            }
+                          if (DataUtils.isValidPostId(postId)) {
+                            getPostFromServer(postId)
+                          }
                         } else {
                             Log.d("iiii", "2")
                             moveForwardNormal()

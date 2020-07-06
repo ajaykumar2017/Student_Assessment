@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.method.PasswordTransformationMethod
@@ -14,6 +13,7 @@ import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.RequestQueue
@@ -23,9 +23,15 @@ import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
-import kotlinx.android.synthetic.main.activity_forget_password.*
-import kotlinx.android.synthetic.main.toolbar_main.*
+import com.tecent.student_assessment.utils.DataUtils
+import kotlinx.android.synthetic.main.activity_forget_password.btnRequestOtp
+import kotlinx.android.synthetic.main.activity_forget_password.btnSubmit
+import kotlinx.android.synthetic.main.activity_forget_password.btnVerifyOtp
+import kotlinx.android.synthetic.main.activity_forget_password.etConfirmPassword
+import kotlinx.android.synthetic.main.activity_forget_password.etEmail
+import kotlinx.android.synthetic.main.activity_forget_password.etOTP
+import kotlinx.android.synthetic.main.activity_forget_password.etPassword
+import kotlinx.android.synthetic.main.toolbar_main.toolbar_main
 import org.json.JSONObject
 
 class ForgetPasswordActivity : AppCompatActivity() {
@@ -59,8 +65,9 @@ class ForgetPasswordActivity : AppCompatActivity() {
         }
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT  //Prevent landscape mode
         sharedPreferences = getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId,
-                Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId,
+            Context.MODE_PRIVATE
+        )
         dialog = ACProgressFlower.Builder(this)
                 .direction(ACProgressConstant.DIRECT_CLOCKWISE)
                 .themeColor(Color.BLACK).text("Please Wait..")
@@ -118,19 +125,19 @@ class ForgetPasswordActivity : AppCompatActivity() {
 
 
     fun requestOTP(view: View){
-        if (ExtraFunctions.isValidEmailId(etEmail.text.toString())){
-            dialog.show()
-            val url = ExtraFunctions.serverurl + "checkEmail.php" // <----enter your post url here
-            val stringRequest = object : StringRequest(
-                    Method.POST, url, Response.Listener { response->
-                dialog.dismiss()
-                try {
-                    val emp = JSONObject(response)
-                    when(emp.getString("result")){
-                        "successful"->{
-                            otp=emp.getString("otp")
-                            etEmail.isEnabled=false
-                            btnRequestOtp.text="Resend OTP"
+      if (DataUtils.isValidEmailId(etEmail.text.toString())) {
+        dialog.show()
+        val url = DataUtils.serverurl + "checkEmail.php" // <----enter your post url here
+        val stringRequest = object : StringRequest(
+            Method.POST, url, Response.Listener { response ->
+          dialog.dismiss()
+          try {
+            val emp = JSONObject(response)
+            when (emp.getString("result")) {
+              "successful" -> {
+                otp = emp.getString("otp")
+                etEmail.isEnabled = false
+                btnRequestOtp.text = "Resend OTP"
                             etOTP.animate().translationY(0f)
                             btnVerifyOtp.animate().translationY(0f)
                         }
@@ -186,17 +193,19 @@ class ForgetPasswordActivity : AppCompatActivity() {
             makeToast("Password Mismatch",Toast.LENGTH_LONG)
         }else{
             dialog.show()
-            val url = ExtraFunctions.serverurl + "changePassword.php" // <----enter your post url here
-            val stringRequest = object : StringRequest(
-                    Method.POST, url, Response.Listener { response->
-                dialog.dismiss()
-                try {
-                    val emp = JSONObject(response)
-                    when(emp.getString("result")){
-                        "successful"->{
-                            makeToast("Password changed successfully.", Toast.LENGTH_LONG)
-                            var intent1: Intent = Intent(this,
-                                StudentLoginActivity::class.java)
+          val url = DataUtils.serverurl + "changePassword.php" // <----enter your post url here
+          val stringRequest = object : StringRequest(
+              Method.POST, url, Response.Listener { response ->
+            dialog.dismiss()
+            try {
+              val emp = JSONObject(response)
+              when (emp.getString("result")) {
+                "successful" -> {
+                  makeToast("Password changed successfully.", Toast.LENGTH_LONG)
+                  var intent1: Intent = Intent(
+                      this,
+                      StudentLoginActivity::class.java
+                  )
                             startActivity(intent1)
                             finish()
                         }

@@ -4,9 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -35,8 +32,8 @@ import com.tecent.student_assessment.ui.fragments.DashboardFragment
 import com.tecent.student_assessment.ui.fragments.DoubtsFragment
 import com.tecent.student_assessment.ui.fragments.HomeFragment
 import com.tecent.student_assessment.ui.fragments.TestSeriesFragment
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.ExtraFunctions
-import java.io.ByteArrayOutputStream
 import java.util.Locale
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -91,7 +88,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     requestQueue = Volley.newRequestQueue(this)
     fab = findViewById(id.fab_post)
     sharedPreferences = this.getSharedPreferences(
-        ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE
+        DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
     )
     sharedPreferencesLike = this.getSharedPreferences("postLikes", Context.MODE_PRIVATE)
     val name = sharedPreferences.getString("name", "")
@@ -103,8 +100,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     etSearch = findViewById(id.etSearch)
     menuBtn.setOnClickListener { drawerLayout!!.openDrawer(Gravity.LEFT) }
     requestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + userdp, userProfileImage
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + userdp, userProfileImage
         )
     )
 
@@ -133,8 +130,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     navHeaderTextViewName.text = name!!.toUpperCase(Locale.ROOT)
     navHeaderTextViewEmail.text = email
     requestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + userdp, navHeaderImageView
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + userdp, navHeaderImageView
         )
     )
     //Floating Action Button Listener
@@ -143,40 +140,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
       startActivity(fIntent)
     }
     navHeaderImageView.setOnClickListener {
-      animateIntent(navHeaderImageView)
+      ExtraFunctions(this).animateIntent(navHeaderImageView)
     }
     userProfileImage.setOnClickListener {
-      animateIntent(userProfileImage)
+      ExtraFunctions(this).animateIntent(userProfileImage)
     }
     Handler().postDelayed({
       etSearch.text = resources.getString(string.search_android)
     }, 10000)
 
-  }
-
-  private fun animateIntent(view: ImageView) {
-    val intent = Intent(this, ImageViewerActivity::class.java)
-    intent.putExtra("intentType", "byteArray")
-    intent.putExtra(
-        "imageByteArray",
-        getFileDataFromDrawable(view.drawable)
-    )
-    val transitionName = getString(string.transition_string)
-
-    val options =
-      ActivityOptionsCompat.makeSceneTransitionAnimation(
-          this,
-          view, // Starting view
-          transitionName    // The String
-      )
-    ActivityCompat.startActivity(this, intent, options.toBundle())
-  }
-
-  fun getFileDataFromDrawable(drawable: Drawable): ByteArray {
-    val bitmap = (drawable as BitmapDrawable).bitmap
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream)
-    return byteArrayOutputStream.toByteArray()
   }
 
   override fun onOptionsItemSelected(item: MenuItem): Boolean {

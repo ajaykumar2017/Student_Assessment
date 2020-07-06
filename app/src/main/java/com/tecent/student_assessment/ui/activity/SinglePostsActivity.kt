@@ -7,12 +7,12 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cc.cloudist.acplibrary.ACProgressConstant
 import cc.cloudist.acplibrary.ACProgressFlower
 import com.android.volley.Request
@@ -22,15 +22,18 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
-import com.tecent.student_assessment.objects.CommentObject
-import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsForSingleActivityAdapter
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.objects.CommentObject
+import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsCommentsForSingleActivityAdapter
+import com.tecent.student_assessment.utils.DataUtils
 import kotlinx.android.synthetic.main.activity_profile.iv_profile_image
-import kotlinx.android.synthetic.main.activity_single_posts.*
-import kotlinx.android.synthetic.main.toolbar_main.*
+import kotlinx.android.synthetic.main.activity_single_posts.iv_datetime_branch_subject
+import kotlinx.android.synthetic.main.activity_single_posts.iv_post_image
+import kotlinx.android.synthetic.main.activity_single_posts.iv_post_text
+import kotlinx.android.synthetic.main.activity_single_posts.ivusername
+import kotlinx.android.synthetic.main.toolbar_main.toolbar_main
 import org.json.JSONObject
 import java.util.HashMap
 
@@ -59,7 +62,8 @@ class SinglePostsActivity : AppCompatActivity() {
             finish()
         })
         sharedPreferences = this.getSharedPreferences(
-            ExtraFunctions.sharedPreferencesId, Context.MODE_PRIVATE)
+            DataUtils.sharedPreferencesId, Context.MODE_PRIVATE
+        )
         val intent = intent
         val postid:String=intent.getStringExtra("postid")
         requestQueue = Volley.newRequestQueue(this)
@@ -88,33 +92,42 @@ class SinglePostsActivity : AppCompatActivity() {
 
     fun volleySinglePostDataRequest(postid: String)
     {
-        val url = ExtraFunctions.serverurl + "SinglePostsData.php"
-        val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
-            try {
-                val emp = JSONObject(response)
-                val userdp:String=emp.getString("userdp")
-                val username:String=emp.getString("name")
-                val userbranch:String=emp.getString("branch")
-                val userPostTime: String = emp.getString("posttime")
-                val userPostSubject: String = emp.getString("subject")
-                val userPostText: String = emp.getString("posttext")
-                val userfilename: String = emp.getString("filename")
+      val url = DataUtils.serverurl + "SinglePostsData.php"
+      val stringRequest =
+        object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+          try {
+            val emp = JSONObject(response)
+            val userdp: String = emp.getString("userdp")
+            val username: String = emp.getString("name")
+            val userbranch: String = emp.getString("branch")
+            val userPostTime: String = emp.getString("posttime")
+            val userPostSubject: String = emp.getString("subject")
+            val userPostText: String = emp.getString("posttext")
+            val userfilename: String = emp.getString("filename")
                 requestQueue.add<Bitmap>(
-                    ExtraFunctions.createImageRequestFromUrl(
-                        ExtraFunctions.serverurl + "userdp/" + userdp, iv_profile_image))
+                    DataUtils.createImageRequestFromUrl(
+                        DataUtils.serverurl + "userdp/" + userdp, iv_profile_image
+                    )
+                )
                 ivusername.setText(username)
                 iv_datetime_branch_subject.setText(userPostTime + "  " + "\u2022" + " " + userbranch.toUpperCase() + "  " + "\u2022" + " " + userPostSubject)
                 iv_post_text.setText(userPostText)
                 if (userfilename != "") {
                     if (userfilename.substring(userfilename.lastIndexOf('.') + 1) == "pdf" || userfilename.substring(userfilename.lastIndexOf('.') + 1) == "PDF") {
                         requestQueue.add(
-                            ExtraFunctions.createImageRequestFromUrl(
-                                ExtraFunctions.serverurl +
-                                "posts/pdfthumbnail/" + userfilename.replace(userfilename.substring(userfilename.lastIndexOf('.') + 1), "") + "jpg", iv_post_image))
+                            DataUtils.createImageRequestFromUrl(
+                                DataUtils.serverurl +
+                                    "posts/pdfthumbnail/" + userfilename.replace(
+                                    userfilename.substring(userfilename.lastIndexOf('.') + 1), ""
+                                ) + "jpg", iv_post_image
+                            )
+                        )
                     } else {
                         requestQueue.add(
-                            ExtraFunctions.createImageRequestFromUrl(
-                                ExtraFunctions.serverurl + "posts/" + userfilename, iv_post_image))
+                            DataUtils.createImageRequestFromUrl(
+                                DataUtils.serverurl + "posts/" + userfilename, iv_post_image
+                            )
+                        )
                     }
                 } else {
                     iv_post_image.setVisibility(View.GONE)
@@ -136,17 +149,18 @@ class SinglePostsActivity : AppCompatActivity() {
 
     fun volleyCommentDataRequest(postid:String){
         try {
-            val url = ExtraFunctions.serverurl + "commentsPostsDataAdapter.php"
-            val stringRequest = object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
+          val url = DataUtils.serverurl + "commentsPostsDataAdapter.php"
+          val stringRequest =
+            object : StringRequest(Request.Method.POST, url, Response.Listener { response ->
 //                progressBar.setVisibility(View.GONE)
-                try {
-                    val emp = JSONObject(response)
-                    val result = emp.getString("result")
-                    if (result == "successful") {
-                        val json = emp.getString("commentList")
-                        val builder = GsonBuilder()
-                        val gson = builder.create()
-                        val commentObjectArrayList:ArrayList<CommentObject> = gson.fromJson(
+              try {
+                val emp = JSONObject(response)
+                val result = emp.getString("result")
+                if (result == "successful") {
+                  val json = emp.getString("commentList")
+                  val builder = GsonBuilder()
+                  val gson = builder.create()
+                  val commentObjectArrayList: ArrayList<CommentObject> = gson.fromJson(
                                 json,
                                 object : TypeToken<List<CommentObject>>() {
                                 }.type

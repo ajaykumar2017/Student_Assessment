@@ -5,15 +5,15 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.RequestQueue
 import com.android.volley.Response.ErrorListener
 import com.android.volley.Response.Listener
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions
+import com.tecent.student_assessment.utils.DataUtils
 import org.json.JSONObject
 import java.util.HashMap
 
@@ -36,7 +36,7 @@ class SetUpActivity : AppCompatActivity() {
     val email = sharedPreferences.getString("email", "")!!
     val password = sharedPreferences.getString("passw", "")!!
     //volley part start
-    val url = ExtraFunctions.serverurl + "studentLoginData.php"
+    val url = DataUtils.serverurl + "studentLoginData.php"
     val stringRequest: StringRequest = object : StringRequest(
         Method.POST, url,
         Listener { response ->

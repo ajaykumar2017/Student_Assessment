@@ -1,15 +1,9 @@
 package com.tecent.student_assessment.ui.adapters
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Handler
 import android.view.LayoutInflater
@@ -22,8 +16,6 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -39,16 +31,14 @@ import com.tecent.student_assessment.R
 import com.tecent.student_assessment.R.color
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.R.string
 import com.tecent.student_assessment.ui.activity.CommentsPostHomeActivity
 import com.tecent.student_assessment.ui.activity.ImagePdfWebViewActivity
-import com.tecent.student_assessment.ui.activity.ImageViewerActivity
 import com.tecent.student_assessment.ui.activity.ProfileActivity
 import com.tecent.student_assessment.ui.activity.SinglePostsActivity
 import com.tecent.student_assessment.ui.adapters.MyRecyclerHomePostsAdapter.HomePostsHolder
+import com.tecent.student_assessment.utils.DataUtils
 import com.tecent.student_assessment.utils.ExtraFunctions
 import org.json.JSONObject
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.util.ArrayList
 import java.util.HashMap
@@ -104,13 +94,13 @@ class MyRecyclerHomePostsAdapter(
     var type = ""
 
     mRequestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + mUserDp, homePostsHolder.iv_profile_image
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + mUserDp, homePostsHolder.iv_profile_image
         )
     )
     mRequestQueue.add(
-        ExtraFunctions.createImageRequestFromUrl(
-            ExtraFunctions.serverurl + "userdp/" + mSharedPreferences.getString("userdp", ""),
+        DataUtils.createImageRequestFromUrl(
+            DataUtils.serverurl + "userdp/" + mSharedPreferences.getString("userdp", ""),
             homePostsHolder.my_profile_image
         )
     )
@@ -122,14 +112,9 @@ class MyRecyclerHomePostsAdapter(
     homePostsHolder.iv_post_text.text = mPostText
     //long press click copy text
     homePostsHolder.iv_post_text.setOnLongClickListener {
-      val clipboard = mContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-      val clip: ClipData = ClipData.newPlainText(
+      ExtraFunctions(mContext).copyTextToClipboard(
           homePostsHolder.iv_post_text.text.toString(), homePostsHolder.iv_post_text.text
       )
-      clipboard.setPrimaryClip(clip)
-      Toast.makeText(mContext, "Text Copied to clipboard", Toast.LENGTH_SHORT)
-          .show()
-      return@setOnLongClickListener true
     }
 
     if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
@@ -156,11 +141,11 @@ class MyRecyclerHomePostsAdapter(
         type = "pdf"
         //                viewLink = "https://docs.google.com/viewer?url=" + ExtraFunctions.serverurl + "posts/" + mPostFile;
         viewLink =
-          ExtraFunctions.serverurl + "pdfViewer/web/viewer.html?file=" + "/project/posts/" + mPostFile
+          DataUtils.serverurl + "pdfViewer/web/viewer.html?file=" + "/project/posts/" + mPostFile
 
         //Image loading using Coil
         homePostsHolder.iv_post_image.load(
-            ExtraFunctions.serverurl + "posts/pdfthumbnail/" + mPostFile.replace(
+            DataUtils.serverurl + "posts/pdfthumbnail/" + mPostFile.replace(
                 mPostFile.substring(mPostFile.lastIndexOf('.') + 1), ""
             ) + "jpg"
         ) {
@@ -168,10 +153,10 @@ class MyRecyclerHomePostsAdapter(
         }
       } else {
         type = "image"
-        viewLink = ExtraFunctions.serverurl + "posts/" + mPostFile
+        viewLink = DataUtils.serverurl + "posts/" + mPostFile
 
         //Image loading using Coil
-        homePostsHolder.iv_post_image.load(ExtraFunctions.serverurl + "posts/" + mPostFile) {
+        homePostsHolder.iv_post_image.load(DataUtils.serverurl + "posts/" + mPostFile) {
           placeholder(R.drawable.loading2)
         }
       }
@@ -235,10 +220,7 @@ class MyRecyclerHomePostsAdapter(
         intent.putExtra("viewLink", finalViewLink)
         mContext.startActivity(intent)
       } else {
-//                val intent = Intent(mContext, ImagePdfWebView::class.java)
-//                intent.putExtra("viewLink", finalViewLink)
-//                mContext.startActivity(intent)
-        animateIntent(homePostsHolder.iv_post_image)
+        ExtraFunctions(mContext).animateIntent(homePostsHolder.iv_post_image)
       }
     }
     //onclick post image end
@@ -280,8 +262,8 @@ class MyRecyclerHomePostsAdapter(
 
       }
       tvDeletePost.setOnClickListener {
-        if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
-          val url = ExtraFunctions.serverurl + "deleteHomePosts.php"
+        if (DataUtils.isNetworkStatusAvailable(mContext)) {
+          val url = DataUtils.serverurl + "deleteHomePosts.php"
           val stringRequest =
             object : StringRequest(Method.POST, url, Response.Listener { response ->
               try {
@@ -324,7 +306,7 @@ class MyRecyclerHomePostsAdapter(
       }
 
       tvSharePost.setOnClickListener {
-        if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
+        if (DataUtils.isNetworkStatusAvailable(mContext)) {
           mDialog.show()
           val extrastring =
             "\n\nThis Post is posted by " + mUserName + " in \'Student Assessment\' app." +
@@ -347,7 +329,7 @@ class MyRecyclerHomePostsAdapter(
       }
 
       tvShareLink.setOnClickListener {
-        if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
+        if (DataUtils.isNetworkStatusAvailable(mContext)) {
           mDialog.show()
           val shareString = "https://sas.a3creators.co.in/StudentAssessment/post?id=$mPostId"
           mDialog.dismiss()
@@ -424,7 +406,7 @@ class MyRecyclerHomePostsAdapter(
           }
           val explainValue = etExplain.text.toString()
           if (radioGroup.checkedRadioButtonId != -1) {
-            val url = ExtraFunctions.serverurl + "reportPost.php"
+            val url = DataUtils.serverurl + "reportPost.php"
             val finalReportValue = reportValue
             val stringRequest =
               object : StringRequest(Method.POST, url, Response.Listener { response ->
@@ -524,9 +506,9 @@ class MyRecyclerHomePostsAdapter(
     }
     //like part start
     homePostsHolder.ivlike.setOnClickListener {
-      if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
+      if (DataUtils.isNetworkStatusAvailable(mContext)) {
         if (mSharedPreferencesLike.getString(mPostId, "") == "liked") {
-          val url = ExtraFunctions.serverurl + "unLikePosts.php"
+          val url = DataUtils.serverurl + "unLikePosts.php"
           val stringRequest =
             object : StringRequest(Method.POST, url, Response.Listener { response ->
               try {
@@ -568,7 +550,7 @@ class MyRecyclerHomePostsAdapter(
             }
           mRequestQueue.add(stringRequest)
         } else {
-          val url = ExtraFunctions.serverurl + "likePosts.php"
+          val url = DataUtils.serverurl + "likePosts.php"
           val stringRequest =
             object : StringRequest(Method.POST, url, Response.Listener { response ->
               try {
@@ -631,7 +613,7 @@ class MyRecyclerHomePostsAdapter(
     //comment part end
 
     homePostsHolder.ivshare.setOnClickListener {
-      if (ExtraFunctions.isNetworkStatusAvailable(mContext)) {
+      if (DataUtils.isNetworkStatusAvailable(mContext)) {
         mDialog.show()
         val extraString =
           "\n\nThis Post is posted by " + mUserName + " in \'Student Assessment\' app." +
@@ -654,14 +636,14 @@ class MyRecyclerHomePostsAdapter(
               ) == "PDF"
           ) {
             f = File(
-                ExtraFunctions.serverurl +
+                DataUtils.serverurl +
                     "posts/pdfthumbnail/" + mPostFile.replace(
                     mPostFile.substring(mPostFile.lastIndexOf('.') + 1), ""
                 ) + "jpg"
             )
           } else {
             f = File(
-                ExtraFunctions.serverurl + "posts/" + mPostFile
+                DataUtils.serverurl + "posts/" + mPostFile
             )
           }
           if (f.exists()) {
@@ -670,7 +652,7 @@ class MyRecyclerHomePostsAdapter(
             intentShareFile.type = "image/*"
             intentShareFile.putExtra(
                 Intent.EXTRA_STREAM, Uri.parse(
-                ExtraFunctions.rootdir + "posts/" + mPostFile
+                DataUtils.rootdir + "posts/" + mPostFile
             )
             )
             intentShareFile.putExtra(
@@ -686,19 +668,19 @@ class MyRecyclerHomePostsAdapter(
                     mPostFile.lastIndexOf('.') + 1
                 ) == "PDF"
             ) {
-              dUrl = ExtraFunctions.serverurl +
+              dUrl = DataUtils.serverurl +
                   "posts/pdfthumbnail/" + mPostFile.replace(
                   mPostFile.substring(mPostFile.lastIndexOf('.') + 1), ""
               ) + "jpg"
               fDnld =
                 mPostFile.replace(mPostFile.substring(mPostFile.lastIndexOf('.') + 1), "") + "jpg"
             } else {
-              dUrl = ExtraFunctions.serverurl + "posts/" + mPostFile
+              dUrl = DataUtils.serverurl + "posts/" + mPostFile
               fDnld = mPostFile
             }
             PRDownloader.download(
                 dUrl,
-                ExtraFunctions.rootdir + "posts/",
+                DataUtils.rootdir + "posts/",
                 fDnld
             )
                 .build()
@@ -709,7 +691,7 @@ class MyRecyclerHomePostsAdapter(
                     intentShareFile.type = "image/*"
                     intentShareFile.putExtra(
                         Intent.EXTRA_STREAM, Uri.parse(
-                        ExtraFunctions.rootdir + "posts/" + fDnld
+                        DataUtils.rootdir + "posts/" + fDnld
                     )
                     )
                     intentShareFile.putExtra(
@@ -799,32 +781,6 @@ class MyRecyclerHomePostsAdapter(
           id.view_comments
       )
     }
-  }
-
-  private fun animateIntent(view: ImageView) {
-    val intent = Intent(mContext, ImageViewerActivity::class.java)
-    intent.putExtra("intentType", "byteArray")
-    intent.putExtra(
-        "imageByteArray",
-        getFileDataFromDrawable(mContext, view.drawable)
-    )
-    val transitionName = mContext.getString(
-        string.transition_string
-    )
-    val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-        mContext as Activity, view as View, transitionName
-    )
-    ActivityCompat.startActivity(mContext, intent, options.toBundle())
-  }
-
-  fun getFileDataFromDrawable(
-    context: Context,
-    drawable: Drawable
-  ): ByteArray {
-    val bitmap = (drawable as BitmapDrawable).bitmap
-    val byteArrayOutputStream = ByteArrayOutputStream()
-    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-    return byteArrayOutputStream.toByteArray()
   }
 
   override fun getItemViewType(position: Int): Int {

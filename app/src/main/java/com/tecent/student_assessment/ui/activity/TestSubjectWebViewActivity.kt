@@ -4,14 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.appcompat.app.AppCompatActivity
 import com.tecent.student_assessment.R.drawable
 import com.tecent.student_assessment.R.id
 import com.tecent.student_assessment.R.layout
-import com.tecent.student_assessment.utils.ExtraFunctions.serverurl
+import com.tecent.student_assessment.utils.DataUtils.serverurl
 import kotlinx.android.synthetic.main.activity_image_pdf_web_view.progress_bar
 import kotlinx.android.synthetic.main.activity_test_subject_web_view.webView
 import kotlinx.android.synthetic.main.toolbar_main.toolbar_main
